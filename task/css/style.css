@@ -1,0 +1,35 @@
+.container {
+    margin: auto;
+    width: 50%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+    background-color: #2596be;
+}
+
+.cell {
+    text-align: center;
+    background-color: #25a5be;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 20px;
+}
+
+.header {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+}
+
+input[type=submit] {
+    background-color: #96be25;
+    border: none;
+    padding: 16px 32px;
+    cursor: pointer;
+}
+
+.results {
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+
+
