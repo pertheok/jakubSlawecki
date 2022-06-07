@@ -32,83 +32,97 @@
 
             <!--row 1-->
 
-            <div class="cell" id="api-name-1">
+            <div class="cell">
                 Recent earthquakes
             </div>
-            <div class="cell" id="api-description-1">
+            <div class="cell">
                 <p>
                     Returns a highest magnitude earthquake in the specified boundary box. 
                     <br>
-                    Please note that the API documentation does not specify the units in which the numbers are provided nor what exactly they represent.
+                    Please note that the API documentation does not specify the units in which the numbers are provided nor what exactly do they represent.
                 </p>
             </div>
-            <div class="cell" id="api-parameters-1">
-
-                <label for="selNorth">North:</label>
-                <input type="number" id="selNorth">
-
-                <br>
-                <br>
-
-                <label for="selSouth">South:</label>
-                <input type="number" id="selSouth">
-
-                <br>
-                <br>
-
-                <label for="selEast">East:</label>
-                <input type="number" id="selEast">
-
-                <br>
-                <br>
-
-                <label for="selWest">West:</label>
-                <input type="number" id="selWest">
-
+            <div class="cell">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label for="selNorth">North:</label>
+                            </td>
+                            <td>
+                                <input type="number" id="selNorth">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="selSouth">South:</label>
+                            </td>
+                            <td>
+                                <input type="number" id="selSouth">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="selEast">East:</label>
+                            </td>
+                            <td>
+                                <input type="number" id="selEast">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> 
+                                <label for="selWest">West:</label>
+                            </td>
+                            <td>
+                                <input type="number" id="selWest">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="cell">
                 <button id="api-run-1">Run</button>
             </div>
-            <div class="cell" id="api-results-1">
+            <div class="cell">
                 <table>
                     <tbody>
                         <tr>
-                            <td align="left">
-                                Date:
+                            <td>
+                                Date & time:
                             </td>
-                            <td align="left" id="api1Datetime">
+                            <td id="api1Datetime">
 
                             </td>
                         </tr>
                         <tr>
-                            <td align="left">
+                            <td>
                                 Depth:
                             </td>
-                            <td align="left" id="api1Depth">
+                            <td id="api1Depth">
 
                             </td>
                         </tr>
                         <tr>
-                            <td align="left">
+                            <td>
                                 Magnitude:
                             </td>
-                            <td align="left" id="api1Magnitude">
+                            <td id="api1Magnitude">
 
                             </td>
                         </tr>
                         <tr>
-                            <td align="left">
+                            <td>
                                 Latitude:
                             </td>
-                            <td align="left" id="api1Latitude">
+                            <td id="api1Latitude">
 
                             </td>
                         </tr>
                         <tr>
-                            <td align="left">
+                            <td>
                                 Longitude:
                             </td>
-                            <td align="left" id="api1Longitude">
+                            <td id="api1Longitude">
 
                             </td>
                         </tr>
@@ -118,43 +132,113 @@
 
             <!--row 2-->
 
-            <div class="cell" id="api-name-2">
-
+            <div class="cell">
+                Country code
             </div>
-            <div class="cell" id="api-description-2">
-
+            <div class="cell">
+                Returns the ISO country code for the given the given latitude & longitude.
             </div>
-            <div class="cell" id="api-parameters-2">
-
+            <div class="cell">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label for="selLat">Latitude:</label>
+                            </td>
+                            <td>
+                                <input type="number" min="-90" max="90" id="selLat">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="selLng">Longitude:</label>
+                            </td>
+                            <td>
+                                <input type="number" min="-180" max="180" id="selLng">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="cell">
                 <button id="api-run-2">Run</button>
             </div>
-            <div class="cell" id="api-results-2">
-
+            <div class="cell">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Country code:
+                            </td>
+                            <td id="api2Code">
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Country name:
+                            </td>
+                            <td id="api2Name">
+                                
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!--row 3-->
 
-            <div class="cell" id="api-name-3">
-
+            <div class="cell">
+                Ocean
             </div>
-            <div class="cell" id="api-description-3">
-
+            <div class="cell">
+                Returns a name of the ocean or sea present in the location specified by given latitude and longitude. 
             </div>
-            <div class="cell" id="api-parameters-3">
-
+            <div class="cell">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label for="oceanLat">Latitude:</label>
+                            </td>
+                            <td>
+                                <input type="number" min="-90" max="90" id="oceanLat">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="oceanLng">Longitude:</label>
+                            </td>
+                            <td>
+                                <input type="number" min="-180" max="180" id="oceanLng">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="cell">
                 <button id="api-run-3">Run</button>
             </div>
-            <div class="cell" id="api-results-3">
-
+            <div class="cell">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Ocean/sea name:
+                            </td>
+                            <td id="api3Name">
+                                
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
 
         </div>
         <script type="application/javascript" src="./libs/js/jquery-3.6.0.min.js"></script>
-        <script type="application/javascript" src="./libs/js/script.js"></script>
+        <script type="application/javascript" src="./libs/js/apiScript1.js"></script>
+        <script type="application/javascript" src="./libs/js/apiScript2.js"></script>
+        <script type="application/javascript" src="./libs/js/apiScript3.js"></script>
     </body>
 </html>

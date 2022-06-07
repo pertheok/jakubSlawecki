@@ -35,12 +35,11 @@ button:active {
     padding: 20px;
 }
 
-#api-parameters-1 {
-    display: block;
+td {
+    text-align: left;
 }
 
-#api-parameters-1  input {
-    float: right;
+td  input {
     width: 70px;
 }
 

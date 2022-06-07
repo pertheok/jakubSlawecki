@@ -1,3 +1,5 @@
+//script for running api 1
+
 $('#api-run-1').click(() => {
 
     $.ajax({
@@ -14,12 +16,16 @@ $('#api-run-1').click(() => {
             console.log(result);
 
             if (result.status.name == "ok") {
-
-                $('#api1Datetime').html(result['data'][0]['datetime']);
-                $('#api1Depth').html(result['data'][0]['depth']);
-                $('#api1Magnitude').html(result['data'][0]['magnitude']);
-                $('#api1Latitude').html(result['data'][0]['lat']);
-                $('#api1Longitude').html(result['data'][0]['lng']);
+                // if(Object.keys(result.status.data) === 0) {
+                //     $('#api1Datetime').html("No data found.");
+                // } else {
+                
+                    $('#api1Datetime').html(result['data'][0]['datetime']);
+                    $('#api1Depth').html(result['data'][0]['depth']);
+                    $('#api1Magnitude').html(result['data'][0]['magnitude']);
+                    $('#api1Latitude').html(result['data'][0]['lat']);
+                    $('#api1Longitude').html(result['data'][0]['lng']);
+                // }
 
             }
         },
