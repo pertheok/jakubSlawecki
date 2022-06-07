@@ -1,0 +1,55 @@
+button {
+    background-color: #96be25;
+    border: none;
+    border-radius: 8px;
+    padding: 16px 32px;
+    cursor: pointer;
+    box-shadow: 4px 4px #999;
+}
+
+button:hover {
+    background-color: #be2596;
+}
+
+button:active {
+    background-color: #be2596;
+    box-shadow: 2px 2px #666;
+    transform: translate(2px, 2px);
+}
+
+.container {
+    margin: auto;
+    width: 75%;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    padding: 10px;
+    background-color: #2596be;
+}
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #25a5be;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 20px;
+}
+
+#api-parameters-1 {
+    display: block;
+}
+
+#api-parameters-1  input {
+    float: right;
+    width: 70px;
+}
+
+.header {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+}
+
+
+
+
+

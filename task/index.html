@@ -7,7 +7,7 @@
         </title>
         <meta name="description" content="ITCS portfolio task">
         <meta name="author" content="Jakub Slawecki">
-        <link rel="stylesheet" href="./css/style.css">
+        <link rel="stylesheet" href="./libs/css/style.css">
     </head>
     <body>
         <div class="container">
@@ -21,19 +21,99 @@
                 API description
             </div>
             <div class="cell header">
-
+                API parameters
+            </div>
+            <div class="cell header">
+                API run button
+            </div>
+            <div class="cell header">
+                API results
             </div>
 
             <!--row 1-->
 
             <div class="cell" id="api-name-1">
-
+                Recent earthquakes
             </div>
             <div class="cell" id="api-description-1">
+                <p>
+                    Returns a highest magnitude earthquake in the specified boundary box. 
+                    <br>
+                    Please note that the API documentation does not specify the units in which the numbers are provided nor what exactly they represent.
+                </p>
+            </div>
+            <div class="cell" id="api-parameters-1">
+
+                <label for="selNorth">North:</label>
+                <input type="number" id="selNorth">
+
+                <br>
+                <br>
+
+                <label for="selSouth">South:</label>
+                <input type="number" id="selSouth">
+
+                <br>
+                <br>
+
+                <label for="selEast">East:</label>
+                <input type="number" id="selEast">
+
+                <br>
+                <br>
+
+                <label for="selWest">West:</label>
+                <input type="number" id="selWest">
 
             </div>
             <div class="cell">
-                <input type="submit" value="Submit">
+                <button id="api-run-1">Run</button>
+            </div>
+            <div class="cell" id="api-results-1">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td align="left">
+                                Date:
+                            </td>
+                            <td align="left" id="api1Datetime">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                Depth:
+                            </td>
+                            <td align="left" id="api1Depth">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                Magnitude:
+                            </td>
+                            <td align="left" id="api1Magnitude">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                Latitude:
+                            </td>
+                            <td align="left" id="api1Latitude">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                Longitude:
+                            </td>
+                            <td align="left" id="api1Longitude">
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <!--row 2-->
@@ -44,8 +124,14 @@
             <div class="cell" id="api-description-2">
 
             </div>
+            <div class="cell" id="api-parameters-2">
+
+            </div>
             <div class="cell">
-                <input type="submit" value="Submit">
+                <button id="api-run-2">Run</button>
+            </div>
+            <div class="cell" id="api-results-2">
+
             </div>
 
             <!--row 3-->
@@ -56,15 +142,19 @@
             <div class="cell" id="api-description-3">
 
             </div>
+            <div class="cell" id="api-parameters-3">
+
+            </div>
             <div class="cell">
-                <input type="submit" value="Submit">
+                <button id="api-run-3">Run</button>
+            </div>
+            <div class="cell" id="api-results-3">
+
             </div>
 
-            <!--results-->
 
-            <div class="cell results" id="results">
-
-            </div>
         </div>
+        <script type="application/javascript" src="./libs/js/jquery-3.6.0.min.js"></script>
+        <script type="application/javascript" src="./libs/js/script.js"></script>
     </body>
 </html>
