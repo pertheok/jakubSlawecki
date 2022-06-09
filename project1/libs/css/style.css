@@ -1,0 +1,5 @@
+/* required for running Leaflet */
+#map {
+    height: 180px;
+    width: 180px;
+}
