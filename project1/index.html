@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,29 +8,62 @@
         </title>
         <meta name="description" content="Gazetteer">
         <meta name="author" content="Jakub Slawecki">
+        <!--Leaflet essentials-->
+        <link rel="stylesheet" href="./libs/css/leaflet.css"/>
+        <!--Bootstrap essentials-->
+        <link rel="stylesheet" href="libs/css/bootstrap.min.css">
+        <!--stylesheet-->
         <link rel="stylesheet" href="libs/css/style.css">
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-        integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-        crossorigin=""/>
-        <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
-        integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
-        crossorigin="">
-        </script>
     </head>
     <body>
-        <header>
-            <nav>
-
-            </nav>
-        </header>
-        <main>
-            <!--Leaflet implementation-->
-            <div id="map">
+        <div class="container-fluid">
+            <!--Top bar-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <form autocomplete="off" action="./libs/php/formHandler.php">
+                        <div class="autocomplete">
+                            <input id="country-search" type="text" name="country-search" placeholder="Search for a country...">
+                        </div>
+                    </form>
+                </div>
             </div>
-        </main>
-        <script type="text/javascript" src="libs/js/script.js">
+            <!--Main Leaflet window-->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!--Leaflet implementation-->
+                    <div id="map">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal for displaying country information-->
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Country information</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!--Leaflet essentials-->
+        <script src="./libs/js/leaflet.js">
         </script>
+         <!--Bootstrap essentials-->
+        <script src="./libs/js/bootstrap.min.js">
+        </script>
+        <!--jQuery-->
         <script type="text/javascript" src="libs/js/jquery-3.6.0.min.js">
+        </script>
+        <!--custom script-->
+        <script type="text/javascript" src="libs/js/script.js">
         </script>
     </body>
 </html>
