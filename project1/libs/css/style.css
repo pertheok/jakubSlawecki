@@ -1,9 +1,32 @@
-/* required for running Leaflet */
-#map {
-    width: 100%;
-    height: 100vh;
+html, body {
+    height: 100%;
+    background-color: #096398;
+}
+
+button {
+    border: none;
+    box-shadow: none;
+    text-align: center;
+    background-color: #096398;
+    color: white;
+}
+
+#info:hover, .list-group-item:hover {
+    color: white;
+    background-color: #bea925;
+}
+
+#info:active, .list-group-item:active {
+    color: white;
+    background-color: #6c25be;
 }
 
 input {
     width: 100%;
 }
+
+/*#map required for running Leaflet */
+#map {
+    height: 100vh;
+    width: 100%;
+} 
