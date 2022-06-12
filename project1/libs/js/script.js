@@ -146,6 +146,11 @@ const outputHtml = matches => {
         `).join('');
 
         matchList.innerHTML = html;
+
+
+        //empty the match list if nothing matches the user's input
+    } else {
+        matchList.innerHTML = '';
     }
 }
 

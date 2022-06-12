@@ -5,7 +5,7 @@
 
     $executionStartTime = microtime(true);
 
-    //URLs to send the requests to - API keys not hidden as they are free and do not incur any costs when going over limitations
+    //URLs to send the requests to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
 
     $countryUrl = 'http://api.geonames.org/countryInfoJSON?&lang=en&country=' . $_REQUEST['countryCode'] . '&username=pertheok'; //URL to retrieve data from the api providing basic country information
     $currencyUrl = 'https://openexchangerates.org/api/latest.json?app_id=c692867c4e8647368b163220f42193fe&symbols=' . $_REQUEST['currency']; //URL to retrieve data from currency exchange, free account only allows to use USD as a base
