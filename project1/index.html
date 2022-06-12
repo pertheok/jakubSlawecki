@@ -8,44 +8,54 @@
         </title>
         <meta name="description" content="Gazetteer">
         <meta name="author" content="Jakub Slawecki">
+
         <!--Leaflet essentials-->
         <link rel="stylesheet" href="./libs/css/leaflet.css"/>
+
         <!--Bootstrap essentials-->
         <link rel="stylesheet" href="libs/css/bootstrap.min.css">
+
         <!--stylesheet-->
         <link rel="stylesheet" href="libs/css/style.css">
     </head>
     <body>
         <div class="container-fluid">
+
             <!--Top bar-->
             <div class="row">
-              <!--Information button triggering a modal-->
+
+              <!--Information button triggering an info modal-->
               <button class="col-sm-4" type="button" id="info" data-bs-toggle="modal" data-bs-target="#infoModal">
                 About...
               </button>
+
               <!--Search bar-->
                 <div class="col-sm-8">
                     <form autocomplete="off" action="./libs/php/formHandler.php">
                         <input id="country-search" type="text" name="country-search" placeholder="Search for a country...">
-                        <!--Section to display matching items-->
-                        <div class="card">
+
+                        <!--Section to display matching items, CURRENTLY STRETCHES THE ROW INSTEAD OF OVERLAPPING THE MAP-->
+                        <div class="col-sm-8 card">
                           <ul class="list-group list-group-flush" id="match-list">
                           </ul>
                         </div>
                     </form>
                 </div>
             </div>
+
             <!--Main Leaflet window-->
             <div class="row">
                 <div class="col-sm-12">
+
                     <!--Leaflet implementation - need to make sure it does cover the whole remainder of the screen without needing to scroll to see the footer, on all devices-->
                     <div id="map">
                     </div>
                 </div>
             </div>
         </div>
+
         <!--Modal for displaying country information-->
-        <div class="modal" tabindex="-1">
+        <div class="modal" tabindex="-1" id="countryInfoModal">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
                 <div class="modal-header">
@@ -53,14 +63,15 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <!--Displaying information retrieved from the APIs-->
-                  <p>Country name: </p><span id="countryName">Country name</span>
-                  <p>Country capital: </p><span id="capitalName">Capital name</span>
-                  <p>Country population: </p><span id="countryPopulation">Country population</span>
-                  <p>Country currency: </p><span id="countryCurrency">Country currency</span>
-                  <p>Currency GBP exchange rate: </p><span id="countryCurrencyExchange">Current weather</span>
-                  <p>Current weather: </p><span id="countryWeather">cName</span>
-                  <p>Country Wikipedia page: </p><span><a id="countryWiki" href="">Link</a></span>
+
+                  <!--Displaying information retrieved from the APIs, spans will have their html rewritten based -->
+                  <p>Country name: <span id="countryName">Country name</span></p>
+                  <p>Country capital: <span id="capitalName">Capital name</span></p>
+                  <p>Country population: <span id="countryPopulation">Country population</span></p>
+                  <p>Country currency: <span id="countryCurrency">Country currency</span></p>
+                  <p>Currency USD exchange rate: <span id="countryCurrencyExchange">USD exchange rate</span></p>
+                  <p>Current weather in the capital: <span id="countryWeather">Current weather in the capital</span></p>
+                  <p>Country Wikipedia page: <span><a id="countryWiki" href="">Link</a></span></p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -68,6 +79,7 @@
               </div>
             </div>
         </div>
+
         <!--Modal for displaying app information-->
         <div class="modal" tabindex="-1" id="infoModal">
           <div class="modal-dialog modal-dialog-centered">
@@ -80,7 +92,10 @@
                 <p>
                   This app is a portfolio project that I did to show my skills as a web developer. Its main purpose is to display basic information about countries, 
                   such as their capitals, population, etc. Simply type in a country name or its ISO A2 or ISO A3 country code to see the results 
-                  - map should be centered and highlighted around your selection, and a dismissable info window should show up.
+                  - map should be centered and highlighted around your selection, and a dismissable info window should show up. Click on your selected country's outline to show the factsheet again.
+                </p>
+                <p>
+                  If you have location enabled in your browser settings, the map should initialise by showing the country you're currently in.
                 </p>
                 <p>
                   <a href="https://jakubslawecki.com">My website</a>
@@ -91,16 +106,20 @@
               </div>
             </div>
           </div>
-        </div>        
+        </div>
+
         <!--Leaflet essentials-->
         <script src="./libs/js/leaflet.js">
         </script>
+
          <!--Bootstrap essentials-->
         <script src="./libs/js/bootstrap.min.js">
         </script>
+
         <!--jQuery-->
         <script type="text/javascript" src="libs/js/jquery-3.6.0.min.js">
         </script>
+        
         <!--custom script-->
         <script type="text/javascript" src="libs/js/script.js">
         </script>
