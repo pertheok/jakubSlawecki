@@ -1,41 +1,10 @@
-html, body {
-    height: 100%;
-    background-color: #096398;
-}
-
-/* bootstrap button styling made it look odd with the current app layout */
-
-button {
-    border: none;
-    box-shadow: none;
-    text-align: center;
-    background-color: #096398;
-    color: white;
-}
-
-/* highlights interactable buttons on mouse hover */
-
-#info:hover, .list-group-item:hover {
-    color: white;
-    background-color: #bea925;
-}
-
-/* highlights interactable buttons on mouse click */
-
-#info:active, .list-group-item:active {
-    color: white;
-    background-color: #6c25be;
-}
-
 /* makes input fill the width of its container */
 
 input {
     width: 100%;
 }
 
-/*#map required for running Leaflet - setting height to 100% makes the map not render at all, 
-setting it to a particular vh value makes it either render beyond the viewport (adds a vertical scrollbar) 
-or it does not fill the rest of the viewport for some devices with bigger screens (leaves white space at the bottom of the app)*/
+/*required for running Leaflet*/
 #map {
     height: 100vh;
     width: 100%;

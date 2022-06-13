@@ -1,13 +1,19 @@
 //Leaflet configuration
 
-let map = L.map('map').setView([51.505, -0.09], 13);
+//disables default zoom control placement as the search bar obscures it & centres the map around the UK if user has location disabled
+
+let map = L.map('map', {zoomControl: false}).setView([51.505, -0.09], 5);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-//center the map on user's location
+//re-adds the zoom control buttons to the bottom left of the screen
+
+new L.Control.Zoom({position: "bottomleft"}).addTo(map);
+
+//center the map on user's location - this will need to be changed to it also provides information about the country that user is currently in
 
 map.locate({
     setView: true,
@@ -17,7 +23,7 @@ map.locate({
 //drawing a polygon over the selected country
 
 //test code to see how boundaries are displayed, will be removed and replaced by a functionality that will draw a border based on user's selection
-let uk = {
+let selectedCountry = {
     "type":"Feature",
     "properties":{
         "name":"United Kingdom",
@@ -97,19 +103,19 @@ let uk = {
 }
 
 //displaying the boundaries extracted from the .geo.json file on the map
-
-let currentCountry = L.geoJSON(uk).addTo(map);
+let selectedCountryBoundary = L.geoJSON(selectedCountry).addTo(map);
+map.fitBounds(selectedCountryBoundary.getBounds());
 
 //displaying country information modal after clicking on the country outline
 
-currentCountry.on('click', () => {
+selectedCountryBoundary.on('click', () => {
     $('#countryInfoModal').modal("show");
 });
 
 //search logic
 
-const search = document.getElementById("country-search");
-const matchList = document.getElementById("match-list");
+const search = document.getElementById("countrySearch");
+const matchList = document.getElementById("matchList");
 
 //search countryBorders.geo.json and filter it by user's input, going through the list of available country names
 
@@ -140,9 +146,7 @@ const searchCountries = async userInput => {
 const outputHtml = matches => {
     if (matches.length > 0) {
         const html = matches.map(match => `
-            <li class="list-group-item">
-                <h4>${match.properties.name}</h4>
-            </li>
+                <option value="${match.properties.name}">
         `).join('');
 
         matchList.innerHTML = html;
@@ -158,15 +162,9 @@ search.addEventListener('input', () => searchCountries(search.value));
 
 //script for handling requests - WIP, needs some refactoring
 
-
-//below doesn't seem to work, probably because of the second .attr argument? how to make it so it targets selection's html?
-$('#matchList').on('click', '.list-group-item', () => {
-    $('#country-search').attr(value, match.properties.name);
-});
-
 //below needs some refactoring
 
-$('#country-search').keypress(event => {
+$('#countrySearch').keypress(event => {
 
     if (event.which == 13) {
 
@@ -175,28 +173,29 @@ $('#country-search').keypress(event => {
             type: "POST",
             dataType: 'json',
             data: {
-                countryCode: $('#selNorth').val(), //id needs changing
-                currency: $('#selNorth').val(), //id needs changing
-                capitalName: $('#selNorth').val() //id needs changing
+                countryCode: "GB", //needs changing to a variable
+                currencyName: "GBP", //needs changing to a variable
+                capitalName: "London"//needs changing to a variable
             },
             success: function(result) {
-                console.log(result);
+                console.log(JSON.stringify(result));
 
-                if (result.status.name == "ok") {
-                        $('#countryName').html(result.countryName);
-                        $('#capitalName').html(result.capital);
-                        $('#countryPopulation').html(result.population);
-                        $('#countryCurrency').html(result.currencyCode);
-                        $('#countryCurrencyExchange').html(result.currencyCode); //<-needs implementation based on API response
-                        $('#countryWeather').html(result.currencyCode); //<-needs implementation based on API response
+                //below will be worked on after getting api responses that can be worked with
+                // if (result.status.name == "ok") {
+                //         $('#countryName').html(result.countryName);
+                //         $('#capitalName').html(result.capital);
+                //         $('#countryPopulation').html(result.population);
+                //         $('#countryCurrency').html(result.currencyCode);
+                //         $('#countryCurrencyExchange').html(result.currencyCode); //<-needs implementation based on API response
+                //         $('#countryWeather').html(result.currencyCode); //<-needs implementation based on API response
 
-                        if (result.countryName.includes(" ")) {
-                            let underscore = result.countryName.replace(" ", "_");
-                            $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${underscore}`);
-                        } else {
-                            $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${result.countryName}`); //<-needs implementation based on API response
-                        }   
-                }
+                //         if (result.countryName.includes(" ")) {
+                //             let underscore = result.countryName.replace(" ", "_");
+                //             $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${underscore}`);
+                //         } else {
+                //             $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${result.countryName}`); //<-needs implementation based on API response
+                //         }   
+                // }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(`${textStatus}, ${errorThrown}`);
