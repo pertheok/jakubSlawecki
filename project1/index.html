@@ -25,12 +25,10 @@
             <div class="row">
               <!--Search bar-->
                 <div class="col-sm-12 fixed-top">
-                    <form autocomplete="off" action="./libs/php/formHandler.php">
+                    <form autocomplete="off" action="./libs/php/geonamesHandler.php">
                         <input id="countrySearch" list="matchList" name="country-search" placeholder="Search for a country...">
                         <!--Section to display matching items-->
-                        <datalist id="matchList">
-
-                        </datalist>
+                        <datalist id="matchList"></datalist>
                     </form>
                 </div>
             </div>
@@ -71,6 +69,27 @@
               </div>
             </div>
         </div>
+
+        <!--Modal for displaying errors-->
+        <div class="modal" tabindex="-1" id="errorModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+
+                <!--Section for displaying an error message-->
+                <p id="errorMessage">
+                </p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+      </div>
 
         <!--Leaflet essentials-->
         <script src="./libs/js/leaflet/leaflet.js">

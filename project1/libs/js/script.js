@@ -114,19 +114,38 @@ selectedCountryBoundary.on('click', () => {
 
 //search logic
 
+//the below code prevents the JSON file from being downloaded by the user -  async: false is considered deprecated but I was unable to make the code work using promises
+const localJsonCall = () => {
+    let localJsonResponse;
+    $.ajax({
+        url: 'libs/php/jsonHandler.php',
+        type: 'POST',
+        dataType: 'text json',
+        async: false,
+        success: function(result) {
+            localJsonResponse = result.data;            
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+    return localJsonResponse;
+};
+
+//create an object containing information retrieved from a local JSON file
+
+const countryData = localJsonCall();
+
 const search = document.getElementById("countrySearch");
 const matchList = document.getElementById("matchList");
 
-//search countryBorders.geo.json and filter it by user's input, going through the list of available country names
+//search countryData and filter it by user's input, going through the list of available country names
 
-const searchCountries = async userInput => {
-    const response = await fetch('./libs/json/countryBorders.geo.json');
-    const countries = await response.json();
-    const countriesData = countries.features;
+const searchCountries = userInput => {
 
     //display data matching user input
 
-    let matches = countriesData.filter(country => {
+    let matches = countryData.filter(country => {
         const regex = new RegExp(`^${userInput}`, 'gi');
         return country.properties.name.match(regex) || country.properties['iso_a2'].match(regex) || country.properties['iso_a3'].match(regex);
     });
@@ -146,11 +165,10 @@ const searchCountries = async userInput => {
 const outputHtml = matches => {
     if (matches.length > 0) {
         const html = matches.map(match => `
-                <option value="${match.properties.name}">
+                <option value="${match.properties.name}">${match.properties["iso_a2"]}</option>
         `).join('');
 
         matchList.innerHTML = html;
-
 
         //empty the match list if nothing matches the user's input
     } else {
@@ -168,41 +186,42 @@ $('#countrySearch').keypress(event => {
 
     if (event.which == 13) {
 
+        const chosenCountry = $("#countrySearch").attr("value");
+        const chosenCountryData = countryData.filter(country => {
+        return country.properties.name.match(chosenCountry) || country.properties['iso_a2'].match(chosenCountry) || country.properties['iso_a3'].match(chosenCountry);
+        });
+
         $.ajax({
-            url: "libs/php/formHandler.php",
+            url: "libs/php/geonamesHandler.php",
             type: "POST",
             dataType: 'json',
             data: {
-                countryCode: "GB", //needs changing to a variable
-                currencyName: "GBP", //needs changing to a variable
-                capitalName: "London"//needs changing to a variable
+                countryCode: chosenCountryData[0].properties["iso_a2"]
             },
             success: function(result) {
-                console.log(JSON.stringify(result));
+                //console.log(JSON.stringify(result));
 
-                //below will be worked on after getting api responses that can be worked with
-                // if (result.status.name == "ok") {
-                //         $('#countryName').html(result.countryName);
-                //         $('#capitalName').html(result.capital);
-                //         $('#countryPopulation').html(result.population);
-                //         $('#countryCurrency').html(result.currencyCode);
-                //         $('#countryCurrencyExchange').html(result.currencyCode); //<-needs implementation based on API response
-                //         $('#countryWeather').html(result.currencyCode); //<-needs implementation based on API response
+                if (result.status.name == "ok") {
+                        $('#countryName').html(result.countryName);
+                        $('#capitalName').html(result.capital);
+                        $('#countryPopulation').html(result.population);
+                        $('#countryCurrency').html(result.currencyCode);
+                        // $('#countryCurrencyExchange').html(result.currencyCode); //<-needs implementation based on API response
+                        // $('#countryWeather').html(result.currencyCode); //<-needs implementation based on API response
 
-                //         if (result.countryName.includes(" ")) {
-                //             let underscore = result.countryName.replace(" ", "_");
-                //             $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${underscore}`);
-                //         } else {
-                //             $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${result.countryName}`); //<-needs implementation based on API response
-                //         }   
-                // }
+                        if (result.countryName.includes(" ")) {
+                            let underscore = result.countryName.replace(" ", "_");
+                            $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${underscore}`);
+                        } else {
+                            $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${result.countryName}`); //<-needs implementation based on API response
+                        }   
+                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.log(`${textStatus}, ${errorThrown}`);
+                console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
             }
-    });
+        });
 
     }
-
 });
 
