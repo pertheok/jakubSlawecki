@@ -1,9 +1,3 @@
-/* makes input fill the width of its container */
-
-input {
-    width: 100%;
-}
-
 /*required for running Leaflet*/
 #map {
     height: 100vh;

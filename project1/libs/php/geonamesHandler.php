@@ -7,9 +7,7 @@ $executionStartTime = microtime(true);
 
 //URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
 
-$countryCode = $_POST['countryCode'];
-
-$url = 'http://api.geonames.org/countryInfoJSON?&lang=en&country=' . $countryCode . '&username=pertheok'; //URL to retrieve data from the api providing basic country information
+$url = 'http://api.geonames.org/countryInfoJSON?&lang=en&country=' . $_REQUEST['countryCode'] . '&username=pertheok'; //URL to retrieve data from the api providing basic country information
 
 $ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

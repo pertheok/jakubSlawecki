@@ -20,15 +20,18 @@
     </head>
     <body>
         <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12">
 
+              </div>
+            </div>
             <!--Top bar-->
             <div class="row">
               <!--Search bar-->
                 <div class="col-sm-12 fixed-top">
-                    <form autocomplete="off" action="./libs/php/geonamesHandler.php">
-                        <input id="countrySearch" list="matchList" name="country-search" placeholder="Search for a country...">
-                        <!--Section to display matching items-->
-                        <datalist id="matchList"></datalist>
+                    <form action="./libs/php/geonamesHandler.php">
+                      <select name="countryName" id="countrySearch">
+                      </select>
                     </form>
                 </div>
             </div>
@@ -36,7 +39,6 @@
             <!--Main Leaflet window-->
             <div class="row">
                 <div class="col-sm-12">
-
                     <!--Leaflet implementation-->
                     <div id="map">
                     </div>
@@ -55,12 +57,12 @@
                 <div class="modal-body">
 
                   <!--Displaying information retrieved from the APIs, spans will have their html rewritten based -->
-                  <p>Country name: <span id="countryName">Country name</span></p>
-                  <p>Country capital: <span id="capitalName">Capital name</span></p>
-                  <p>Country population: <span id="countryPopulation">Country population</span></p>
-                  <p>Country currency: <span id="countryCurrency">Country currency</span></p>
-                  <p>Currency USD exchange rate: <span id="countryCurrencyExchange">USD exchange rate</span></p>
-                  <p>Current weather in the capital: <span id="countryWeather">Current weather in the capital</span></p>
+                  <p>Country name: <span id="countryName">No data found</span></p>
+                  <p>Country capital: <span id="capitalName">No data found</span></p>
+                  <p>Country population: <span id="countryPopulation">No data found</span></p>
+                  <p>Country currency: <span id="countryCurrency">No data found</span></p>
+                  <p>Currency USD exchange rate: <span id="countryCurrencyExchange">No data found</span></p>
+                  <p>Current weather in the capital: <span id="countryWeather">No data found</span></p>
                   <p>Country Wikipedia page: <span><a id="countryWiki" href="">Link</a></span></p>
                 </div>
                 <div class="modal-footer">
@@ -69,27 +71,6 @@
               </div>
             </div>
         </div>
-
-        <!--Modal for displaying errors-->
-        <div class="modal" tabindex="-1" id="errorModal">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-
-                <!--Section for displaying an error message-->
-                <p id="errorMessage">
-                </p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-      </div>
 
         <!--Leaflet essentials-->
         <script src="./libs/js/leaflet/leaflet.js">

@@ -7,7 +7,7 @@ $executionStartTime = microtime(true);
 
 //URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
 
-$url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $_REQUEST['capitalName'] . '&APPID=e32492c31dc6e5cd00009f4f881846d6'; //URL to retrieve data from weather api
+$url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $_POST['capitalName'] . '&APPID=e32492c31dc6e5cd00009f4f881846d6'; //URL to retrieve data from weather api
 
 $ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

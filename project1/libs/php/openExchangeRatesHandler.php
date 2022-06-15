@@ -7,7 +7,7 @@ $executionStartTime = microtime(true);
 
 //URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
 
-$url = 'https://openexchangerates.org/api/latest.json?app_id=c692867c4e8647368b163220f42193fe&symbols=' . $_REQUEST['currencyName']; //URL to retrieve data from currency exchange, free account only allows to use USD as a base
+$url = 'https://openexchangerates.org/api/latest.json?app_id=c692867c4e8647368b163220f42193fe&symbols=' . $_POST['countryCurrency']; //URL to retrieve data from currency exchange, free account only allows to use USD as a base
 
 $ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
