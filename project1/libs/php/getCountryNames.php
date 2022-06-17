@@ -14,7 +14,16 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-	$output['data'] = $countryInfoJsonArray['features'];
+
+	//create a new array that contains objects of countryName => iso_a2 (key => value) pairs
+	$finalDataArray = [];
+	$dataToAccess = $countryInfoJsonArray['features'];
+
+	for ($i = 0; $i < count($dataToAccess); $i++) {
+		array_push($finalDataArray, (object)['countryName' => $dataToAccess[$i]['properties']['name'], 'iso_a2' => $dataToAccess[$i]['properties']['iso_a2']]);
+	}
+
+	$output['data'] = $finalDataArray;
 	
 	header('Content-Type: application/json; charset=UTF-8');
 

@@ -1,4 +1,4 @@
-//Leaflet configuration
+//Leaflet configuration and related functions
 
 //disables default zoom control placement as the search bar obscures it & centres the map around the UK if user has location disabled
 
@@ -13,25 +13,30 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 new L.Control.Zoom({position: "bottomleft"}).addTo(map);
 
-//center the map on user's location - this will need to be changed so it also provides information about the country that user is currently in
-
-map.locate({
-    setView: true,
-    maxZoom: 5
-});
-
 //create an empty geoJSON layer to display country borders on it
 
 let bordersLayer = L.geoJSON().addTo(map);
+
+//display the selected country's borders on map
+
+const displayBorders = countryJson => {
+    bordersLayer.addData(countryJson);
+};
+
+//centre the map around the selected country
+
+const centreMap = () => {
+    map.fitBounds(bordersLayer.getBounds());
+};
 
 //search logic
 
 //the below code prevents the JSON file from being downloaded by the user -  async: false is considered deprecated but I was unable to make the code work using promises
 
-const localJsonCall = () => {
+const getCountryNames = () => {
     let localJsonResponse;
     $.ajax({
-        url: 'libs/php/jsonHandler.php',
+        url: 'libs/php/getCountryNames.php',
         type: 'POST',
         dataType: 'text json',
         async: false,
@@ -47,17 +52,17 @@ const localJsonCall = () => {
 
 //create an object containing information retrieved from a local JSON file
 
-const countryData = localJsonCall();
+const countryNames = getCountryNames();
 
 //populate the dropdown list with country names
 
-for (let i = 0; i < countryData.length; i++) {
+for (let i = 0; i < countryNames.length; i++) {
 
     //if given country does not have a valid iso_a2 code, don't include it on the list
-    if (countryData[i].properties["iso_a2"] == "-99") {
+    if (countryNames[i]['iso_a2'] == "-99") {
         continue;
     } else {
-        $("select").append(`<option value="${countryData[i].properties["iso_a2"]}">${countryData[i].properties.name}</option>`);
+        $("select").append(`<option value="${countryNames[i]['iso_a2']}">${countryNames[i].countryName}</option>`);
     }
 }
 
@@ -69,15 +74,33 @@ $("#countrySearch").html($("option").sort((a, b) => {
 
 //script for handling requests 
 
-$('#countrySearch').on("change", () => {
+const getData = (chosenCountryCode) => {
+
+    //create a variable that will store retrieved geoJSON data for drawing borders
+    let chosenCountryGeoJson;
 
     //clear any drawn borders
     bordersLayer.clearLayers();
 
     //retrieve data about the chosen country from the internal JSON
-    const chosenCountry = $("select").val();
-    const chosenCountryData = countryData.filter(country => {
-        return country.properties["iso_a2"] == chosenCountry;
+    // const chosenCountryCode = $("select").val();
+
+    //ajax request to get a geoJSON object containing the chosen country's data
+
+    $.ajax({
+        url: 'libs/php/getCountryBorders.php',
+        type: 'POST',
+        async: false,
+        data: {
+            isoCode: chosenCountryCode
+        },
+        dataType: 'text json',
+        success: function(result) {
+            chosenCountryGeoJson = result.data;            
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
     });
 
     //ajax request to get data from the geonames API
@@ -87,7 +110,7 @@ $('#countrySearch').on("change", () => {
         type: "POST",
         dataType: 'json',
         data: {
-            countryCode: chosenCountry
+            countryCode: chosenCountryCode
         },
         success: function(result) {
 
@@ -162,17 +185,53 @@ $('#countrySearch').on("change", () => {
     
     //display the selected country's borders on map
 
-    bordersLayer.addData(chosenCountryData);
+    displayBorders(chosenCountryGeoJson);
 
     //centre the map around the selected country
 
-    map.fitBounds(bordersLayer.getBounds());
+    centreMap();
 
     //displaying country information modal after clicking on the country outline
 
-    bordersLayer.on('click', () => {
+    bordersLayer.on("click", () => {
         $('#countryInfoModal').modal("show");
     });
 
+}
+
+//retrieve the user's location or retrieve the data for the default country (UK)
+
+const getLocation = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        getData("GB");
+    }
+}
+
+const showPosition = position => {
+   console.log("Latitude: " + position.coords.latitude +
+    "<br>Longitude: " + position.coords.longitude);
+    // $.ajax({
+    //   url: 'abc.php',
+    //   type: 'POST',
+    //   data: 'latitude='+position.coords.latitude+'&longitude='+position.coords.longitude,
+    //   success: function(data) {
+    //     console.log(data);
+    //   },
+    //   error: function(e) {
+    //     //called when there is an error
+    //     //console.log(e.message);
+    //   }
+    // });
+}
+
+getLocation();
+
+
+//retrieve data about the country selected from the drop down menu
+
+$('select').change(() => {
+    getData($("select").val());
 });
 
