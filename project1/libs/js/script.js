@@ -2,16 +2,12 @@
 
 //disables default zoom control placement as the search bar obscures it & centres the map around the UK if user has location disabled
 
-let map = L.map('map', {zoomControl: false}).setView([51.505, -0.09], 5);
+let map = L.map('map');
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: 'SPA made by <a href="http://www.jakubslawecki.com">Jakub Slawecki</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
-
-//re-adds the zoom control buttons to the bottom left of the screen
-
-new L.Control.Zoom({position: "bottomleft"}).addTo(map);
 
 //create an empty geoJSON layer to display country borders on it
 
@@ -31,7 +27,7 @@ const centreMap = () => {
 
 //search logic
 
-//the below code prevents the JSON file from being downloaded by the user -  async: false is considered deprecated but I was unable to make the code work using promises
+//extract the data regarding country names and their ISO codes - async: false is considered deprecated but I was unable to make the code work using promises
 
 const getCountryNames = () => {
     let localJsonResponse;
@@ -50,7 +46,7 @@ const getCountryNames = () => {
     return localJsonResponse;
 };
 
-//create an object containing information retrieved from a local JSON file
+//create an object containing information retrieved from the local JSON file
 
 const countryNames = getCountryNames();
 
@@ -66,7 +62,7 @@ for (let i = 0; i < countryNames.length; i++) {
     }
 }
 
-//sort the countries on the dropdown menu
+//sort the countries on the dropdown menu alphabetically
 
 $("#countrySearch").html($("option").sort((a, b) => {
     return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
@@ -82,10 +78,7 @@ const getData = (chosenCountryCode) => {
     //clear any drawn borders
     bordersLayer.clearLayers();
 
-    //retrieve data about the chosen country from the internal JSON
-    // const chosenCountryCode = $("select").val();
-
-    //ajax request to get a geoJSON object containing the chosen country's data
+    //ajax request to get a geoJSON object containing the chosen country's data from the internal geo.json file
 
     $.ajax({
         url: 'libs/php/getCountryBorders.php',
@@ -167,9 +160,8 @@ const getData = (chosenCountryCode) => {
                 success: function(result) {
 
                     if (result.status.name == "ok") {
-                        //modify the result so it's rounded to the nearest integer
-                        let convertToCelsius = (result.data.main.temp - 273.15).toFixed(0);                    
-                        $('#countryWeather').html(`${convertToCelsius}&#8451;, ${result.data.weather[0].description}`); 
+                        //modify the result so it's rounded to the nearest integer                
+                        $('#countryWeather').html(`${result.data.main.temp.toFixed(0)}&#8451;, ${result.data.weather[0].description}`); 
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -181,7 +173,11 @@ const getData = (chosenCountryCode) => {
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
-    });   
+    });
+    
+    //set the value of the drop down menu to the country whose data is being currently displayed - this is used when country data was not retrieved following user's actions, such as when invoking the getLocation() function 
+
+    $('select').val(chosenCountryCode);
     
     //display the selected country's borders on map
 
@@ -199,39 +195,46 @@ const getData = (chosenCountryCode) => {
 
 }
 
-//retrieve the user's location or retrieve the data for the default country (UK)
+//retrieve the user's location or retrieve the data for the default country (UK) if navigator.geolocation is not supported by the browser
 
 const getLocation = () => {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(showPosition, () => { getData("GB")});
     } else {
         getData("GB");
     }
 }
 
 const showPosition = position => {
-   console.log("Latitude: " + position.coords.latitude +
-    "<br>Longitude: " + position.coords.longitude);
-    // $.ajax({
-    //   url: 'abc.php',
-    //   type: 'POST',
-    //   data: 'latitude='+position.coords.latitude+'&longitude='+position.coords.longitude,
-    //   success: function(data) {
-    //     console.log(data);
-    //   },
-    //   error: function(e) {
-    //     //called when there is an error
-    //     //console.log(e.message);
-    //   }
-    // });
-}
+    let userLat = position.coords.latitude;
+    let userLong = position.coords.longitude;
+
+    //if user lat-long data is available, call openCage API to get the ISO code of the country the user is currently in, otherwise 
+
+    if (userLat && userLong) {
+        $.ajax({
+            url: "libs/php/openCageHandler.php",
+            type: 'POST',
+            data: {
+                userLatitude: userLat,
+                userLongitude: userLong
+            },
+            success: function(result) {
+                getData(result.data);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+            }
+        });
+    } else {
+        getData("GB");
+    }
+};
 
 getLocation();
-
 
 //retrieve data about the country selected from the drop down menu
 
 $('select').change(() => {
     getData($("select").val());
 });
-
