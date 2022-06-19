@@ -1,14 +1,14 @@
 //Leaflet configuration and related functions
 
-//disables default zoom control placement as the search bar obscures it & centres the map around the UK if user has location disabled
+//creating the main map object
 
 let map = L.map('map');
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: 'SPA made by <a href="http://www.jakubslawecki.com">Jakub Slawecki</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+//adding tile layers from the selected tile provider to the map
 
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'SPA made by <a href="http://www.jakubslawecki.com">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
+}).addTo(map);
 
 //create an empty geoJSON layer to display country borders on it
 
@@ -26,7 +26,7 @@ const centreMap = () => {
     map.fitBounds(bordersLayer.getBounds());
 };
 
-//buttons
+//buttons to invoke info modals
 
 //centre map on the selected country
 L.easyButton('<img src="./libs/icons/crosshair.png">', () => {
@@ -100,13 +100,17 @@ $("#countrySearch").html($("option").sort((a, b) => {
 
 const getData = (chosenCountryCode) => {
 
-    //create a variable that will store retrieved geoJSON data for drawing borders
+    //show the loading modal when function is initiated - when locally tested, the function is executed so fast the modal doesn't even show - this will be more helpful when retrieveing API data takes longer than usual
+
+    $('#loadingModal').modal("show");
+
+    //create a variable that will store the retrieved geoJSON data for drawing borders
     let chosenCountryGeoJson;
 
     //clear any drawn borders
     bordersLayer.clearLayers();
 
-    //ajax request to get a geoJSON object containing the chosen country's data from the internal geo.json file, it also sets the countryName and countryCode in the countryInfoModal
+    //ajax request to get a geoJSON object containing the chosen country's data from the internal geo.json file, it also sets the countryName and countryIsoCode in the countryInfoModal
 
     $.ajax({
         url: 'libs/php/getCountryBorders.php',
@@ -121,8 +125,7 @@ const getData = (chosenCountryCode) => {
             $('.countryName').html(result.data.properties.name);
             $('#countryIsoCode').html(result.data.properties['iso_a2']);
 
-
-            //extracts the country name and appends it to the wikipedia URL directly or after replacing any spaces in the country's name with underscores
+            //extracts the country name and appends it to the wikipedia URL directly or after replacing any present spaces in the country's name with underscores
             if (result.data.properties.name.includes(" ")) {
                 let underscore = result.data.properties.name.replace(" ", "_");
                 $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${underscore}`);
@@ -147,6 +150,7 @@ const getData = (chosenCountryCode) => {
         success: function(result) {
             if (result.status.name == "ok") {
                     $('.capitalName').html(result.data.capital);
+
                     //conversion to string and regex used to help with adding a comma for separating thousands from the number
                     $('#countryPopulation').html(result.data.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                     $('#countryContinent').html(result.data.continentName);
@@ -171,6 +175,7 @@ const getData = (chosenCountryCode) => {
                 success: function(result) {
 
                     if (result.status.name == "ok") {
+
                         //modify the result so it's rounded to two decimal places
                         let rate = (result.data.rates[$("#countryCurrency").html()]).toFixed(2);
                         $('#countryCurrencyExchange').html(`1 USD = ${rate} ${$("#countryCurrency").html()}`);
@@ -193,6 +198,7 @@ const getData = (chosenCountryCode) => {
                 success: function(result) {
 
                     if (result.status.name == "ok") {
+
                         //modify the result so it's rounded to the nearest integer                
                         $('#capitalTemperature').html(result.data.temperature.toFixed(0));
                         $('#capitalWeather').html(result.data.description);
@@ -201,11 +207,11 @@ const getData = (chosenCountryCode) => {
                         $('#capitalHumidity').html(result.data.humidity);
                         $('#capitalWindSpeed').html(result.data.windSpeed);
 
-                        //converting unix timestamps to UTC time hh:mm
+                        //converting received Unix timestamps to UTC time hh:mm
                         let sunrise = result.data.sunrise;
                         let sunset = result.data.sunset;
 
-                        //creating a new date from each unix, multiplying each by 1000 so the arguments are in ms instead of s
+                        //creating a new date from each retrieved Unix, multiplying each by 1000 so the arguments are in ms instead of s
                         let sunriseDate = new Date(sunrise * 1000);
                         let sunsetDate = new Date(sunset * 1000);
 
@@ -243,6 +249,10 @@ const getData = (chosenCountryCode) => {
 
     centreMap();
 
+    //hide the loading modal after all data had been retrieved successfully
+
+    $('#loadingModal').modal("hide");
+
     //displaying country information modal after clicking on the country outline
 
     bordersLayer.on("click", () => {
@@ -265,7 +275,7 @@ const showPosition = position => {
     let userLat = position.coords.latitude;
     let userLong = position.coords.longitude;
 
-    //if user lat-long data is available, call openCage API to get the ISO code of the country the user is currently in, otherwise 
+    //if user lat-long data is available, call openCage API to get the ISO code of the country the user is currently in, otherwise retrieve the data for the default country (UK)
 
     if (userLat && userLong) {
         $.ajax({
@@ -286,6 +296,8 @@ const showPosition = position => {
         getData("GB");
     }
 };
+
+//invoke the two functions defined above
 
 getLocation();
 

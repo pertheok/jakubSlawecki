@@ -91,50 +91,62 @@
               </div>
             </div>
           </div>
-      </div>
+        </div>
 
-      <!--Modal for displaying currency information-->
-      <div class="modal" tabindex="-1" id="currencyInfoModal">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Currency information</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+        <!--Modal for displaying currency information-->
+        <div class="modal" tabindex="-1" id="currencyInfoModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Currency information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
 
-              <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-              <p>Local currency: <span id="countryCurrency">No data found</span></p>
-              <p>Local currency USD exchange rate: <span id="countryCurrencyExchange">No data found</span></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+                <p>Local currency: <span id="countryCurrency">No data found</span></p>
+                <p>Local currency USD exchange rate: <span id="countryCurrencyExchange">No data found</span></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
             </div>
           </div>
         </div>
-    </div>
 
-    <!--Modal for displaying currency information-->
-    <div class="modal" tabindex="-1" id="wikipediaModal">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Country Wikipedia Page</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
+        <!--Modal for displaying currency information-->
+        <div class="modal" tabindex="-1" id="wikipediaModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Country Wikipedia Page</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
 
-            <!--Link redirecting the user to the selected country's Wikipedia page-->
-            <p>Wikipedia link (opens in a new tab): <a href="" target="_blank" id="countryWiki"><span>Link</span></a></p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <!--Link redirecting the user to the selected country's Wikipedia page-->
+                <p>Wikipedia link (opens in a new tab): <a href="" target="_blank" id="countryWiki"><span>Link</span></a></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-  </div>
 
-
+        <!--Loading screen modal-->
+        <div class="modal" tabindex="-1" id="loadingModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content justify-content-center align-items-center">
+              <div class="modal-body">
+                <div class="spinner-border" role="status">
+                  <span class="sr-only"></span>
+                </div>
+                <span>Loading data...</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!--Leaflet essentials-->
         <script src="./libs/js/leaflet/leaflet.js">
