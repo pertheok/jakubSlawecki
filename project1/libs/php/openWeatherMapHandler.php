@@ -24,7 +24,17 @@ $ch = curl_init();
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-	$output['data'] = $decode;
+
+	//take only what's required from the response
+	$output['data']['clouds'] = $decode['clouds']['all'];
+	$output['data']['temperature'] = $decode['main']['temp'];
+	$output['data']['pressure'] = $decode['main']['pressure'];
+	$output['data']['humidity'] = $decode['main']['humidity'];
+	$output['data']['sunrise'] = $decode['sys']['sunrise'];
+	$output['data']['sunset'] = $decode['sys']['sunset'];
+	$output['data']['windSpeed'] = $decode['wind']['speed'];
+	$output['data']['description'] = $decode['weather'][0]['description'];
+
 	
 	header('Content-Type: application/json; charset=UTF-8');
 

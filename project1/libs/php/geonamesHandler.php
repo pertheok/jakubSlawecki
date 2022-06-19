@@ -24,7 +24,13 @@ $ch = curl_init();
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-	$output['data'] = $decode['geonames'];
+
+	//takes only what's required from the JSON response
+	$output['data']['areaInSqKm'] = $decode['geonames'][0]['areaInSqKm'];
+	$output['data']['capital'] = $decode['geonames'][0]['capital'];
+	$output['data']['continentName'] = $decode['geonames'][0]['continentName'];
+	$output['data']['currencyCode'] = $decode['geonames'][0]['currencyCode'];
+	$output['data']['population'] = $decode['geonames'][0]['population'];
 	
 	header('Content-Type: application/json; charset=UTF-8');
 

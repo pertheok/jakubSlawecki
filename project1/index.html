@@ -52,14 +52,13 @@
                 </div>
                 <div class="modal-body">
 
-                  <!--Displaying information retrieved from the APIs, spans will have their html rewritten based -->
-                  <p>Country name: <span id="countryName">No data found</span></p>
-                  <p>Country capital: <span id="capitalName">No data found</span></p>
-                  <p>Country population: <span id="countryPopulation">No data found</span></p>
-                  <p>Country currency: <span id="countryCurrency">No data found</span></p>
-                  <p>Currency USD exchange rate: <span id="countryCurrencyExchange">No data found</span></p>
-                  <p>Current weather in the capital: <span id="countryWeather">No data found</span></p>
-                  <p>Country Wikipedia page: <span><a id="countryWiki" href="">Link</a></span></p>
+                  <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+                  <p>Name: <span class="countryName">No data found</span></p>
+                  <p>ISO code: <span id="countryIsoCode">No data found</span></p>
+                  <p>Continent: <span id="countryContinent">No data found</span></p>
+                  <p>Capital: <span class="capitalName">No data found</span></p>
+                  <p>Population: <span id="countryPopulation">No data found</span></p>                  
+                  <p>Area in km<sup>2</sup>: <span id="countryArea">No data found</span></p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -67,6 +66,75 @@
               </div>
             </div>
         </div>
+
+        <!--Modal for displaying weather information-->
+        <div class="modal" tabindex="-1" id="weatherInfoModal">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Weather in <span class="capitalName">No data found</span> - capital of <span class="countryName">No data found</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+
+                <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+                <p><span id="capitalTemperature">No data found</span>&#8451;, <span id="capitalWeather"></span></p>
+                <p>Cloudiness: <span id="capitalCloudiness">No data found</span>%</p>
+                <p>Pressure: <span id="capitalPressure">No data found</span> hPa</p>
+                <p>Humidity: <span id="capitalHumidity">No data found</span>%</p>
+                <p>Wind speed: <span id="capitalWindSpeed">No data found</span> m/s</p>
+                <p>Sunrise (UTC): <span id="capitalSunrise">No data found</span></p>
+                <p>Sunset (UTC): <span id="capitalSunset">No data found</span></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <!--Modal for displaying currency information-->
+      <div class="modal" tabindex="-1" id="currencyInfoModal">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Currency information</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+              <p>Local currency: <span id="countryCurrency">No data found</span></p>
+              <p>Local currency USD exchange rate: <span id="countryCurrencyExchange">No data found</span></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!--Modal for displaying currency information-->
+    <div class="modal" tabindex="-1" id="wikipediaModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Country Wikipedia Page</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <!--Link redirecting the user to the selected country's Wikipedia page-->
+            <p>Wikipedia link (opens in a new tab): <a href="" target="_blank" id="countryWiki"><span>Link</span></a></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+
 
         <!--Leaflet essentials-->
         <script src="./libs/js/leaflet/leaflet.js">

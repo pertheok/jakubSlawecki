@@ -9,6 +9,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'SPA made by <a href="http://www.jakubslawecki.com">Jakub Slawecki</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
+
 //create an empty geoJSON layer to display country borders on it
 
 let bordersLayer = L.geoJSON().addTo(map);
@@ -24,6 +25,33 @@ const displayBorders = countryJson => {
 const centreMap = () => {
     map.fitBounds(bordersLayer.getBounds());
 };
+
+//buttons
+
+//centre map on the selected country
+L.easyButton('<img src="./libs/icons/crosshair.png">', () => {
+    map.fitBounds(bordersLayer.getBounds());
+}).addTo(map);
+
+//display basic country info
+L.easyButton('<img src="./libs/icons/info.png">', () => {
+    $('#countryInfoModal').modal("show");
+}).addTo(map);
+
+//display weather info
+L.easyButton('<img src="./libs/icons/sun.png">', () => {
+    $('#weatherInfoModal').modal("show");
+}).addTo(map);
+
+//display currency info
+L.easyButton('<img src="./libs/icons/dollar.png">', () => {
+    $('#currencyInfoModal').modal("show");
+}).addTo(map);
+
+//display country wiki
+L.easyButton('<img src="./libs/icons/wiki.ico">', () => {
+    $('#wikipediaModal').modal("show");
+}).addTo(map);
 
 //search logic
 
@@ -78,7 +106,7 @@ const getData = (chosenCountryCode) => {
     //clear any drawn borders
     bordersLayer.clearLayers();
 
-    //ajax request to get a geoJSON object containing the chosen country's data from the internal geo.json file
+    //ajax request to get a geoJSON object containing the chosen country's data from the internal geo.json file, it also sets the countryName and countryCode in the countryInfoModal
 
     $.ajax({
         url: 'libs/php/getCountryBorders.php',
@@ -89,7 +117,18 @@ const getData = (chosenCountryCode) => {
         },
         dataType: 'text json',
         success: function(result) {
-            chosenCountryGeoJson = result.data;            
+            chosenCountryGeoJson = result.data;
+            $('.countryName').html(result.data.properties.name);
+            $('#countryIsoCode').html(result.data.properties['iso_a2']);
+
+
+            //extracts the country name and appends it to the wikipedia URL directly or after replacing any spaces in the country's name with underscores
+            if (result.data.properties.name.includes(" ")) {
+                let underscore = result.data.properties.name.replace(" ", "_");
+                $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${underscore}`);
+            } else {
+                $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${result.data.properties.name}`);
+            } 
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
@@ -106,23 +145,17 @@ const getData = (chosenCountryCode) => {
             countryCode: chosenCountryCode
         },
         success: function(result) {
-
             if (result.status.name == "ok") {
-                    $('#countryName').html(result.data[0].countryName);
-                    $('#capitalName').html(result.data[0].capital);
-                    $('#countryPopulation').html(result.data[0].population);
-                    $('#countryCurrency').html(result.data[0].currencyCode);
-
-                    if (result.data[0].countryName.includes(" ")) {
-                        let underscore = result.data[0].countryName.replace(" ", "_");
-                        $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${underscore}`);
-                    } else {
-                        $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${result.data[0].countryName}`); //<-needs implementation based on API response
-                    }   
+                    $('.capitalName').html(result.data.capital);
+                    //conversion to string and regex used to help with adding a comma for separating thousands from the number
+                    $('#countryPopulation').html(result.data.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $('#countryContinent').html(result.data.continentName);
+                    $('#countryArea').html(result.data.areaInSqKm.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $('#countryCurrency').html(result.data.currencyCode);   
             }
         },
 
-        // nested ajax request, as data retrieved from the first request is needed for the remaining two
+        // nested ajax request, as data retrieved from the previous request is needed for the next two
 
         complete: function () {
 
@@ -155,13 +188,36 @@ const getData = (chosenCountryCode) => {
                 type: "POST",
                 dataType: 'json',
                 data: {
-                    capitalName: $("#capitalName").html()
+                    capitalName: $(".capitalName").html()
                 },
                 success: function(result) {
 
                     if (result.status.name == "ok") {
                         //modify the result so it's rounded to the nearest integer                
-                        $('#countryWeather').html(`${result.data.main.temp.toFixed(0)}&#8451;, ${result.data.weather[0].description}`); 
+                        $('#capitalTemperature').html(result.data.temperature.toFixed(0));
+                        $('#capitalWeather').html(result.data.description);
+                        $('#capitalCloudiness').html(result.data.clouds);
+                        $('#capitalPressure').html(result.data.pressure);
+                        $('#capitalHumidity').html(result.data.humidity);
+                        $('#capitalWindSpeed').html(result.data.windSpeed);
+
+                        //converting unix timestamps to UTC time hh:mm
+                        let sunrise = result.data.sunrise;
+                        let sunset = result.data.sunset;
+
+                        //creating a new date from each unix, multiplying each by 1000 so the arguments are in ms instead of s
+                        let sunriseDate = new Date(sunrise * 1000);
+                        let sunsetDate = new Date(sunset * 1000);
+
+                        //extract hours from each timestamp
+                        let sunriseHour = sunriseDate.getHours();
+                        let sunsetHour = sunsetDate.getHours();
+
+                        //extract minutes from each timestamp
+                        let sunriseMinutes = sunriseDate.getMinutes();
+                        let sunsetMinutes = sunsetDate.getMinutes();
+                        $('#capitalSunrise').html(`${sunriseHour}:${sunriseMinutes}`);
+                        $('#capitalSunset').html(`${sunsetHour}:${sunsetMinutes}`);
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
