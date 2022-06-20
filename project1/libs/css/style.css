@@ -30,3 +30,14 @@ img {
 .col-sm-12 {
     top: 10px;
 }
+
+/* remove decoration from links to news articles */
+
+.newslink {
+    text-decoration: none;
+    color: black;
+}
+
+.newslink:hover {
+    text-decoration: underline;
+}

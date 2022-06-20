@@ -29,23 +29,28 @@ const centreMap = () => {
 //buttons to invoke info modals
 
 //centre map on the selected country
-L.easyButton('<img src="./libs/icons/crosshair.png">', () => {
+L.easyButton('<img src="./libs/icons/crosshair.ico">', () => {
     map.fitBounds(bordersLayer.getBounds());
 }).addTo(map);
 
 //display basic country info
-L.easyButton('<img src="./libs/icons/info.png">', () => {
+L.easyButton('<img src="./libs/icons/info.ico">', () => {
     $('#countryInfoModal').modal("show");
 }).addTo(map);
 
 //display weather info
-L.easyButton('<img src="./libs/icons/sun.png">', () => {
+L.easyButton('<img src="./libs/icons/sun.ico">', () => {
     $('#weatherInfoModal').modal("show");
 }).addTo(map);
 
 //display currency info
-L.easyButton('<img src="./libs/icons/dollar.png">', () => {
+L.easyButton('<img src="./libs/icons/dollar.ico">', () => {
     $('#currencyInfoModal').modal("show");
+}).addTo(map);
+
+//display local news
+L.easyButton('<img src="./libs/icons/news.ico">', () => {
+    $('#countryNewsModal').modal("show");
 }).addTo(map);
 
 //display country wiki
@@ -107,8 +112,15 @@ const getData = (chosenCountryCode) => {
     //create a variable that will store the retrieved geoJSON data for drawing borders
     let chosenCountryGeoJson;
 
+    //create a variable that will be used to query news API and places API
+    let chosenCountryName;
+
     //clear any drawn borders
     bordersLayer.clearLayers();
+
+    //change contents of the news modal back to empty
+    $('#news').html('');
+    
 
     //ajax request to get a geoJSON object containing the chosen country's data from the internal geo.json file, it also sets the countryName and countryIsoCode in the countryInfoModal
 
@@ -125,12 +137,13 @@ const getData = (chosenCountryCode) => {
             $('.countryName').html(result.data.properties.name);
             $('#countryIsoCode').html(result.data.properties['iso_a2']);
 
-            //extracts the country name and appends it to the wikipedia URL directly or after replacing any present spaces in the country's name with underscores
+            //extracts the country name and appends it to the wikipedia URL directly or after replacing any present spaces in the country's name with underscores, assigns whatever's apended to a variable that will be used to query news API and places API
             if (result.data.properties.name.includes(" ")) {
-                let underscore = result.data.properties.name.replace(" ", "_");
-                $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${underscore}`);
+                chosenCountryName = result.data.properties.name.replace(" ", "_");
+                $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${chosenCountryName}`);
             } else {
-                $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${result.data.properties.name}`);
+                chosenCountryName = result.data.properties.name;
+                $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${chosenCountryName}`);
             } 
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -162,6 +175,56 @@ const getData = (chosenCountryCode) => {
         // nested ajax request, as data retrieved from the previous request is needed for the next two
 
         complete: function () {
+
+            //ajax request to get data from the news API
+
+            $.ajax({
+                url: "libs/php/newsHandler.php",
+                type: "POST",
+                dataType: 'json',
+                data: {
+                    countryName: chosenCountryName
+                },
+                success: function(result) {
+
+                    if (result.status.name == "ok") {
+
+                        //display a message if there's no results for the selected country
+                        if (result.status.totalResults === 0) {
+                            $('#news').html('<p>No news data found for the selected country.</p>');
+                        } else {
+                            //render html based on the retrieved news data - if there's no image provided with the article, use the placeholder
+                            for (let i = 0; i < result.data.length; i++) {
+                                if (result.data[i].urlToImage) {
+                                    $('#news').append(
+                                        `<a class="newslink" href="${result.data[i].url}" target="_blank">
+                                            <img src="${result.data[i].urlToImage}" alt="Article image">
+                                            <p>${result.data[i].source} | </p>
+                                            <h5>${result.data[i].title}</h5>
+                                            <p>${result.data[i].description}</p>
+                                        </a>
+                                        <hr>`
+                                    );
+                                } else {
+                                    $('#news').append(
+                                        `<a class="newslink" href="${result.data[i].url}" target="_blank">
+                                            <img src="./libs/images/noimg.jpg" alt="Article image placeholder">
+                                            <p>${result.data[i].source} | </p>
+                                            <h5>${result.data[i].title}</h5>
+                                            <p>${result.data[i].description}</p>
+                                        </a>
+                                        <hr>`
+                                    );
+                                }
+
+                            }
+                        }
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+                }
+            });
 
             //ajax request to get data from the openExchangeRates API
 
@@ -252,12 +315,6 @@ const getData = (chosenCountryCode) => {
     //hide the loading modal after all data had been retrieved successfully
 
     $('#loadingModal').modal("hide");
-
-    //displaying country information modal after clicking on the country outline
-
-    bordersLayer.on("click", () => {
-        $('#countryInfoModal').modal("show");
-    });
 
 }
 

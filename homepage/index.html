@@ -1,87 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <title>
-            Main page - Jakub Slawecki
-        </title>
-        <meta name="description" content="Portfolio page">
-        <meta name="author" content="Jakub Slawecki">
-
-        <!--Favicon-->
-        <link rel="icon" type="image/x-icon" href="./libs/images/favicon.ico">
-
-        <!--Bootstrap essentials-->
-        <link rel="stylesheet" href="./libs/css/bootstrap/bootstrap.min.css">
-
-        <!--stylesheet-->
-        <link rel="stylesheet" href="./libs/css/style.css">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Jakub Slawecki</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="./libs/assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="./libs/css/styles.css" rel="stylesheet" />
     </head>
-    <body class="bg-info">
-        <div class="container-flex">
-            <header class="m-5">
-                <div class="row">
-                    <div class="col-sm-6 d-flex justify-content-center align-items-center">
-                        <h1>
-                            ---WORK IN PROGRESS!---Hi, I'm Jakub
-                        </h1>
-                    </div>
-                    <p class="col-sm-6 text-justify">
-                        I'm an amateur full stack developer. After over 5 years in the Telecommunications industry working as a Planner, I have decided to take the opportunity that lockdowns have presented to learn a new trade. Over the last two years 
-                        I used my spare time to learn about different coding languages, frameworks, as well as other technologies used in web development. I'm hoping to broaden my horizons in this field even further and start a professional career.
-                        Please see some of my example works that I decided to put on display.
-                    </p>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="#page-top">Jakub Slawecki</a>
+                <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#portfolio">Portfolio</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#about">About</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#contact">Contact</a></li>
+                    </ul>
                 </div>
-                <div class="row">
-                    <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                        <h3>
-                            Contact me!
-                        </h3>
-                        <a href="mailto:kubaslawecki@gmail.com">
-                            <img src="./libs/images/email.png" alt="Email icon">
-                        </a>
-                        <a href="https://www.linkedin.com/in/jakub-slawecki-94352b102/" target="_blank">
-                            <img src="./libs/images/linkedin.png" alt="Linkedin icon">
-                        </a>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead bg-primary text-white text-center">
+            <div class="container d-flex align-items-center flex-column">
+                <!-- Masthead Heading-->
+                <h1 class="masthead-heading text-uppercase mb-0">Jakub Slawecki</h1>
+                <br>
+                <!-- Masthead Subheading-->
+                <p class="masthead-subheading font-weight-light mb-0">
+                    I'm an amateur full stack developer. I'm hoping to broaden my horizons in this field even further and start a professional career. Please see some of my example works that I decided to put on display.
+                </p>
+            </div>
+        </header>
+        <!-- Portfolio Section-->
+        <section class="page-section portfolio" id="portfolio">
+            <div class="container">
+                <!-- Portfolio Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Portfolio</h2>
+                <br>
+                <br>
+                <!-- Portfolio Grid Items-->
+                <div class="row justify-content-center">
+                    <!-- Portfolio Item 1-->
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="./libs/assets/img/portfolio/gazetteer.PNG" alt="Mobile view of the Gazetteer" />
+                        </div>
+                    </div>
+                    <!-- Portfolio Item 2-->
+                    <div class="col-md-6 col-lg-4 mb-5">
+                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal2">
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid" src="./libs/assets/img/portfolio/gazetteer.PNG" alt="Mobile view of the Gazetteer" />
+                        </div>
                     </div>
                 </div>
-            </header>
-            <main class="m-5">
+            </div>
+        </section>
+        <!-- About Section-->
+        <section class="page-section bg-primary text-white mb-0" id="about">
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-white">About</h2>
+                <!-- About Section Content-->
                 <div class="row">
-                    <div class="col-sm-6">
-                        <img src="./libs/images/gazetteer.PNG" alt="Mobile view of the Gazetteer">
-                        <p>
-                            Gazetteer - retrieves data from various APIs about the selected country and displays in on the interactive map powered by Leaflet.
+                    <div class="col-lg-4 ms-auto">
+                        <p class="lead">
+                            After over 5 years in the Telecommunications industry working as a Planner, 
+                            I have decided to take the opportunity that lockdowns have presented to learn a new trade. Over the last two years I used my spare time to 
+                            learn about different coding languages, frameworks, as well as other technologies used in web development. 
                         </p>
-                    </div>
-                    <div class="col-sm-6">
-                        <img class="w-auto" src="./libs/images/gazetteer.PNG" alt="Mobile view of the Gazetteer">
-                        <p>
-                            ---Placeholder for the second portfolio project--- 
-                        </p>
+                     </div>
+                </div>
+                <!-- About Section Button-->
+            </div>
+        </section>
+        <!-- Contact Section-->
+        <section class="page-section" id="contact">
+            <div class="container">
+                <!-- Contact Section Heading-->
+                <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Contact Me</h2>
+                <!-- Contact Section Form-->
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xl-7">
+                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                            <!-- Name input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                                <label for="name">Full name</label>
+                                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                            </div>
+                            <!-- Email address input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
+                                <label for="email">Email address</label>
+                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                            </div>
+                            <!-- Phone number input-->
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
+                                <label for="phone">Phone number</label>
+                                <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
+                            </div>
+                            <!-- Message input-->
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
+                                <label for="message">Message</label>
+                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
+                            </div>
+                            <!-- Submit success message-->
+                            <!---->
+                            <!-- This is what your users will see when the form-->
+                            <!-- has successfully submitted-->
+                            <div class="d-none" id="submitSuccessMessage">
+                                <div class="text-center mb-3">
+                                    <div class="fw-bolder">Form submission successful!</div>
+                                    To activate this form, sign up at
+                                    <br />
+                                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+                                </div>
+                            </div>
+                            <!-- Submit error message-->
+                            <!---->
+                            <!-- This is what your users will see when there is-->
+                            <!-- an error submitting the form-->
+                            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
+                            <!-- Submit Button-->
+                            <button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Send</button>
+                        </form>
                     </div>
                 </div>
-            </main>
-            <footer>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="footer text-center">
+            <div class="container">
                 <div class="row">
-                    <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                        <p>Created in 2022 by Jakub Slawecki</p>
+                    <!-- Footer Social Icons-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">Around the Web</h4>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-github"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
                     </div>
                 </div>
-            </footer>
-         </div>
-
-        <!--Bootstrap essentials-->
-        <script src="./libs/js/bootstrap/bootstrap.min.js">
-        </script>
-
-        <!--jQuery-->
-        <script type="text/javascript" src="./libs/js/jquery-3.6.0.min.js">
-        </script>
-        
-        <!--custom script-->
-        <script type="text/javascript" src="./libs/js/script.js">
-        </script>
+            </div>
+        </footer>
+        <!-- Copyright Section-->
+        <div class="copyright py-4 text-center text-white">
+            <div class="container"><small>Jakub Slawecki, 2022. Original website template by <a href="http://startbootstrap.com">Start Bootstrap</a>, published under <a href="https://github.com/StartBootstrap/startbootstrap-freelancer/blob/master/LICENSE">MIT License</a></small></div>
+        </div>
+        <!-- Portfolio Modals-->
+        <!-- Portfolio Modal 1-->
+        <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" aria-labelledby="portfolioModal1" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                    <div class="modal-body text-center pb-5">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Gazetteer</h2>
+                                    <br>
+                                    <!-- Portfolio Modal - Image-->
+                                    <img class="img-fluid rounded mb-5" src="./libs/assets/img/portfolio/gazetteer.PNG" alt="Mobile view of the Gazetteer" />
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-4">Gazetteer - retrieves data about the selected country from various APIs and displays in on the interactive map powered by Leaflet.</p>
+                                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                                        <i class="fas fa-xmark fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Portfolio Modal 2-->
+        <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" aria-labelledby="portfolioModal2" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                    <div class="modal-body text-center pb-5">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8">
+                                    <!-- Portfolio Modal - Title-->
+                                    <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">Gazetteer</h2>
+                                    <br>
+                                    <!-- Portfolio Modal - Image-->
+                                    <img class="img-fluid rounded mb-5" src="./libs/assets/img/portfolio/gazetteer.PNG" alt="Mobile view of the Gazetteer" />
+                                    <!-- Portfolio Modal - Text-->
+                                    <p class="mb-4">Gazetteer - retrieves data about the selected country from various APIs and displays in on the interactive map powered by Leaflet.</p>
+                                    <button class="btn btn-primary" data-bs-dismiss="modal">
+                                        <i class="fas fa-xmark fa-fw"></i>
+                                        Close Window
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="./libs/js/scripts.js"></script>
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
 </html>

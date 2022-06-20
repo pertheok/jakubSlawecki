@@ -7,7 +7,7 @@ $executionStartTime = microtime(true);
 
 //URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
 
-$url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $_POST['capitalName'] . '&APPID=e32492c31dc6e5cd00009f4f881846d6&units=metric'; //URL to retrieve data from weather api
+$url = 'https://newsapi.org/v2/everything?q=' . $_REQUEST['countryName'] . '&sortBy=publishedAt&language=en&pageSize=10&apiKey=a6f3ba0005e44352adcd34b99222b894'; 
 
 $ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -18,24 +18,24 @@ $ch = curl_init();
 
 	curl_close($ch);
 
+
+	//create a new array that will contain only the desired data
+	$finalDataArray = [];
 	$decode = json_decode($result,true);	
+	
+	//populate the array with desired data
+
+	for ($i = 0; $i < count($decode['articles']); $i++) {
+		array_push($finalDataArray, (object)['source' => $decode['articles'][$i]['source']['name'], 'title' => $decode['articles'][$i]['title'], 'description' => $decode['articles'][$i]['description'], 'url' => $decode['articles'][$i]['url'], 'urlToImage' => $decode['articles'][$i]['urlToImage']]);
+	}
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
+	$output['status']['totalResults'] = $decode['totalResults'];
 
-	//take only what's required from the response
-	$output['data']['clouds'] = $decode['clouds']['all'];
-	$output['data']['temperature'] = $decode['main']['temp'];
-	$output['data']['pressure'] = $decode['main']['pressure'];
-	$output['data']['humidity'] = $decode['main']['humidity'];
-	$output['data']['sunrise'] = $decode['sys']['sunrise'];
-	$output['data']['sunset'] = $decode['sys']['sunset'];
-	$output['data']['windSpeed'] = $decode['wind']['speed'];
-	$output['data']['description'] = $decode['weather'][0]['description'];
-	$output['data']['icon'] = $decode['weather'][0]['icon'];
-
+	$output['data'] = $finalDataArray;
 	
 	header('Content-Type: application/json; charset=UTF-8');
 
