@@ -27,11 +27,11 @@ img {
 
 /* offset the drop down menu a little away from the top edge of the screen*/
 
-.col-sm-12 {
+.col-12 {
     top: 10px;
 }
 
-/* remove decoration from links to news articles */
+/* styling of the news modal */
 
 .newslink {
     text-decoration: none;
@@ -40,4 +40,26 @@ img {
 
 .newslink:hover {
     text-decoration: underline;
+}
+
+/* styling of the weather modal */
+
+#weather {
+    background: url(../images/weather.png) no-repeat;
+    background-size: cover;
+}
+
+#weatherImage {
+    width: 100px;
+    height: 100px;
+}
+
+.weatherHeader {
+    font-weight: bold;
+
+}
+
+.weatherData {
+    padding: 0px;
+    text-align: center;
 }

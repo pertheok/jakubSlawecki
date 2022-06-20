@@ -29,7 +29,7 @@
             <!--Top bar-->
             <div class="row">
               <!--Search bar-->
-                <div class="col-sm-12 d-flex justify-content-center fixed-top">
+                <div class="col-12 d-flex justify-content-center fixed-top">
                     <select name="countryName" id="countrySearch">
                     </select>
                 </div>
@@ -73,16 +73,72 @@
                 <h5 class="modal-title">Weather in <span class="capitalName">No data found</span> - capital of <span class="countryName">No data found</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <div class="modal-body">
-
-                <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                <p><span id="capitalTemperature">No data found</span>&#8451;, <span id="capitalWeather"></span></p>
-                <p>Cloudiness: <span id="capitalCloudiness">No data found</span>%</p>
-                <p>Pressure: <span id="capitalPressure">No data found</span> hPa</p>
-                <p>Humidity: <span id="capitalHumidity">No data found</span>%</p>
-                <p>Wind speed: <span id="capitalWindSpeed">No data found</span> m/s</p>
-                <p>Sunrise (UTC): <span id="capitalSunrise">No data found</span></p>
-                <p>Sunset (UTC): <span id="capitalSunset">No data found</span></p>
+              <div class="modal-body" id="weather">
+                  <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+                  <div class="row">
+                    <div class="col-4">
+                      <img id="weatherImage" src="" alt="Weather symbol">
+                    </div>
+                    <div class="col-8 d-inline-flex justify-content-start align-items-end">
+                      <h5 id="capitalTemperature" class="weatherHeader">No data found</h5><h5 class="weatherHeader">&#8451;,&nbsp;</h5><h5 id="capitalWeather" class="weatherHeader">No data found</h5>
+                    </div>
+                  </div>
+                  <div class="row w-100 m-0 justify-content-around">
+                    <span class="weatherHeader col-3 weatherData">
+                      Cloudiness
+                    </span>
+                    <span class="weatherHeader col-3 weatherData">
+                      Pressure
+                    </span>
+                    <span class="weatherHeader col-3 weatherData">
+                      Humidity
+                    </span>
+                  </div>
+                  <div class="row w-100 m-0 justify-content-around">
+                    <p class="col-3 weatherData">
+                      <span id="capitalCloudiness">
+                        No data found
+                      </span>%
+                    </p>
+                    <p class="col-3 weatherData">
+                      <span id="capitalPressure">
+                        No data found
+                      </span> hPa
+                    </p>
+                    <p class="col-3 weatherData">
+                      <span id="capitalHumidity">
+                        No data found
+                      </span>%
+                    </p>
+                  </div>
+                  <div class="row w-100 m-0 justify-content-around">
+                    <span class="weatherHeader col-3 weatherData">
+                      Wind
+                    </span>
+                    <span class="weatherHeader col-3 weatherData">
+                      Sunrise
+                    </span>
+                    <span class="weatherHeader col-3 weatherData">
+                      Sunset
+                    </span>
+                  </div>
+                  <div class="row w-100 m-0 justify-content-around">
+                    <p class="col-3 weatherData">
+                      <span id="capitalWindSpeed">
+                        No data found
+                      </span> m/s
+                    </p>
+                    <p class="col-3 weatherData">
+                      <span id="capitalSunrise">
+                        No data found
+                      </span>
+                    </p>
+                    <p class="col-3 weatherData">
+                      <span id="capitalSunset">
+                        No data found
+                      </span>
+                    </p>
+                  </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -117,7 +173,7 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Recent news in <span class="countryName">No data found</span></h5>
+                <h5 class="modal-title">Recent news involving <span class="countryName">No data found</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body" id="news">

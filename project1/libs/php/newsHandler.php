@@ -7,12 +7,15 @@ $executionStartTime = microtime(true);
 
 //URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
 
-$url = 'https://newsapi.org/v2/everything?q=' . $_REQUEST['countryName'] . '&sortBy=publishedAt&language=en&pageSize=10&apiKey=a6f3ba0005e44352adcd34b99222b894'; 
+$url = 'https://newsapi.org/v2/everything?q=' . $_REQUEST['countryName'] . '&sortBy=publishedAt&language=en&pageSize=10&apiKey=a6f3ba0005e44352adcd34b99222b894';
 
 $ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_URL,$url);
+
+	//not including user agent in the header prevents from obtaining data when testing locally
+	curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1");
 
 	$result=curl_exec($ch);
 
@@ -21,7 +24,7 @@ $ch = curl_init();
 
 	//create a new array that will contain only the desired data
 	$finalDataArray = [];
-	$decode = json_decode($result,true);	
+	$decode = json_decode($result,true);
 	
 	//populate the array with desired data
 

@@ -265,6 +265,7 @@ const getData = (chosenCountryCode) => {
                         //modify the result so it's rounded to the nearest integer                
                         $('#capitalTemperature').html(result.data.temperature.toFixed(0));
                         $('#capitalWeather').html(result.data.description);
+                        $('#weatherImage').attr('src', `https://openweathermap.org/img/wn/${result.data.icon}@2x.png`);
                         $('#capitalCloudiness').html(result.data.clouds);
                         $('#capitalPressure').html(result.data.pressure);
                         $('#capitalHumidity').html(result.data.humidity);
