@@ -33,6 +33,10 @@ img {
 
 /* styling of the news modal */
 
+.modal-header {
+    background: white;
+}
+
 .newslink {
     text-decoration: none;
     color: black;
@@ -63,3 +67,4 @@ img {
     padding: 0px;
     text-align: center;
 }
+

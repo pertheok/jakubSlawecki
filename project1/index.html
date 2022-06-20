@@ -19,7 +19,10 @@
         <link rel="stylesheet" href="./libs/css/bootstrap/bootstrap.min.css">
 
         <!--Leaflet easy buttons-->
-        <link rel="stylesheet" href="./libs/css/easybutton/easybutton.css">
+        <link rel="stylesheet" href="./libs/css/leaflet/easybutton.css">
+
+        <!--Leaflet marker clusters-->
+        <link rel="stylesheet" href="./libs/css/leaflet/MarkerCluster.css">
 
         <!--stylesheet-->
         <link rel="stylesheet" href="./libs/css/style.css">
@@ -172,7 +175,7 @@
         <div class="modal" tabindex="-1" id="countryNewsModal">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-              <div class="modal-header">
+              <div class="modal-header sticky-top">
                 <h5 class="modal-title">Recent news involving <span class="countryName">No data found</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
@@ -231,7 +234,12 @@
         </script>
 
         <!--Leaflet easy buttons-->
-        <script src="./libs/js/easybutton/easybutton.js"></script>
+        <script src="./libs/js/leaflet/easybutton.js">
+        </script>
+
+        <!--Leaflet marker clusters-->
+        <script src="./libs/js/leaflet/leaflet.markercluster.js">
+        </script>
 
         <!--jQuery-->
         <script type="text/javascript" src="./libs/js/jquery-3.6.0.min.js">

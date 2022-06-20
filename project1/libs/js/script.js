@@ -14,6 +14,10 @@ L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map
 
 let bordersLayer = L.geoJSON().addTo(map);
 
+//create an empty layer for displaying markers
+
+let markerLayer = L.markerClusterGroup().addTo(map);
+
 //display the selected country's borders on map
 
 const displayBorders = countryJson => {
@@ -106,7 +110,6 @@ $("#countrySearch").html($("option").sort((a, b) => {
 const getData = (chosenCountryCode) => {
 
     //show the loading modal when function is initiated - when locally tested, the function is executed so fast the modal doesn't even show - this will be more helpful when retrieveing API data takes longer than usual
-
     $('#loadingModal').modal("show");
 
     //create a variable that will store the retrieved geoJSON data for drawing borders
@@ -115,8 +118,9 @@ const getData = (chosenCountryCode) => {
     //create a variable that will be used to query news API and places API
     let chosenCountryName;
 
-    //clear any drawn borders
+    //clear any drawn borders and markers
     bordersLayer.clearLayers();
+    markerLayer.clearLayers();
 
     //change contents of the news modal back to empty
     $('#news').html('');
@@ -218,6 +222,32 @@ const getData = (chosenCountryCode) => {
                                 }
 
                             }
+                        }
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+                }
+            });
+
+            //ajax request to get data from the Triposo API
+
+            $.ajax({
+                url: "libs/php/triposoHandler.php",
+                type: "POST",
+                dataType: 'json',
+                data: {
+                    countryName: chosenCountryName
+                },
+                success: function(result) {
+
+                    if (result.status.name == "ok") {
+
+                        //adds markers to the map and gives each a popup with a short description
+                        for (let i = 0; i < result.data.length; i++) {
+                            markerLayer.addLayer(L.marker([result.data[i].coordinates.latitude, result.data[i].coordinates.longitude], {
+                                title: result.data[i].name
+                            }).bindPopup(`<b>${result.data[i].name}</b><br>${result.data[i].snippet}`));
                         }
                     }
                 },
