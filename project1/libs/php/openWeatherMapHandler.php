@@ -1,15 +1,19 @@
 <?php
 
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+	ini_set('display_errors', 'On');
+	error_reporting(E_ALL);
 
-$executionStartTime = microtime(true);
+	//API key, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
 
-//URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
+	$openWeatherMapApiKey = 'e32492c31dc6e5cd00009f4f881846d6';
 
-$url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $_POST['capitalName'] . '&APPID=e32492c31dc6e5cd00009f4f881846d6&units=metric'; //URL to retrieve data from weather api
+	$executionStartTime = microtime(true);
 
-$ch = curl_init();
+	//URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
+
+	$url = 'https://api.openweathermap.org/data/2.5/weather?q=' . $_POST['capitalName'] . '&APPID=' . $openWeatherMapApiKey . '&units=metric';
+
+	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_URL,$url);
@@ -26,6 +30,7 @@ $ch = curl_init();
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 
 	//take only what's required from the response
+
 	$output['data']['clouds'] = $decode['clouds']['all'];
 	$output['data']['temperature'] = $decode['main']['temp'];
 	$output['data']['pressure'] = $decode['main']['pressure'];

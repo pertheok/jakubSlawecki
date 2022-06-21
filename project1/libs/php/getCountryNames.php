@@ -7,8 +7,13 @@
 
 	$executionStartTime = microtime(true);
 
+	//load the local json file
+
     $countryInfoJson = file_get_contents("../json/countryBorders.geo.json");
-    $countryInfoJsonArray = json_decode($countryInfoJson, true);	
+
+	//access the required data from the json response
+
+    $countryInfoJsonArray = json_decode($countryInfoJson, true)['features'];	
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
@@ -16,11 +21,11 @@
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 
 	//create a new array that contains objects of countryName => iso_a2 (key => value) pairs
-	$finalDataArray = [];
-	$dataToAccess = $countryInfoJsonArray['features'];
 
-	for ($i = 0; $i < count($dataToAccess); $i++) {
-		array_push($finalDataArray, (object)['countryName' => $dataToAccess[$i]['properties']['name'], 'iso_a2' => $dataToAccess[$i]['properties']['iso_a2']]);
+	$finalDataArray = [];
+
+	for ($i = 0; $i < count($countryInfoJsonArray); $i++) {
+		array_push($finalDataArray, (object)['countryName' => $countryInfoJsonArray[$i]['properties']['name'], 'iso_a2' => $countryInfoJsonArray[$i]['properties']['iso_a2']]);
 	}
 
 	$output['data'] = $finalDataArray;

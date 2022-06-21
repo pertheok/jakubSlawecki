@@ -1,15 +1,23 @@
 <?php
 
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+	//retrieve data from the geonames API
 
-$executionStartTime = microtime(true);
+	ini_set('display_errors', 'On');
+	error_reporting(E_ALL);
 
-//URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
+	//Username, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
 
-$url = 'http://api.geonames.org/countryInfoJSON?&lang=en&country=' . $_REQUEST['countryCode'] . '&username=pertheok'; //URL to retrieve data from the api providing basic country information
+	$geonamesUsername = 'pertheok';
 
-$ch = curl_init();
+	$executionStartTime = microtime(true);
+
+	//URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations.
+
+	$url = 'http://api.geonames.org/countryInfoJSON?&lang=en&country=' . $_REQUEST['countryCode'] . '&username=' . $geonamesUsername;
+
+	//cURL configuration
+
+	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_URL,$url);
@@ -18,7 +26,9 @@ $ch = curl_init();
 
 	curl_close($ch);
 
-	$decode = json_decode($result,true);	
+	//access the required data from the json response
+
+	$decode = json_decode($result,true)['geonames'][0];	
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
@@ -26,12 +36,13 @@ $ch = curl_init();
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 
 	//takes only what's required from the JSON response
-	$output['data']['areaInSqKm'] = $decode['geonames'][0]['areaInSqKm'];
-	$output['data']['capital'] = $decode['geonames'][0]['capital'];
-	$output['data']['continentName'] = $decode['geonames'][0]['continentName'];
-	$output['data']['currencyCode'] = $decode['geonames'][0]['currencyCode'];
-	$output['data']['population'] = $decode['geonames'][0]['population'];
-	
+
+	$output['data']['areaInSqKm'] = $decode['areaInSqKm'];
+	$output['data']['capital'] = $decode['capital'];
+	$output['data']['continentName'] = $decode['continentName'];
+	$output['data']['currencyCode'] = $decode['currencyCode'];
+	$output['data']['population'] = $decode['population'];
+
 	header('Content-Type: application/json; charset=UTF-8');
 
 	echo json_encode($output); 

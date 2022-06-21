@@ -1,15 +1,19 @@
 <?php
 
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+	ini_set('display_errors', 'On');
+	error_reporting(E_ALL);
 
-$executionStartTime = microtime(true);
+	//API key, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
 
-//URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
+	$openExchangeRatesApiKey = 'c692867c4e8647368b163220f42193fe';
 
-$url = 'https://openexchangerates.org/api/latest.json?app_id=c692867c4e8647368b163220f42193fe&symbols=' . $_POST['countryCurrency']; //URL to retrieve data from currency exchange, free account only allows to use USD as a base
+	$executionStartTime = microtime(true);
 
-$ch = curl_init();
+	//URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
+
+	$url = 'https://openexchangerates.org/api/latest.json?app_id=' . $openExchangeRatesApiKey . '&symbols=' . $_POST['countryCurrency'];
+
+	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_URL,$url);
@@ -24,6 +28,9 @@ $ch = curl_init();
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
+
+	//retrieve data, it's small enough so no need to bother with sieving it through  
+
 	$output['data'] = $decode;
 	
 	header('Content-Type: application/json; charset=UTF-8');
