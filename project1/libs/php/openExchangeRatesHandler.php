@@ -4,15 +4,14 @@
 	error_reporting(E_ALL);
 
 	//API key, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
-
 	$openExchangeRatesApiKey = 'c692867c4e8647368b163220f42193fe';
 
 	$executionStartTime = microtime(true);
 
-	//URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
-
+	//URL to send the request to
 	$url = 'https://openexchangerates.org/api/latest.json?app_id=' . $openExchangeRatesApiKey . '&symbols=' . $_POST['countryCurrency'];
 
+	//cURL configuration
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -30,7 +29,6 @@
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 
 	//retrieve data, it's small enough so no need to bother with sieving it through  
-
 	$output['data'] = $decode;
 	
 	header('Content-Type: application/json; charset=UTF-8');

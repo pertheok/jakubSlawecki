@@ -1,5 +1,4 @@
 /* setting up Leaflet so the map takes up the entire height and width of the screen */
-
 html, body {
     height: 100%;
     width: 100%;
@@ -18,18 +17,13 @@ body {
   }
 
 /* offset the drop down menu a little away from the top edge of the screen, so it's aligned with the top edge of Leaflet's control buttons*/
-
 .col-12 {
     top: 10px;
 }
 
-
-/* setting modal sizing so they don't overflow beyond the viewport */
-
-/* styling of the news modal */
+/* -----styling of the news modal */
 
 /* changes the colour so the sticky header and footer obscures the content as the modal is being scrolled */
-
 .modal-header, .modal-footer {
     background: white;
 }
@@ -44,30 +38,31 @@ body {
 }
 
 /* makes news article images fill their modal width */
-
 img {
     display: block;
     height: auto;
     width: 100%;
 }
 
-/* styling of the weather modal */
+/* -----styling of the weather modal */
 
+/* background image of the weather modal */
 #weather {
     background: url(../images/weather.png) no-repeat;
     background-size: cover;
 }
 
+/* sizing of the weather image dependent on the weather API response */
 #weatherImage {
     width: 100px;
     height: 100px;
 }
 
-.weatherHeader {
+.data-header {
     font-weight: bold;
 }
 
-.weatherData {
+.data {
     padding: 0px;
     text-align: center;
 }

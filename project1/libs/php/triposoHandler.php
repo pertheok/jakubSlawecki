@@ -10,10 +10,10 @@
 
 	$executionStartTime = microtime(true);
 
-	//URL to send the request to - API keys not hidden as they are free and do not incur any costs when going over limitations. Perhaps add a functionality to hide it somehow?
-
+	//URL to send the request to
 	$url = 'https://www.triposo.com/api/20220411/location.json?part_of=' . $_REQUEST['countryName'] . '&tag_labels=national_park&count=100&fields=coordinates,name,snippet&account=' . $triposoAccountId .  '&token=' . $triposoApiKey;
 
+	//cURL configuration
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -31,7 +31,6 @@
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 
 	//takes only what's required from the JSON response
-	
 	$output['data'] = $decode['results'];
 	
 	header('Content-Type: application/json; charset=UTF-8');
