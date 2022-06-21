@@ -5,7 +5,7 @@ let map = L.map('map');
 
 //add tile layers from the selected tile provider to the map
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'SPA made by <a href="http://www.jakubslawecki.com target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
+	attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
 }).addTo(map);
 
 //create an empty geoJSON layer to display country borders on it
