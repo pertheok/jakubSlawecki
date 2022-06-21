@@ -18,20 +18,22 @@
         <!--Bootstrap essentials-->
         <link rel="stylesheet" href="./libs/css/bootstrap/bootstrap.min.css">
 
-        <!--Leaflet easy buttons-->
+        <!--Leaflet Easy Buttons-->
         <link rel="stylesheet" href="./libs/css/leaflet/easybutton.css">
 
-        <!--Leaflet marker clusters-->
+        <!--Leaflet Marker Clusters-->
         <link rel="stylesheet" href="./libs/css/leaflet/MarkerCluster.css">
         <link rel="stylesheet" href="./libs/css/leaflet/MarkerCluster.Default.css">
 
-        <!--stylesheet-->
+        <!--Main stylesheet-->
         <link rel="stylesheet" href="./libs/css/style.css">
     </head>
     <body>
         <div class="container-fluid">
+
             <!--Top bar-->
             <div class="row">
+              
               <!--Search bar-->
                 <div class="col-12 d-flex justify-content-center fixed-top">
                     <select name="countryName" id="countrySearch">
@@ -49,21 +51,60 @@
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Country information</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <h5 class="modal-title">
+                    Country information
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                  </button>
                 </div>
                 <div class="modal-body">
 
-                  <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                  <p>Name: <span class="countryName">No data found</span></p>
-                  <p>ISO code: <span id="countryIsoCode">No data found</span></p>
-                  <p>Continent: <span id="countryContinent">No data found</span></p>
-                  <p>Capital: <span class="capitalName">No data found</span></p>
-                  <p>Population: <span id="countryPopulation">No data found</span></p>                  
-                  <p>Area in km<sup>2</sup>: <span id="countryArea">No data found</span></p>
+                  <!--Display information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+                  <p>
+                    Name: 
+                    <span class="countryName">
+                      No data found
+                    </span>
+                  </p>
+                  <p>
+                    ISO code: 
+                    <span id="countryIsoCode">
+                      No data found
+                    </span>
+                  </p>
+                  <p>
+                    Continent: 
+                    <span id="countryContinent">
+                      No data found
+                    </span>
+                  </p>
+                  <p>
+                    Capital: 
+                    <span class="capitalName">
+                      No data found
+                    </span>
+                  </p>
+                  <p>
+                    Population: 
+                    <span id="countryPopulation">
+                      No data found
+                    </span>
+                  </p>                  
+                  <p>
+                    Area in km
+                    <sup>
+                      2
+                    </sup>
+                    : 
+                    <span id="countryArea">
+                      No data found
+                    </span>
+                  </p>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                  </button>
                 </div>
               </div>
             </div>
@@ -74,17 +115,35 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Weather in <span class="capitalName">No data found</span> - capital of <span class="countryName">No data found</span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">
+                  Weather in 
+                  <span class="capitalName">
+                    No data found
+                  </span>
+                   - capital of 
+                   <span class="countryName">
+                    No data found
+                  </span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
               </div>
               <div class="modal-body" id="weather">
-                  <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+                  <!--Display information retrieved from APIs, spans will have their html rewritten based on the API responses -->
                   <div class="row">
                     <div class="col-4">
                       <img id="weatherImage" src="" alt="Weather symbol">
                     </div>
                     <div class="col-8 d-inline-flex justify-content-start align-items-end">
-                      <h5 id="capitalTemperature" class="weatherHeader">No data found</h5><h5 class="weatherHeader">&#8451;,&nbsp;</h5><h5 id="capitalWeather" class="weatherHeader">No data found</h5>
+                      <h5 id="capitalTemperature" class="weatherHeader">
+                        No data found
+                      </h5>
+                      <h5 class="weatherHeader">
+                        &#8451;,&nbsp;
+                      </h5>
+                      <h5 id="capitalWeather" class="weatherHeader">
+                        No data found
+                      </h5>
                     </div>
                   </div>
                   <div class="row w-100 m-0 justify-content-around">
@@ -130,7 +189,8 @@
                     <p class="col-3 weatherData">
                       <span id="capitalWindSpeed">
                         No data found
-                      </span> m/s
+                      </span>
+                       m/s
                     </p>
                     <p class="col-3 weatherData">
                       <span id="capitalSunrise">
@@ -145,7 +205,9 @@
                   </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
               </div>
             </div>
           </div>
@@ -157,16 +219,29 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">Currency information</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
               </div>
               <div class="modal-body">
 
                 <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                <p>Local currency: <span id="countryCurrency">No data found</span></p>
-                <p>Local currency USD exchange rate: <span id="countryCurrencyExchange">No data found</span></p>
+                <p>
+                  Local currency: 
+                  <span id="countryCurrency">
+                    No data found
+                  </span>
+                </p>
+                <p>
+                  Local currency USD exchange rate: 
+                </p>
+                <p id="countryCurrencyExchange">
+                  No data found
+                </p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
               </div>
             </div>
           </div>
@@ -177,15 +252,21 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header sticky-top">
-                <h5 class="modal-title">Recent news involving <span class="countryName">No data found</span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">
+                  Recent news involving 
+                  <span class="countryName">
+                    No data found
+                  </span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
               </div>
               <div class="modal-body" id="news">
 
-                <!--Displaying information retrieved from the APIs-->
+                <!--Displaying information retrieved from the APIs, code added by script-->
 
               </div>
-              <div class="modal-footer">
+              <div class="modal-footer sticky-bottom">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
               </div>
             </div>
@@ -197,16 +278,27 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Country Wikipedia Page</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">
+                  Country Wikipedia Page
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
               </div>
               <div class="modal-body">
 
-                <!--Link redirecting the user to the selected country's Wikipedia page-->
-                <p><a href="" target="_blank" id="countryWiki"><span>Wikipedia link (opens in a new tab)</span></a></p>
+                <!--Link redirecting the user to the selected country's Wikipedia page - Easy Buttons documentations is unclear on how can a bound function be changed, in this case to make the button redirect the user straight to Wikipedia page, bypassing the modal-->
+                <p>
+                  <a href="" target="_blank" id="countryWiki">
+                    <span>
+                      Wikipedia link (opens in a new tab)
+                    </span>
+                  </a>
+                </p>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  Close
+                </button>
               </div>
             </div>
           </div>
@@ -220,7 +312,9 @@
                 <div class="spinner-border" role="status">
                   <span class="sr-only"></span>
                 </div>
-                <span>Loading data...</span>
+                <span>
+                  Loading data...
+                </span>
               </div>
             </div>
           </div>
@@ -244,6 +338,10 @@
 
         <!--jQuery-->
         <script type="text/javascript" src="./libs/js/jquery-3.6.0.min.js">
+        </script>
+
+        <!--Font Awesome-->
+        <script src="./libs/js/fontawesome.js">
         </script>
         
         <!--custom script-->
