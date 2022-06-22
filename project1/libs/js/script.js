@@ -160,6 +160,42 @@ const getData = (chosenCountryCode) => {
         }
     });
 
+
+    //ajax request to get data from the Calendarific API
+    $.ajax({
+        url: "libs/php/calendarificHandler.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            countryCode: chosenCountryCode,
+            
+            //retrieve bank holiday data for the current year
+            year: new Date().getFullYear()
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //set the table data with holiday info
+                for (let i = 0;  i < result.data.length; i++) {
+                    $("#holidayTable").append(
+                        `<tr>
+                            <td>
+                                ${result.data[i].date}
+                            </td>
+                            <td>
+                                ${result.data[i].name}
+                            </td>
+                        </tr>`
+                    );
+                }
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+
     //ajax request to get data from the geonames API
     $.ajax({
         url: "libs/php/geonamesHandler.php",
@@ -187,153 +223,153 @@ const getData = (chosenCountryCode) => {
         //nested ajax request, as data retrieved from the previous request is needed for the remaining ones
         complete: function () {
 
-            //ajax request to get data from the news API
-            $.ajax({
-                url: "libs/php/newsHandler.php",
-                type: "POST",
-                dataType: 'json',
-                data: {
-                    countryName: chosenCountryName
-                },
-                success: function(result) {
+            // //ajax request to get data from the news API
+            // $.ajax({
+            //     url: "libs/php/newsHandler.php",
+            //     type: "POST",
+            //     dataType: 'json',
+            //     data: {
+            //         countryName: chosenCountryName
+            //     },
+            //     success: function(result) {
 
-                    if (result.status.name == "ok") {
+            //         if (result.status.name == "ok") {
 
-                        //display a message if there's no results for the selected country
-                        if (result.status.totalResults === 0) {
-                            $('#news').html('<p>No news data found for the selected country.</p>');
-                        } else {
+            //             //display a message if there's no results for the selected country
+            //             if (result.status.totalResults === 0) {
+            //                 $('#news').html('<p>No news data found for the selected country.</p>');
+            //             } else {
 
-                            //render html based on the retrieved news data - if there's no image provided with the article, use the placeholder instead
-                            for (let i = 0; i < result.data.length; i++) {
-                                if (result.data[i].urlToImage) {
-                                    $('#news').append(
-                                        `<a class="newslink" href="${result.data[i].url}" target="_blank">
-                                            <img src="${result.data[i].urlToImage}" alt="Article image">
-                                            <p>${result.data[i].source} | </p>
-                                            <h5>${result.data[i].title}</h5>
-                                            <p>${result.data[i].description}</p>
-                                        </a>
-                                        <hr>`
-                                    );
-                                } else {
-                                    $('#news').append(
-                                        `<a class="newslink" href="${result.data[i].url}" target="_blank">
-                                            <img src="./libs/images/noimg.jpg" alt="Article image placeholder">
-                                            <p>${result.data[i].source} | </p>
-                                            <h5>${result.data[i].title}</h5>
-                                            <p>${result.data[i].description}</p>
-                                        </a>
-                                        <hr>`
-                                    );
-                                }
+            //                 //render html based on the retrieved news data - if there's no image provided with the article, use the placeholder instead
+            //                 for (let i = 0; i < result.data.length; i++) {
+            //                     if (result.data[i].urlToImage) {
+            //                         $('#news').append(
+            //                             `<a class="newslink" href="${result.data[i].url}" target="_blank">
+            //                                 <img src="${result.data[i].urlToImage}" alt="Article image">
+            //                                 <p>${result.data[i].source} | </p>
+            //                                 <h5>${result.data[i].title}</h5>
+            //                                 <p>${result.data[i].description}</p>
+            //                             </a>
+            //                             <hr>`
+            //                         );
+            //                     } else {
+            //                         $('#news').append(
+            //                             `<a class="newslink" href="${result.data[i].url}" target="_blank">
+            //                                 <img src="./libs/images/noimg.jpg" alt="Article image placeholder">
+            //                                 <p>${result.data[i].source} | </p>
+            //                                 <h5>${result.data[i].title}</h5>
+            //                                 <p>${result.data[i].description}</p>
+            //                             </a>
+            //                             <hr>`
+            //                         );
+            //                     }
 
-                            }
-                        }
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-                }
-            });
+            //                 }
+            //             }
+            //         }
+            //     },
+            //     error: function(jqXHR, textStatus, errorThrown) {
+            //         console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+            //     }
+            // });
 
-            //ajax request to get data from the Triposo API
-            $.ajax({
-                url: "libs/php/triposoHandler.php",
-                type: "POST",
-                dataType: 'json',
-                data: {
-                    countryName: chosenCountryName
-                },
-                success: function(result) {
+            // //ajax request to get data from the Triposo API
+            // $.ajax({
+            //     url: "libs/php/triposoHandler.php",
+            //     type: "POST",
+            //     dataType: 'json',
+            //     data: {
+            //         countryName: chosenCountryName
+            //     },
+            //     success: function(result) {
 
-                    if (result.status.name == "ok") {
+            //         if (result.status.name == "ok") {
 
-                        //adds markers to the map and gives each marker a popup with a short description
+            //             //adds markers to the map and gives each marker a popup with a short description
 
-                        for (let i = 0; i < result.data.length; i++) {
-                            markerLayer.addLayer(L.marker([result.data[i].coordinates.latitude, result.data[i].coordinates.longitude], {
-                                title: result.data[i].name,
-                                icon: customMarker
-                            }).bindPopup(`<b>${result.data[i].name}</b><br>${result.data[i].snippet}`));
-                        }
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-                }
-            });
+            //             for (let i = 0; i < result.data.length; i++) {
+            //                 markerLayer.addLayer(L.marker([result.data[i].coordinates.latitude, result.data[i].coordinates.longitude], {
+            //                     title: result.data[i].name,
+            //                     icon: customMarker
+            //                 }).bindPopup(`<b>${result.data[i].name}</b><br>${result.data[i].snippet}`));
+            //             }
+            //         }
+            //     },
+            //     error: function(jqXHR, textStatus, errorThrown) {
+            //         console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+            //     }
+            // });
 
-            //ajax request to get data from the openExchangeRates API
-            $.ajax({
-                url: "libs/php/openExchangeRatesHandler.php",
-                type: "POST",
-                dataType: 'json',
-                data: {
-                    countryCurrency: $("#countryCurrency").html()
-                },
-                success: function(result) {
+            // //ajax request to get data from the openExchangeRates API
+            // $.ajax({
+            //     url: "libs/php/openExchangeRatesHandler.php",
+            //     type: "POST",
+            //     dataType: 'json',
+            //     data: {
+            //         countryCurrency: $("#countryCurrency").html()
+            //     },
+            //     success: function(result) {
 
-                    if (result.status.name == "ok") {
+            //         if (result.status.name == "ok") {
 
-                        //modify the result so it's rounded to two decimal places
-                        let rate = (result.data.rates[$("#countryCurrency").html()]).toFixed(2);
+            //             //modify the result so it's rounded to two decimal places
+            //             let rate = (result.data.rates[$("#countryCurrency").html()]).toFixed(2);
 
-                        //set the indicated html classes and ids equal to the relevant retrieved data
-                        $('#countryCurrencyExchange').html(`1 USD = ${rate} ${$("#countryCurrency").html()}`);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-                }
-            });
+            //             //set the indicated html classes and ids equal to the relevant retrieved data
+            //             $('#countryCurrencyExchange').html(`1 USD = ${rate} ${$("#countryCurrency").html()}`);
+            //         }
+            //     },
+            //     error: function(jqXHR, textStatus, errorThrown) {
+            //         console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+            //     }
+            // });
 
-            //ajax request to get data from the openWeatherMap API
-            $.ajax({
-                url: "libs/php/openWeatherMapHandler.php",
-                type: "POST",
-                dataType: 'json',
-                data: {
-                    capitalName: $(".capitalName").html()
-                },
-                success: function(result) {
+            // //ajax request to get data from the openWeatherMap API
+            // $.ajax({
+            //     url: "libs/php/openWeatherMapHandler.php",
+            //     type: "POST",
+            //     dataType: 'json',
+            //     data: {
+            //         capitalName: $(".capitalName").html()
+            //     },
+            //     success: function(result) {
 
-                    if (result.status.name == "ok") {
+            //         if (result.status.name == "ok") {
 
-                        //set the indicated html classes and ids equal to the relevant retrieved data
+            //             //set the indicated html classes and ids equal to the relevant retrieved data
 
-                        //modify the result so it's rounded to the nearest integer 
-                        $('#capitalTemperature').html(result.data.temperature.toFixed(0));
-                        $('#capitalWeather').html(result.data.description);
-                        $('#weatherImage').attr('src', `https://openweathermap.org/img/wn/${result.data.icon}@2x.png`);
-                        $('#capitalCloudiness').html(result.data.clouds);
-                        $('#capitalPressure').html(result.data.pressure);
-                        $('#capitalHumidity').html(result.data.humidity);
-                        $('#capitalWindSpeed').html(result.data.windSpeed);
+            //             //modify the result so it's rounded to the nearest integer 
+            //             $('#capitalTemperature').html(result.data.temperature.toFixed(0));
+            //             $('#capitalWeather').html(result.data.description);
+            //             $('#weatherImage').attr('src', `https://openweathermap.org/img/wn/${result.data.icon}@2x.png`);
+            //             $('#capitalCloudiness').html(result.data.clouds);
+            //             $('#capitalPressure').html(result.data.pressure);
+            //             $('#capitalHumidity').html(result.data.humidity);
+            //             $('#capitalWindSpeed').html(result.data.windSpeed);
 
-                        //converting received Unix timestamps to UTC time hh:mm
-                        let sunrise = result.data.sunrise;
-                        let sunset = result.data.sunset;
+            //             //converting received Unix timestamps to UTC time hh:mm
+            //             let sunrise = result.data.sunrise;
+            //             let sunset = result.data.sunset;
 
-                        //creating a new date from each retrieved Unix, multiplying each by 1000 so the arguments are in ms instead of s
-                        let sunriseDate = new Date(sunrise * 1000);
-                        let sunsetDate = new Date(sunset * 1000);
+            //             //creating a new date from each retrieved Unix, multiplying each by 1000 so the arguments are in ms instead of s
+            //             let sunriseDate = new Date(sunrise * 1000);
+            //             let sunsetDate = new Date(sunset * 1000);
 
-                        //extract hours from each timestamp
-                        let sunriseHour = sunriseDate.getHours();
-                        let sunsetHour = sunsetDate.getHours();
+            //             //extract hours from each timestamp
+            //             let sunriseHour = sunriseDate.getHours();
+            //             let sunsetHour = sunsetDate.getHours();
 
-                        //extract minutes from each timestamp
-                        let sunriseMinutes = sunriseDate.getMinutes();
-                        let sunsetMinutes = sunsetDate.getMinutes();
-                        $('#capitalSunrise').html(`${sunriseHour}:${sunriseMinutes}`);
-                        $('#capitalSunset').html(`${sunsetHour}:${sunsetMinutes}`);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-                }
-            });
+            //             //extract minutes from each timestamp
+            //             let sunriseMinutes = sunriseDate.getMinutes();
+            //             let sunsetMinutes = sunsetDate.getMinutes();
+            //             $('#capitalSunrise').html(`${sunriseHour}:${sunriseMinutes}`);
+            //             $('#capitalSunset').html(`${sunsetHour}:${sunsetMinutes}`);
+            //         }
+            //     },
+            //     error: function(jqXHR, textStatus, errorThrown) {
+            //         console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+            //     }
+            // });
 
         },
         error: function(jqXHR, textStatus, errorThrown) {

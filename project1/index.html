@@ -307,28 +307,29 @@
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Currency information</h5>
+                <h5 class="modal-title">National Holidays in this year</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
               </div>
               <div class="modal-body">
 
                 <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                <div class="row w-100 m-0 justify-content-around align-items-center bg-secondary text-white">
-                  <span class="data-header col-6 data">
-                    Local currency:
-                  </span>
-                  <span class="data-header col-6 data">
-                    Local currency USD exchange rate:
-                  </span>
-                </div>
-                <div class="row w-100 m-0 justify-content-around align-items-center">
-                  <span id="countryCurrency" class="col-6 data">
-                    No data found
-                  </span>
-                  <span id="countryCurrencyExchange" class="col-6 data">
-                    No data found
-                  </span>
+                <div class="row w-100">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>
+                          Name:
+                        </th>
+                        <th>
+                          Date:
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody id="holidayTable">
+                      <!--Data appended via script-->
+                    </tbody>
+                  </table>
                 </div>
               </div>
               <div class="modal-footer">

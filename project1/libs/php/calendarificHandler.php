@@ -10,7 +10,7 @@
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to
-	$url = 'https://calendarific.com/api/v2/holidays?&api_key=' . $calendarificApiKey . '&country=' . $_REQUEST['countryCode'] . '&year=' . $_REQUEST['year'];
+	$url = 'https://calendarific.com/api/v2/holidays?&api_key=' . $calendarificApiKey . '&country=' . $_REQUEST['countryCode'] . '&year=' . $_REQUEST['year'] . '&type=national';
 
 	//cURL configuration
 	$ch = curl_init();
@@ -26,7 +26,7 @@
 	$finalDataArray = [];
 
 	//access the required data from the json response
-	$decode = json_decode($result,true)['holidays'][0];	
+	$decode = json_decode($result,true)['response']['holidays'];	
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
