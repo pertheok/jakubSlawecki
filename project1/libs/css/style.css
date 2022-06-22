@@ -16,18 +16,23 @@ body {
     width: 100%;
   }
 
-/* offset the drop down menu a little away from the top edge of the screen, so it's aligned with the top edge of Leaflet's control buttons*/
-.col-12 {
-    top: 10px;
-}
+/* Loader setup */
+#loader {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    opacity: 0.7;
+    background-color: #fff;
+    z-index: 99;
+  }
 
 /* -----styling of the news modal */
 
 /* changes the colour so the sticky header and footer obscures the content as the modal is being scrolled */
-.modal-header, .modal-footer {
-    background: white;
-}
-
 .newslink {
     text-decoration: none;
     color: black;

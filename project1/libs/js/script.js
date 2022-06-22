@@ -14,9 +14,24 @@ let bordersLayer = L.geoJSON().addTo(map);
 //create an empty layer for displaying markers
 let markerLayer = L.markerClusterGroup().addTo(map);
 
+//create a variable for storing the custom marker style
+let customMarker = L.ExtraMarkers.icon({
+    icon: "fa-leaf",
+    markerColor: "green",
+    shape: "square",
+    prefix: 'fa'
+});
+
 //display the selected country's borders on map
 const displayBorders = countryJson => {
     bordersLayer.addData(countryJson);
+
+    //apply the selected style to the borders
+    bordersLayer.setStyle({
+        "color": "#ff7800",
+        "weight": 3,
+        "opacity": 0.65
+    });
 };
 
 //centre the map around the selected country
@@ -27,7 +42,7 @@ const centreMap = () => {
 //-----buttons to invoke info modals
 
 //centre map on the selected country
-L.easyButton('<i class="fa-solid fa-xl fa-location-crosshairs"></i>', () => {
+L.easyButton('<i class="fa-solid fa-xl fa-flag"></i>', () => {
     map.fitBounds(bordersLayer.getBounds());
 }).addTo(map);
 
@@ -51,10 +66,11 @@ L.easyButton('<i class="fa-solid fa-xl fa-newspaper"></i>', () => {
     $('#countryNewsModal').modal("show");
 }).addTo(map);
 
-//display country wiki modal
-L.easyButton('<i class="fa-brands fa-xl fa-wikipedia-w"></i>', () => {
-    $('#wikipediaModal').modal("show");
+//display bank holiday modal
+L.easyButton('<i class="fa-solid fa-xl fa-calendar-day"></i>', () => {
+    $('#holidayModal').modal("show");
 }).addTo(map);
+
 
 //-----search logic
 
@@ -98,9 +114,6 @@ $("#countrySearch").html($("option").sort((a, b) => {
 //-----script for handling requests 
 
 const getData = (chosenCountryCode) => {
-
-    //show the loading modal when function is initiated - when locally tested, the function is executed so fast the modal doesn't even show - this will be more useful when retrieveing API data takes longer than usual?
-    $('#loadingModal').modal("show");
 
     //create a variable that will store the retrieved geoJSON data for drawing borders
     let chosenCountryGeoJson;
@@ -240,7 +253,8 @@ const getData = (chosenCountryCode) => {
 
                         for (let i = 0; i < result.data.length; i++) {
                             markerLayer.addLayer(L.marker([result.data[i].coordinates.latitude, result.data[i].coordinates.longitude], {
-                                title: result.data[i].name
+                                title: result.data[i].name,
+                                icon: customMarker
                             }).bindPopup(`<b>${result.data[i].name}</b><br>${result.data[i].snippet}`));
                         }
                     }
@@ -336,9 +350,6 @@ const getData = (chosenCountryCode) => {
     //centre the map around the selected country
     centreMap();
 
-    //hide the loading modal after all data had been retrieved successfully
-    $('#loadingModal').modal("hide");
-
 }
 
 //-----initial state
@@ -386,3 +397,8 @@ getLocation();
 $('select').change(() => {
     getData($("select").val());
 });
+
+//hide the pre-loader after all data had been retrieved successfully
+$(window).on('load', function () {
+    $('#loader').hide();
+  }) 

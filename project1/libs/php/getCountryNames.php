@@ -1,6 +1,6 @@
 <?php
 
-	//retrieves data from an internal JSON file
+	//retrieve country names and their ISO codes from an internal JSON file
 
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);

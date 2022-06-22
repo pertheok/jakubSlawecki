@@ -1,6 +1,6 @@
 <?php
 
-	//retrieve data from an internal JSON file
+	//retrieve geoJSON data from an internal JSON file
 
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);

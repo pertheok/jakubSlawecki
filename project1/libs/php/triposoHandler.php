@@ -1,4 +1,6 @@
 <?php
+	
+	//retrieve data from the Triposo API
 
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
