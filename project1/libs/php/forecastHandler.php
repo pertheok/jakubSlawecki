@@ -11,7 +11,7 @@
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to
-	$url = 'https://api.openweathermap.org/data/2.5/forecast?q=' . $_POST['capitalName'] . '&APPID=' . $openWeatherMapApiKey;
+	$url = 'https://api.openweathermap.org/data/2.5/forecast?q=' . $_POST['capitalName'] . '&APPID=' . $openWeatherMapApiKey . '&units=metric';
 
 	//cURL configuration
 	$ch = curl_init();
@@ -23,7 +23,10 @@
 
 	curl_close($ch);
 
-	$decode = json_decode($result,true);	
+	//create a new array that will contain only the desired data
+	$finalDataArray = [];
+
+	$decode = json_decode($result,true)['list'];
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
@@ -31,16 +34,13 @@
 	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 
 	//take only what's required from the response
-	$output['data']['clouds'] = $decode['clouds']['all'];
-	$output['data']['temperature'] = $decode['main']['temp'];
-	$output['data']['pressure'] = $decode['main']['pressure'];
-	$output['data']['humidity'] = $decode['main']['humidity'];
-	$output['data']['sunrise'] = $decode['sys']['sunrise'];
-	$output['data']['sunset'] = $decode['sys']['sunset'];
-	$output['data']['windSpeed'] = $decode['wind']['speed'];
-	$output['data']['description'] = $decode['weather'][0]['description'];
-	$output['data']['icon'] = $decode['weather'][0]['icon'];
+	for ($i = 0; $i < count($decode); $i++) {
 
+		//check if forecast data is for the noon of the given day
+		if (str_contains('12:00:00', $decode[$i]['dt_txt'])) {
+			array_push($finalDataArray, (object)['temp' => $decode[$i]['main']['temp'], 'date' => $decode[$i]['dt_txt'], 'icon' => $decode[$i]['weather']['icon']]);
+		}
+	}
 	
 	header('Content-Type: application/json; charset=UTF-8');
 

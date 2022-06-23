@@ -67,64 +67,71 @@
                   </button>
                 </div>
                 <div class="modal-body">
-
                   <!--Display information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                  <div class="row w-100 m-0 justify-content-around">
-                    <span class="data-header col-6 data">
-                      Name:
-                    </span>
-                    <span class="countryName col-3 data">
-                      No data found
-                    </span>
-                    <span class="data-header col-3 data">
-                      ISO code: 
-                    </span>
-                    <span class="data-header col-3 data">
-                      Continent: 
-                    </span>
-                  </div>
-                  <div class="row w-100 m-0 justify-content-around align-items-center">
-                    
-                    <span id="countryIsoCode" class="col-3 data">
-                      No data found
-                    </span>
-                    <span id="countryContinent" class="col-3 data">
-                      No data found
-                    </span>
-                  </div>
-                  <div class="row w-100 m-0 justify-content-around align-items-center bg-secondary text-white">
-                    <span class="data-header col-3 data">
-                      Capital: 
-                    </span>
-                    <span class="data-header col-3 data">
-                      Population: 
-                    </span>
-                    <span class="data-header col-3 data">
-                      Area (km<sup>2</sup>): 
-                    </span>
-                  </div>
-                  <div class="row w-100 m-0 justify-content-around align-items-center">
-                    <span class="capitalName col-3 data">
-                      No data found
-                    </span>
-                    <span id="countryPopulation" class="col-3 data">
-                      No data found
-                    </span>
-                    <span id="countryArea" class="col-3 data">
-                      No data found
-                    </span>
-                  </div>
-                <!--Link redirecting the user to the selected country's Wikipedia page - Easy Buttons documentations is unclear on how can a bound function be changed, in this case to make the button redirect the user straight to Wikipedia page, bypassing the modal-->
-                  <div class="row w-100 m-0 justify-content-around align-items-center">
-                    <p>
-                      <a href="" target="_blank" id="countryWiki">
-                        <span>
-                          Wikipedia link (opens in a new tab)
-                        </span>
-                      </a>
-                    </p>
-                  </div>
-                </div>
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <th scope="row">
+                          Name:
+                        </td>
+                        <td class="countryName text-end">
+                          No data found
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          ISO code:
+                        </td>
+                        <td id="countryIsoCode" class="text-end">
+                          No data found
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          Continent:
+                        </td>
+                        <td id="countryContinent" class="text-end">
+                          No data found
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          Capital:
+                        </td>
+                        <td class="capitalName text-end">
+                          No data found
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          Population:
+                        </td>
+                        <td id="countryPopulation" class="text-end">
+                          No data found
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          Area (km<sup>2</sup>):
+                        </td>
+                        <td id="countryArea" class="text-end">
+                          No data found
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="text-center">
+                          
+                          <!--Link redirecting the user to the selected country's Wikipedia page-->
+                          <a href="" target="_blank" id="countryWiki">
+                            Wikipedia link (opens in a new tab)
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>                 
+                  
+
+
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Close
