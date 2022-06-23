@@ -458,4 +458,4 @@ $('select').change(() => {
 //hide the pre-loader after all data had been retrieved successfully
 $(window).on('load', function () {
     $('#loader').hide();
-  }) 
+});
