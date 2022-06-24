@@ -16,8 +16,55 @@ const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/res
 	attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
 });
 
-//set defaul map view
+//set default map view
 esriTopoMap.addTo(map);
+
+//change tile layers based on the selected radio button of the options radio group
+$('#topoMap').on("click", () => {
+        map.removeLayer(esriWorldStreetMap);
+        map.removeLayer(esriWorldImagery);
+        esriTopoMap.addTo(map);
+    }
+);
+
+$('#streetMap').on("click", () => {
+        map.removeLayer(esriTopoMap);
+        map.removeLayer(esriWorldImagery);
+        esriWorldStreetMap.addTo(map);
+    }
+);
+
+$('#worldMap').on("click", () => {
+        map.removeLayer(esriTopoMap);
+        map.removeLayer(esriWorldStreetMap);
+        esriWorldImagery.addTo(map);
+    }
+);
+
+//change visible marker data based on the selected radio button of the options radio group
+$('#nationalReserves').on("click", () => {
+        map.removeLayer(webcamLayer);
+        nationalReserveLayer.addTo(map);
+    }
+);
+
+$('#webcams').on("click", () => {
+        map.removeLayer(nationalReserveLayer);
+        webcamLayer.addTo(map);
+    }
+);
+
+$('#both').on("click", () => {
+    nationalReserveLayer.addTo(map);
+    webcamLayer.addTo(map);
+}
+);
+
+$('#off').on("click", () => {
+        map.removeLayer(nationalReserveLayer);
+        map.removeLayer(webcamLayer);
+    }
+);
 
 //create an empty geoJSON layer to display country borders on it
 let bordersLayer = L.geoJSON().addTo(map);
@@ -93,7 +140,7 @@ L.easyButton('<i class="fa-solid fa-xl fa-calendar-day"></i>', () => {
     $('#holidayModal').modal("show");
 }, "Show current year's national holidays in the selected country").addTo(map);
 
-//button to display layers and markers to choose from
+//button to display tile layers and markers data to choose from
 L.easyButton('<i class="fa-solid fa-map"></i>', () => {
     $('#optionsModal').modal("show");
 }, "Change between map layers and marker data that is displayed").setPosition('bottomleft').addTo(map);
@@ -355,9 +402,6 @@ const getData = (chosenCountryCode) => {
                                 title: result.data[i].name,
                                 icon: leafMarker
                             }).bindPopup(`<b>${result.data[i].name}</b><br>${result.data[i].snippet}`));
-                        //     }).bindPopup(`<div class="embed-responsive embed-responsive-1by1">
-                        //     <iframe class="embed-responsive-item" src="https://webcams.windy.com/webcams/public/embed/player/1508413740/day?autoresize=1&sr=2560x1440&vp=503x25&token=null"></iframe>
-                        //   </div>`)); 
                         }
                     }
                 },
