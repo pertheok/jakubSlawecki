@@ -37,10 +37,12 @@
 	for ($i = 0; $i < count($decode); $i++) {
 
 		//check if forecast data is for the noon of the given day
-		if (str_contains('12:00:00', $decode[$i]['dt_txt'])) {
-			array_push($finalDataArray, (object)['temp' => $decode[$i]['main']['temp'], 'date' => $decode[$i]['dt_txt'], 'icon' => $decode[$i]['weather']['icon']]);
+		if (str_contains($decode[$i]['dt_txt'], '12:00:00')) {
+			array_push($finalDataArray, (object)['temp' => $decode[$i]['main']['temp'], 'date' => $decode[$i]['dt_txt'], 'icon' => $decode[$i]['weather'][0]['icon']]);
 		}
 	}
+
+	$output['data'] = $finalDataArray;
 	
 	header('Content-Type: application/json; charset=UTF-8');
 

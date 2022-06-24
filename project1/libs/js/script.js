@@ -3,21 +3,43 @@
 //create the main map object
 let map = L.map('map');
 
-//add tile layers from the selected tile provider to the map
-L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+//create variables containing different map tiles
+const esriTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
-}).addTo(map);
+});
+
+const esriWorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
+});
+
+const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
+});
+
+//set defaul map view
+esriTopoMap.addTo(map);
 
 //create an empty geoJSON layer to display country borders on it
 let bordersLayer = L.geoJSON().addTo(map);
 
-//create an empty layer for displaying markers
-let markerLayer = L.markerClusterGroup().addTo(map);
+//create an empty layer for displaying markers showing national reserve locations
+let nationalReserveLayer = L.markerClusterGroup().addTo(map);
 
-//create a variable for storing the custom marker style
-let customMarker = L.ExtraMarkers.icon({
+//create an empty layer for displaying markers showing webcam locations
+let webcamLayer = L.markerClusterGroup().addTo(map);
+
+//create a variable for storing the marker style for national reserves
+const leafMarker = L.ExtraMarkers.icon({
     icon: "fa-leaf",
     markerColor: "green",
+    shape: "circle",
+    prefix: 'fa'
+});
+
+//create a variable for storing the marker style for webcams
+const cameraMarker = L.ExtraMarkers.icon({
+    icon: "fa-video",
+    markerColor: "purple",
     shape: "square",
     prefix: 'fa'
 });
@@ -44,32 +66,37 @@ const centreMap = () => {
 //centre map on the selected country
 L.easyButton('<i class="fa-solid fa-xl fa-flag"></i>', () => {
     map.fitBounds(bordersLayer.getBounds());
-}).addTo(map);
+}, 'Centre map on the selected country').addTo(map);
 
 //display basic country info modal
 L.easyButton('<i class="fa-solid fa-xl fa-circle-info"></i>', () => {
     $('#countryInfoModal').modal("show");
-}).addTo(map);
+}, 'Show basic country information').addTo(map);
 
 //display weather info modal
 L.easyButton('<i class="fa-solid fa-xl fa-cloud-sun"></i>', () => {
     $('#weatherInfoModal').modal("show");
-}).addTo(map);
+}, "Show weather information about the selected country's capital").addTo(map);
 
 //display currency info modal
 L.easyButton('<i class="fa-solid fa-xl fa-dollar-sign"></i>', () => {
     $('#currencyInfoModal').modal("show");
-}).addTo(map);
+}, "Show information about the selected country's currency").addTo(map);
 
 //display local news modal
 L.easyButton('<i class="fa-solid fa-xl fa-newspaper"></i>', () => {
     $('#countryNewsModal').modal("show");
-}).addTo(map);
+}, "Show news involving the selected country").addTo(map);
 
 //display bank holiday modal
 L.easyButton('<i class="fa-solid fa-xl fa-calendar-day"></i>', () => {
     $('#holidayModal').modal("show");
-}).addTo(map);
+}, "Show current year's national holidays in the selected country").addTo(map);
+
+//button to display layers and markers to choose from
+L.easyButton('<i class="fa-solid fa-map"></i>', () => {
+    $('#optionsModal').modal("show");
+}, "Change between map layers and marker data that is displayed").setPosition('bottomleft').addTo(map);
 
 
 //-----search logic
@@ -123,7 +150,8 @@ const getData = (chosenCountryCode) => {
 
     //clear any drawn borders and markers
     bordersLayer.clearLayers();
-    markerLayer.clearLayers();
+    nationalReserveLayer.clearLayers();
+    webcamLayer.clearLayers();
 
     //change contents of the news modal back to empty
     $('#news').html('');    
@@ -176,15 +204,19 @@ const getData = (chosenCountryCode) => {
 
             if (result.status.name == "ok") {
 
+                //clear the holiday table to make room for holidays for the selected country
+                $("#holidayTable").html("");
+
                 //set the table data with holiday info
                 for (let i = 0;  i < result.data.length; i++) {
+                    let currentDate = new Date(result.data[i].date);
                     $("#holidayTable").append(
                         `<tr>
                             <td>
-                                ${result.data[i].date}
-                            </td>
-                            <td>
                                 ${result.data[i].name}
+                            </td>
+                            <td class="text-end">
+                                ${currentDate.toString("dS MMM")}
                             </td>
                         </tr>`
                     );
@@ -223,7 +255,7 @@ const getData = (chosenCountryCode) => {
         //nested ajax request, as data retrieved from the previous request is needed for the remaining ones
         complete: function () {
 
-            //ajax request to get data from the news API
+            // //ajax request to get data from the news API
             $.ajax({
                 url: "libs/php/newsHandler.php",
                 type: "POST",
@@ -273,6 +305,37 @@ const getData = (chosenCountryCode) => {
                 }
             });
 
+            //ajax request to get data from the Windy API
+            $.ajax({
+                url: "libs/php/windyHandler.php",
+                type: "POST",
+                dataType: 'json',
+                data: {
+                    countryCode: chosenCountryCode,
+                },
+                success: function(result) {
+
+                    if (result.status.name == "ok") {
+                        for (let i = 0; i < result.data.length; i++) {
+                            webcamLayer.addLayer(L.marker([result.data[i].latitude, result.data[i].longitude], {
+                                title: result.data[i].title,
+                                icon: cameraMarker
+                            }).bindPopup(
+                                `<b>
+                                    ${result.data[i].title}
+                                </b>
+                                <div class="embed-responsive embed-responsive-1by1">
+                                    <iframe class="embed-responsive-item" src="https://webcams.windy.com/webcams/public/embed/player/${result.data[i].id}/day?autoresize=1&sr=2560x1440&vp=503x25&token=null"></iframe>
+                                </div>`
+                            )); 
+                        }
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+                }
+            });
+
             //ajax request to get data from the Triposo API
             $.ajax({
                 url: "libs/php/triposoHandler.php",
@@ -288,10 +351,13 @@ const getData = (chosenCountryCode) => {
                         //adds markers to the map and gives each marker a popup with a short description
 
                         for (let i = 0; i < result.data.length; i++) {
-                            markerLayer.addLayer(L.marker([result.data[i].coordinates.latitude, result.data[i].coordinates.longitude], {
+                            nationalReserveLayer.addLayer(L.marker([result.data[i].coordinates.latitude, result.data[i].coordinates.longitude], {
                                 title: result.data[i].name,
-                                icon: customMarker
+                                icon: leafMarker
                             }).bindPopup(`<b>${result.data[i].name}</b><br>${result.data[i].snippet}`));
+                        //     }).bindPopup(`<div class="embed-responsive embed-responsive-1by1">
+                        //     <iframe class="embed-responsive-item" src="https://webcams.windy.com/webcams/public/embed/player/1508413740/day?autoresize=1&sr=2560x1440&vp=503x25&token=null"></iframe>
+                        //   </div>`)); 
                         }
                     }
                 },
@@ -324,7 +390,7 @@ const getData = (chosenCountryCode) => {
                 }
             });
 
-            //ajax request to get data from the openWeatherMap weather API
+            // //ajax request to get data from the openWeatherMap weather API
             $.ajax({
                 url: "libs/php/openWeatherMapHandler.php",
                 type: "POST",
@@ -339,31 +405,9 @@ const getData = (chosenCountryCode) => {
                         //set the indicated html classes and ids equal to the relevant retrieved data
 
                         //modify the result so it's rounded to the nearest integer 
-                        $('#capitalTemperature').html(result.data.temperature.toFixed(0));
+                        $('#capitalTemperature').html(`${result.data.temperature.toFixed(0)}&#8451;`);
                         $('#capitalWeather').html(result.data.description);
                         $('#weatherImage').attr('src', `https://openweathermap.org/img/wn/${result.data.icon}@2x.png`);
-                        $('#capitalCloudiness').html(result.data.clouds);
-                        $('#capitalPressure').html(result.data.pressure);
-                        $('#capitalHumidity').html(result.data.humidity);
-                        $('#capitalWindSpeed').html(result.data.windSpeed);
-
-                        //converting received Unix timestamps to UTC time hh:mm
-                        let sunrise = result.data.sunrise;
-                        let sunset = result.data.sunset;
-
-                        //creating a new date from each retrieved Unix, multiplying each by 1000 so the arguments are in ms instead of s
-                        let sunriseDate = new Date(sunrise * 1000);
-                        let sunsetDate = new Date(sunset * 1000);
-
-                        //extract hours from each timestamp
-                        let sunriseHour = sunriseDate.getHours();
-                        let sunsetHour = sunsetDate.getHours();
-
-                        //extract minutes from each timestamp
-                        let sunriseMinutes = sunriseDate.getMinutes();
-                        let sunsetMinutes = sunsetDate.getMinutes();
-                        $('#capitalSunrise').html(`${sunriseHour}:${sunriseMinutes}`);
-                        $('#capitalSunset').html(`${sunsetHour}:${sunsetMinutes}`);
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -383,7 +427,26 @@ const getData = (chosenCountryCode) => {
 
                     if (result.status.name == "ok") {
 
+                        //change html of the forecast section to an empty string
+                        $("#forecast").html("");
+                        
                         //set the indicated html classes and ids equal to the relevant retrieved data
+                        for (let i = 0; i < 4; i++) {
+
+                            //declare a variable to store date, which will be later transformed
+                            let forecastDate = new Date(result.data[i].date);
+                            $("#forecast").append(
+                                `<td class="w-25 p-1">
+                                    <p>
+                                        ${forecastDate.toString("ddd dS")}
+                                    </p>
+                                    <img src="https://openweathermap.org/img/wn/${result.data[i].icon}@2x.png" class="w-75 float-start">
+                                    <p class="w-25 float-end h5">
+                                        ${result.data[i].temp.toFixed(0)}&#176;
+                                    </p>
+                                </td>`
+                            );
+                        }
 
                     }
                 },
