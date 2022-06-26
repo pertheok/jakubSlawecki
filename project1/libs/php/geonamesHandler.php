@@ -5,8 +5,9 @@
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
 
-	//Username, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
-	$geonamesUsername = 'pertheok';
+	//Import API key
+	include("config.php");
+	
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to

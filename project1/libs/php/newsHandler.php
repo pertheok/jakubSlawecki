@@ -5,10 +5,8 @@
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
 
-	//API key, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
-	$newsApiKey = 'a6f3ba0005e44352adcd34b99222b894';
-
-	$username = 'pertheok';
+	//Import API key
+	include("config.php");
 
 	$executionStartTime = microtime(true);
 

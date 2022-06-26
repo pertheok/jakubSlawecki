@@ -5,8 +5,8 @@
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
 
-	//API key, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
-	$openWeatherMapApiKey = 'e32492c31dc6e5cd00009f4f881846d6';
+	//Import API key
+	include("config.php");
 
 	$executionStartTime = microtime(true);
 

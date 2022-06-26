@@ -5,8 +5,9 @@
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
 
-	//API key, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
-	$calendarificApiKey = '2b04ec4a8e9c4b70955714d4d5289b4f300cd060';
+	//Import API key
+	include("config.php");
+
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to

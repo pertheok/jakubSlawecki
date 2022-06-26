@@ -5,10 +5,8 @@
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
 
-	//API key and account ID, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
-
-	$triposoAccountId = 'RN9VGNDK';
-	$triposoApiKey = '5eylga1e14ecff5dag1mtyc6qf6plte2';
+	//Import API key
+	include("config.php");
 
 	$executionStartTime = microtime(true);
 

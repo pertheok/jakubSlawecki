@@ -5,8 +5,8 @@
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
 
-	//API key, required to make a request - not hidden as the API is free to use and does not incur any costs when going over limitations. Perhaps add a functionality to hide it in an .env file?
-	$openCageApiKey = 'db840d0c33834a239c5ea6741c24d039';
+	//Import API key
+	include("config.php");
 
 	$executionStartTime = microtime(true);
 
