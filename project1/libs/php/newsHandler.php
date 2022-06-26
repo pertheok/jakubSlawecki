@@ -11,7 +11,7 @@
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to
-	$url = 'https://newsapi.org/v2/everything?q=' . $_REQUEST['countryName'] . '&sortBy=publishedAt&language=en&pageSize=10&apiKey=' . $newsApiKey;
+	$url = 'https://newsapi.org/v2/everything?q=' . $_POST['countryName'] . '&sortBy=publishedAt&language=en&pageSize=10&apiKey=' . $newsApiKey;
 
 	//cURL configuration
 	$ch = curl_init();

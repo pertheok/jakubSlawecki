@@ -11,7 +11,7 @@
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to
-	$url = 'https://calendarific.com/api/v2/holidays?&api_key=' . $calendarificApiKey . '&country=' . $_REQUEST['countryCode'] . '&year=' . $_REQUEST['year'] . '&type=national';
+	$url = 'https://calendarific.com/api/v2/holidays?&api_key=' . $calendarificApiKey . '&country=' . $_POST['countryCode'] . '&year=' . $_POST['year'] . '&type=national';
 
 	//cURL configuration
 	$ch = curl_init();

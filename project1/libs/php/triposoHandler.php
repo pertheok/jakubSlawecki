@@ -11,7 +11,7 @@
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to
-	$url = 'https://www.triposo.com/api/20220411/location.json?part_of=' . $_REQUEST['countryName'] . '&tag_labels=national_park&count=100&fields=coordinates,name,snippet&account=' . $triposoAccountId .  '&token=' . $triposoApiKey;
+	$url = 'https://www.triposo.com/api/20220411/location.json?part_of=' . $_POST['countryName'] . '&tag_labels=national_park&count=100&fields=coordinates,name,snippet&account=' . $triposoAccountId .  '&token=' . $triposoApiKey;
 
 	//cURL configuration
 	$ch = curl_init();

@@ -11,7 +11,7 @@
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to
-	$url = 'https://api.windy.com/api/webcams/v2/list/country=' . $_REQUEST['countryCode'] . "/orderby=popularity/limit=50?show=webcams:location,player";
+	$url = 'https://api.windy.com/api/webcams/v2/list/country=' . $_POST['countryCode'] . "/orderby=popularity/limit=50?show=webcams:location,player";
 
 
 

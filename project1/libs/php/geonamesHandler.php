@@ -11,7 +11,7 @@
 	$executionStartTime = microtime(true);
 
 	//URL to send the request to
-	$url = 'http://api.geonames.org/countryInfoJSON?&lang=en&country=' . $_REQUEST['countryCode'] . '&username=' . $geonamesUsername;
+	$url = 'http://api.geonames.org/countryInfoJSON?&lang=en&country=' . $_POST['countryCode'] . '&username=' . $geonamesUsername;
 
 	//cURL configuration
 	$ch = curl_init();
