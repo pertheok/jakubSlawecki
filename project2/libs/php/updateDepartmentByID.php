@@ -2,7 +2,7 @@
 
 	// example use from browser
 	// use insertDepartment.php first to create new dummy record and then specify it's id in the command below
-	// http://localhost/jakubSlawecki/project2/libs/php/updateDepartmentByID.php?id=<id>
+	// http://localhost/jakubSlawecki/project2/libs/php/updateDepartmentByID.php?name=<name>&locationID=<locationID>&id=<id>
 
 	// remove next two lines for production
 	
@@ -36,9 +36,9 @@
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
+	$query = $conn->prepare('UPDATE department SET name = ?, locationID = ? WHERE id = ?');
 	
-	$query->bind_param("i", $_REQUEST['id']);
+	$query->bind_param("sii", $_REQUEST['name'], $_REQUEST['locationID'], $_REQUEST['id']);
 
 	$query->execute();
 	

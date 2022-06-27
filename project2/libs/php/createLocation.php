@@ -1,7 +1,7 @@
 <?php
 
 	// example use from browser
-	// http://localhost/jakubSlawecki/project2/libs/php/createLocation.php?name=New%20Location
+	// http://localhost/jakubSlawecki/project2/libs/php/createLocation.php?name=<name>
 
 	// remove next two lines for production
 	
@@ -37,9 +37,9 @@
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare('INSERT INTO department (name, locationID) VALUES(?,?)');
+	$query = $conn->prepare('INSERT INTO location (name) VALUES(?)');
 
-	$query->bind_param("si", $_REQUEST['name'], $_REQUEST['locationID']);
+	$query->bind_param("s", $_REQUEST['name']);
 
 	$query->execute();
 	
