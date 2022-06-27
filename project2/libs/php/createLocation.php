@@ -1,8 +1,7 @@
 <?php
 
 	// example use from browser
-	// use insertDepartment.php first to create new dummy record and then specify it's id in the command below
-	// http://localhost/jakubSlawecki/project2/libs/php/deleteDepartmentByID.php?id=<id>
+	// http://localhost/jakubSlawecki/project2/libs/php/createLocation.php?name=New%20Location
 
 	// remove next two lines for production
 	
@@ -10,7 +9,9 @@
 	error_reporting(E_ALL);
 
 	$executionStartTime = microtime(true);
-
+	
+	// this includes the login details
+	
 	include("config.php");
 
 	header('Content-Type: application/json; charset=UTF-8');
@@ -36,9 +37,9 @@
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
-	
-	$query->bind_param("i", $_REQUEST['id']);
+	$query = $conn->prepare('INSERT INTO department (name, locationID) VALUES(?,?)');
+
+	$query->bind_param("si", $_REQUEST['name'], $_REQUEST['locationID']);
 
 	$query->execute();
 	

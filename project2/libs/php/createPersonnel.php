@@ -1,7 +1,7 @@
 <?php
 
 	// example use from browser
-	// http://localhost/companydirectory/libs/php/getAll.php
+	// http://localhost/jakubSlawecki/project2/libs/php/createPersonnel.php?firstName=<firstName>&lastName=<lastName>&jobTitle=<jobTitle>&email=<email>&departmentID=<id>
 
 	// remove next two lines for production
 	
@@ -9,7 +9,9 @@
 	error_reporting(E_ALL);
 
 	$executionStartTime = microtime(true);
-
+	
+	// this includes the login details
+	
 	include("config.php");
 
 	header('Content-Type: application/json; charset=UTF-8');
@@ -32,13 +34,16 @@
 
 	}	
 
-	// SQL does not accept parameters and so is not prepared
+	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
+	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = 'SELECT p.lastName, p.firstName, p.jobTitle, p.email, d.name as department, l.name as location FROM personnel p LEFT JOIN department d ON (d.id = p.departmentID) LEFT JOIN location l ON (l.id = d.locationID) ORDER BY p.lastName, p.firstName, d.name, l.name';
+	$query = $conn->prepare('INSERT INTO department (name, locationID) VALUES(?,?)');
 
-	$result = $conn->query($query);
+	$query->bind_param("si", $_REQUEST['name'], $_REQUEST['locationID']);
+
+	$query->execute();
 	
-	if (!$result) {
+	if (false === $query) {
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";
@@ -52,20 +57,12 @@
 		exit;
 
 	}
-   
-   	$data = [];
-
-	while ($row = mysqli_fetch_assoc($result)) {
-
-		array_push($data, $row);
-
-	}
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = $data;
+	$output['data'] = [];
 	
 	mysqli_close($conn);
 

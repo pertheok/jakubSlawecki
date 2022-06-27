@@ -2,7 +2,7 @@
 
 	// example use from browser
 	// use insertDepartment.php first to create new dummy record and then specify it's id in the command below
-	// http://localhost/jakubSlawecki/project2/libs/php/deleteDepartmentByID.php?id=<id>
+	// http://localhost/jakubSlawecki/project2/libs/php/updateDepartmentByID.php?id=<id>
 
 	// remove next two lines for production
 	
