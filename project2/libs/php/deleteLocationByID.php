@@ -37,6 +37,8 @@
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
 	$query = $conn->prepare('DELETE FROM location WHERE id = ?');
+
+	// $query = $conn->prepare('DELETE FROM location WHERE id = ? not IN (SELECT locationID FROM department WHERE locationID is not null)');
 	
 	$query->bind_param("i", $_REQUEST['id']);
 
