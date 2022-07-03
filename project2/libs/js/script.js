@@ -3,9 +3,9 @@
 //populate the table with basic personnel info
 const readAllPersonnel = () => {
 
-    //set CRUD modal content
-    $("#modalTitle").html("Create a new employee");
-    $("#modalBody").html(`
+    //set read modal content
+    $("#createTitle").html("Create a new employee");
+    $("#createBody").html(`
         <form id="createPersonnel">
             <div class="form-group">
                 <input type="text" class="form-control m-1" id="firstName" placeholder="First Name" required>
@@ -17,6 +17,9 @@ const readAllPersonnel = () => {
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">
                     Create
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
                 </button>
             </div>
         </form>
@@ -49,7 +52,7 @@ const readAllPersonnel = () => {
                         <th>
                             Last Name
                         </th>
-                        <th class="d-none d-md-table-cell">
+                        <th>
                             First Name
                         </th>
                         <th class="d-none d-lg-table-cell">
@@ -64,23 +67,20 @@ const readAllPersonnel = () => {
                         <th class="d-none d-md-table-cell">
                             Location
                         </th>
-                        <th>
-                            Actions
-                        </th>
                     </tr>`
                 );
 
                 //set the table body with the requested info - certain columns are displayed only on certain display sizes to prevent overflowing
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
-                        `<tr id="employee${i}">
+                        `<tr onclick="readPersonnelByID(${result.data[i].id});">
                             <td class="d-none d-lg-table-cell">
                                 ${result.data[i].id}
                             </td>
                             <td>
                                 ${result.data[i].lastName}
                             </td>
-                            <td class="d-none d-md-table-cell">
+                            <td>
                                 ${result.data[i].firstName}
                             </td>
                             <td class="d-none d-lg-table-cell">
@@ -94,14 +94,6 @@ const readAllPersonnel = () => {
                             </td>
                             <td class="d-none d-md-table-cell">
                                 ${result.data[i].location}
-                            </td>
-                            <td>
-                                <span class="fa fa-eye m-1" onclick="readPersonnelByID(${result.data[i].id});">
-                                </span>
-                                <span class="fa fa-pencil m-1" onclick="">
-                                </span>
-                                <span class="fa fa-trash m-1" onclick="">
-                                </span>
                             </td>
                         </tr>`
                     );
@@ -117,9 +109,9 @@ const readAllPersonnel = () => {
 //populate the table with department info
 const readAllDepartments = () => {
 
-    //set CRUD modal content
-    $("#modalTitle").html("Create a new Department");
-    $("#modalBody").html(`
+    //set read modal content
+    $("#createTitle").html("Create a new Department");
+    $("#createBody").html(`
         <form id="createDepartment">
             <div class="form-group">
                 <input type="text" class="form-control m-1" id="departmentName" placeholder="Department Name" required>
@@ -128,6 +120,9 @@ const readAllDepartments = () => {
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">
                     Create
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
                 </button>
             </div>
         </form>
@@ -163,16 +158,13 @@ const readAllDepartments = () => {
                         <th>
                             Location
                         </th>
-                        <th>
-                            Actions
-                        </th>
                     </tr>`
                 );
 
                 //set the table body with the requested info
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
-                        `<tr>
+                        `<tr onclick="readDepartmentByID(${result.data[i].id});">
                             <td>
                                 ${result.data[i].id}
                             </td>
@@ -181,14 +173,6 @@ const readAllDepartments = () => {
                             </td>
                             <td>
                                 ${result.data[i].location}
-                            </td>
-                            <td>
-                                <span class="fa fa-eye m-1" onclick="readDepartmentByID(${result.data[i].id});">
-                                </span>
-                                <span class="fa fa-pencil m-1" onclick="">
-                                </span>
-                                <span class="fa fa-trash m-1" onclick="">
-                                </span>
                             </td>
                         </tr>`
                     );
@@ -205,9 +189,9 @@ const readAllDepartments = () => {
 //populate the table with location info
 const readAllLocations = () => {
 
-    //set CRUD modal content
-    $("#modalTitle").html("Create a new Location");
-    $("#modalBody").html(`
+    //set read modal content
+    $("#createTitle").html("Create a new Location");
+    $("#createBody").html(`
         <form id="createLocation">
             <div class="form-group">
                 <input type="text" class="form-control m-1" id="locationName" placeholder="Location Name" required>
@@ -215,6 +199,9 @@ const readAllLocations = () => {
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">
                     Create
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
                 </button>
             </div>
         </form>
@@ -247,29 +234,18 @@ const readAllLocations = () => {
                         <th>
                             Name
                         </th>
-                        <th>
-                            Actions
-                        </th>
                     </tr>`
                 );
 
                 //set the table body with the requested info
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
-                        `<tr>
+                        `<tr onclick="readLocationByID(${result.data[i].id});">
                             <td>
                                 ${result.data[i].id}
                             </td>
                             <td>
                                 ${result.data[i].name}
-                            </td>
-                            <td>
-                                <span class="fa fa-eye m-1" onclick="readLocationByID(${result.data[i].id});">
-                                </span>
-                                <span class="fa fa-pencil m-1" onclick="">
-                                </span>
-                                <span class="fa fa-trash m-1" onclick="">
-                                </span>
                             </td>
                         </tr>`
                     );
@@ -300,7 +276,7 @@ const createPersonnel = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
+                $("#createModal").modal("hide");
                 readAllPersonnel();
             }                
         },
@@ -324,7 +300,7 @@ const createDepartment = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
+                $("#createModal").modal("hide");
                 readAllDepartments();
             }                
         },
@@ -346,7 +322,7 @@ const createLocation = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
+                $("#createModal").modal("hide");
                 readAllLocations();
             }                
         },
@@ -372,7 +348,7 @@ const readPersonnelByID = id => {
 
             if (result.status.name == "ok") {
 
-                //set CRUD modal content
+                //set view modal content
                 $("#modalTitle").html("Employee record");
                 $("#modalBody").html(`
                     <table class="table table-striped">
@@ -436,7 +412,12 @@ const readPersonnelByID = id => {
                         </tbody>
                     </table>
                 `);
-                $("#crudModal").modal("show");
+
+                //set the delete button
+                $("#deleteConfirm").attr('onclick', `deletePersonnelByID(${result.data.personnel[0].id})`);
+
+                //display the read modal
+                $("#viewModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -458,7 +439,7 @@ const readDepartmentByID = id => {
 
             if (result.status.name == "ok") {
 
-                //set CRUD modal content
+                //set read modal content
                 $("#modalTitle").html("Department record");
                 $("#modalBody").html(`
                     <table class="table table-striped">
@@ -490,7 +471,12 @@ const readDepartmentByID = id => {
                         </tbody>
                     </table>
                 `);
-                $("#crudModal").modal("show");
+
+                //set the delete button
+                $("#deleteConfirm").attr('onclick', `deleteDepartmentByID(${result.data[0].id})`);
+
+                //display the read modal
+                $("#viewModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -513,7 +499,7 @@ const readLocationByID = id => {
 
             if (result.status.name == "ok") {
 
-                //set CRUD modal content
+                //set read modal content
                 $("#modalTitle").html("Location record");
                 $("#modalBody").html(`
                     <table class="table table-striped">
@@ -537,7 +523,12 @@ const readLocationByID = id => {
                         </tbody>
                     </table>
                 `);
-                $("#crudModal").modal("show");
+
+                //set the delete button
+                $("#deleteConfirm").attr('onclick', `deleteLocationByID(${result.data[0].id})`);
+
+                //display the read modal
+                $("#viewModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -562,7 +553,7 @@ const updateDepartmentByID = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
+                $("#viewModal").modal("hide");
                 readAllDepartments();
             }                
         },
@@ -584,7 +575,7 @@ const updateLocationByID = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
+                $("#viewModal").modal("hide");
                 readAllLocations();
             }                
         },
@@ -605,7 +596,7 @@ const updatePersonnelByID = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
+                $("#viewModal").modal("hide");
                 readAllDepartments();
             }                
         },
@@ -617,18 +608,21 @@ const updatePersonnelByID = () => {
 
 //Delete functions
 
-const deleteDepartmentByID = () => {
+//set the delete modal functionality
+
+const deleteDepartmentByID = id => {
     $.ajax({
         url: "libs/php/deleteDepartmentByID.php",
-        type: "DELETE",
+        type: "POST",
         dataType: 'json',
         data: {
-            id: $("#departmentName").val()
+            id: id
         },
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
+                $("#viewModal").modal("hide");
+                $("#deleteWarning").modal("hide");
                 readAllDepartments();
             }                
         },
@@ -638,18 +632,19 @@ const deleteDepartmentByID = () => {
     });
 };
 
-const deleteLocationByID = () => {
+const deleteLocationByID = id => {
     $.ajax({
         url: "libs/php/deleteLocationByID.php",
-        type: "DELETE",
+        type: "POST",
         dataType: 'json',
         data: {
-            id: $("#departmentName").val()
+            id: id
         },
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
+                $("#viewModal").modal("hide");
+                $("#deleteWarning").modal("hide");
                 readAllLocations();
             }                
         },
@@ -660,19 +655,20 @@ const deleteLocationByID = () => {
 
 };
 
-const deletePersonnelByID = () => {
+const deletePersonnelByID = id => {
     $.ajax({
         url: "libs/php/deletePersonnelByID.php",
-        type: "DELETE",
+        type: "POST",
         dataType: 'json',
         data: {
-            id: $("#departmentName").val()
+            id: id
         },
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#crudModal").modal("hide");
-                readAllDepartments();
+                $("#viewModal").modal("hide");
+                $("#deleteWarning").modal("hide");
+                readAllPersonnel();
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -685,9 +681,18 @@ const deletePersonnelByID = () => {
 
 //"Add New" buttons functionality
 $("#addNewButton").on("click", () => {
-    $("#crudModal").modal("show");
+    $("#createModal").modal("show");
 });
 
+//show the delete modal
+$("#deleteButton").on("click", () => {
+    $("#deleteWarning").modal("show");
+});
+
+//show the edit modal
+$("#editButton").on("click", () => {
+    $("#editModal").modal("show");
+});
 
 //needed to wrap the onclick functions in document.ready to work
 

@@ -63,9 +63,27 @@
                 </table>
             </div>
         </div>
+
+        <!--Modal for create operations -->
+        <div class="modal" tabindex="-1" id="createModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="createBody">
+                        <!--Content changed by the script-->
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <!--Modal for displaying CRUD operations-->
-        <div class="modal" tabindex="-1" id="crudModal">
+        <!--Modal for read operations -->
+        <div class="modal" tabindex="-1" id="viewModal">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -79,8 +97,63 @@
                         <!--Content changed by the script-->
                     </div>
                     <div class="modal-footer">
+                        <button type="button" id="editButton" class="btn btn-primary">
+                            Edit
+                        </button>
+                        <button type="button" id="deleteButton" class="btn btn-danger">
+                            Delete
+                        </button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for update operations -->
+        <div class="modal" tabindex="-1" id="editModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <!--Content changed by the script-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                            Confirm changes
+                        </button>
+                        <button type="button" class="btn btn-secondary">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for displaying the delete warning-->
+        <div class="modal" tabindex="-1" id="deleteWarning">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">
+                            Delete the record?
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body text-center" id="modalBody">
+                        <button type="button" class="btn btn-danger m-2" id="deleteConfirm">
+                            Delete
+                        </button>
+                        <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
+                            Cancel
                         </button>
                     </div>
                 </div>
