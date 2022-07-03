@@ -2,6 +2,26 @@
 
 //populate the table with basic personnel info
 const readAllPersonnel = () => {
+
+    //set CRUD modal content
+    $("#modalTitle").html("Create a new employee");
+    $("#modalBody").html(`
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control m-1" id="firstName" placeholder="First Name" required>
+                <input type="text" class="form-control m-1" id="lastName" placeholder="Last Name" required>
+                <input type="text" class="form-control m-1" id="jobTitle" placeholder="Job Title (optional)">
+                <input type="email" class="form-control m-1" id="email" placeholder="Email (optional)">
+                <input type="number" class="form-control m-1" id="departmentID" placeholder="Department ID" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="submitPersonnel" class="btn btn-primary">
+                    Create
+                </button>
+            </div>
+        </form>
+    `);
+
     $.ajax({
         url: "libs/php/readAllPersonnel.php",
         type: "GET",
@@ -17,26 +37,32 @@ const readAllPersonnel = () => {
                 $("thead").html("");
                 $("tbody").html("");
 
-                //set the button HTML
-                $("#buttonContainer").html(`
-                    <button id="addNewPersonnel" class="btn btn-success text-center">
-                        <i class="fa fa-plus">
-                        </i>
-                        Add a new Employee
-                    </button>
-                `);
+                //set the button description
+                $("#addNewButtonText").html(`Add a new Employee`);
 
-                //set the table header
+                //set the table header - certain columns are displayed only on certain display sizes to prevent overflowing
                 $("#tableHeaders").append(
                     `<tr class="sticky-top">
+                        <th class="d-none d-lg-table-cell">
+                            ID
+                        </th>
                         <th>
                             Last Name
                         </th>
-                        <th>
+                        <th class="d-none d-md-table-cell">
                             First Name
+                        </th>
+                        <th class="d-none d-lg-table-cell">
+                            Job title
+                        </th>
+                        <th class="d-none d-md-table-cell">
+                            Email
                         </th>
                         <th>
                             Department
+                        </th>
+                        <th class="d-none d-md-table-cell">
+                            Location
                         </th>
                         <th>
                             Actions
@@ -44,18 +70,30 @@ const readAllPersonnel = () => {
                     </tr>`
                 );
 
-                //set the table body with the requested info
+                //set the table body with the requested info - certain columns are displayed only on certain display sizes to prevent overflowing
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
                         `<tr id="employee${i}">
+                            <td class="d-none d-lg-table-cell">
+                                ${result.data[i].id}
+                            </td>
                             <td>
                                 ${result.data[i].lastName}
                             </td>
-                            <td>
+                            <td class="d-none d-md-table-cell">
                                 ${result.data[i].firstName}
+                            </td>
+                            <td class="d-none d-lg-table-cell">
+                                ${result.data[i].jobTitle}
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                ${result.data[i].email}
                             </td>
                             <td>
                                 ${result.data[i].department}
+                            </td>
+                            <td class="d-none d-md-table-cell">
+                                ${result.data[i].location}
                             </td>
                             <td>
                                 <span class="fa fa-eye">
@@ -79,6 +117,22 @@ const readAllPersonnel = () => {
 //populate the table with department info
 const readAllDepartments = () => {
 
+    //set CRUD modal content
+    $("#modalTitle").html("Create a new Department");
+    $("#modalBody").html(`
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control m-1" id="name" placeholder="Department Name" required>
+                <input type="number" class="form-control m-1" id="locationID" placeholder="Location ID" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="submitDepartment" class="btn btn-primary">
+                    Create
+                </button>
+            </div>
+        </form>
+    `);
+
     $.ajax({
         url: "libs/php/readAllDepartments.php",
         type: "GET",
@@ -94,14 +148,8 @@ const readAllDepartments = () => {
                 $("thead").html("");
                 $("tbody").html("");
                 
-                //set the button HTML
-                $("#buttonContainer").html(`
-                    <button id="addNewDepartment" class="btn btn-success text-center">
-                        <i class="fa fa-plus">
-                        </i>
-                        Add a new Department
-                    </button>
-                `);
+                //set the button description
+                $("#addNewButtonText").html(`Add a new Department`);
 
                 //set the table header
                 $("#tableHeaders").append(
@@ -157,6 +205,22 @@ const readAllDepartments = () => {
 //populate the table with location info
 const readAllLocations = () => {
 
+
+    //set CRUD modal content
+    $("#modalTitle").html("Create a new Location");
+    $("#modalBody").html(`
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control m-1" id="name" placeholder="Location Name" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" id="submitLocation" class="btn btn-primary">
+                    Create
+                </button>
+            </div>
+        </form>
+    `);
+
     $.ajax({
         url: "libs/php/readAllLocations.php",
         type: "GET",
@@ -172,14 +236,8 @@ const readAllLocations = () => {
                 $("thead").html("");
                 $("tbody").html("");
 
-                //set the button HTML
-                $("#buttonContainer").html(`
-                    <button id="addNewLocation" class="btn btn-success text-center">
-                        <i class="fa fa-plus">
-                        </i>
-                        Add a new Location
-                    </button>
-                `);
+                //set the button description
+                $("#addNewButtonText").html(`Add a new Location`);
 
                 //set the table header
                 $("#tableHeaders").append(
@@ -225,71 +283,11 @@ const readAllLocations = () => {
     });
 };
 
-//modifying the CRUD modal contents
-
-//Create a new employee
-
-const createPersonnelModal = () => {
-    $("#modalTitle").html("Create a new employee");
-    $("#modalBody").html(`
-        <form>
-            <div class="form-group">
-                <input type="text" class="form-control m-1" id="firstName" placeholder="First Name" required>
-                <input type="text" class="form-control m-1" id="lastName" placeholder="Last Name" required>
-                <input type="text" class="form-control m-1" id="jobTitle" placeholder="Job Title">
-                <input type="email" class="form-control m-1" id="email" placeholder="Email">
-                <input type="number" class="form-control m-1" id="departmentID" placeholder="Department ID" required>
-            </div>
-            <button type="submit" id="submitPersonnel" class="btn btn-primary">Create</button>
-        </form>
-    `);
-
-    $("#crudModal").modal("show");
-};
-
-const createDepartmentModal = () => {
-    $("#modalTitle").html("Create a new Department");
-    $("#modalBody").html(`
-        <form>
-            <div class="form-group">
-                <input type="text" class="form-control m-1" id="name" placeholder="Department Name" required>
-                <input type="number" class="form-control m-1" id="locationID" placeholder="Location ID" required>
-            </div>
-            <button type="submit" id="submitDepartment" class="btn btn-primary">Create</button>
-        </form>
-    `);
-
-    $("#crudModal").modal("show");
-};
-
-const createLocationModal = () => {
-    $("#modalTitle").html("Create a new Location");
-    $("#modalBody").html(`
-        <form>
-            <div class="form-group">
-                <input type="text" class="form-control m-1" id="name" placeholder="Location Name" required>
-            </div>
-            <button type="submit" id="submitLocation" class="btn btn-primary">Create</button>
-        </form>
-    `);
-
-    $("#crudModal").modal("show");
-};
-
-
 //functions for buttons
 
 //"Add New" buttons functionality
-$("#addNewPersonnel").on("click", () => {
-    createPersonnelModal();
-});
-
-$("#addNewDepartment").on("click", () => {
-    createPersonnelModal();
-});
-
-$("#addNewLocation").on("click", () => {
-    createLocationModal();
+$("#addNewButton").on("click", () => {
+    $("#crudModal").modal("show");
 });
 
 //radio buttons functionality
