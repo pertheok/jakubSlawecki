@@ -96,11 +96,11 @@ const readAllPersonnel = () => {
                                 ${result.data[i].location}
                             </td>
                             <td>
-                                <span class="fa fa-eye">
+                                <span class="fa fa-eye m-1" onclick="readPersonnelByID(${result.data[i].id});">
                                 </span>
-                                <span class="fa fa-pencil">
+                                <span class="fa fa-pencil m-1" onclick="">
                                 </span>
-                                <span class="fa fa-trash">
+                                <span class="fa fa-trash m-1" onclick="">
                                 </span>
                             </td>
                         </tr>`
@@ -172,7 +172,7 @@ const readAllDepartments = () => {
                 //set the table body with the requested info
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
-                        `<tr id="department${i}">
+                        `<tr>
                             <td>
                                 ${result.data[i].id}
                             </td>
@@ -183,11 +183,11 @@ const readAllDepartments = () => {
                                 ${result.data[i].location}
                             </td>
                             <td>
-                                <span class="fa fa-eye">
+                                <span class="fa fa-eye m-1" onclick="readDepartmentByID(${result.data[i].id});">
                                 </span>
-                                <span class="fa fa-pencil">
+                                <span class="fa fa-pencil m-1" onclick="">
                                 </span>
-                                <span class="fa fa-trash">
+                                <span class="fa fa-trash m-1" onclick="">
                                 </span>
                             </td>
                         </tr>`
@@ -256,7 +256,7 @@ const readAllLocations = () => {
                 //set the table body with the requested info
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
-                        `<tr id="department${i}">
+                        `<tr>
                             <td>
                                 ${result.data[i].id}
                             </td>
@@ -264,11 +264,11 @@ const readAllLocations = () => {
                                 ${result.data[i].name}
                             </td>
                             <td>
-                                <span class="fa fa-eye">
+                                <span class="fa fa-eye m-1" onclick="readLocationByID(${result.data[i].id});">
                                 </span>
-                                <span class="fa fa-pencil">
+                                <span class="fa fa-pencil m-1" onclick="">
                                 </span>
-                                <span class="fa fa-trash">
+                                <span class="fa fa-trash m-1" onclick="">
                                 </span>
                             </td>
                         </tr>`
@@ -359,15 +359,191 @@ const createLocation = () => {
 
 //Read functions
 
-const readDepartmentByID = () => {
+const readPersonnelByID = id => {
+
+    $.ajax({
+        url: "libs/php/readPersonnelByID.php",
+        type: "GET",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //set CRUD modal content
+                $("#modalTitle").html("Employee record");
+                $("#modalBody").html(`
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <td>
+                                    ${result.data.personnel[0].id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Last Name
+                                </th>
+                                <td>
+                                    ${result.data.personnel[0].lastName}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    First Name
+                                </th>
+                                <td>
+                                    ${result.data.personnel[0].firstName}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Job Title
+                                </th>
+                                <td>
+                                    ${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Email
+                                </th>
+                                <td>
+                                    ${result.data.personnel[0].email}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Department
+                                </th>
+                                <td>
+                                    ${result.data.personnel[0].department}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Location
+                                </th>
+                                <td>
+                                    ${result.data.personnel[0].location}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+                $("#crudModal").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
+const readDepartmentByID = id => {
+
+    $.ajax({
+        url: "libs/php/readDepartmentByID.php",
+        type: "GET",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //set CRUD modal content
+                $("#modalTitle").html("Department record");
+                $("#modalBody").html(`
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <td>
+                                    ${result.data[0].id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <td>
+                                    ${result.data[0].name}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Location
+                                </th>
+                                <td>
+                                    ${result.data[0].location}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+                $("#crudModal").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
 
 };
 
-const readLocationByID = () => {
+const readLocationByID = id => {
 
-};
+    $.ajax({
+        url: "libs/php/readLocationByID.php",
+        type: "GET",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
 
-const readPersonnelByID = () => {
+            if (result.status.name == "ok") {
+
+                //set CRUD modal content
+                $("#modalTitle").html("Location record");
+                $("#modalBody").html(`
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <td>
+                                    ${result.data[0].id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <td>
+                                    ${result.data[0].name}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+                $("#crudModal").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
 
 };
 
