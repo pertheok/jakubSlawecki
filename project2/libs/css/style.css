@@ -1,4 +1,11 @@
-.wrapper {
-    width: 600px;
-    margin: 0 auto;
+.fa:hover {
+    cursor: pointer;
+}
+
+th {
+    background-color: #A89D9B !important;
+}
+
+tbody tr:hover {
+    background-color: orange !important;
 }

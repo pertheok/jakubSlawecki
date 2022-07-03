@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -9,6 +9,9 @@
         <meta name="description" content="Company Information CRUD app">
         <meta name="author" content="Jakub Slawecki">
 
+        <!--Favicon-->
+        <link rel="icon" type="image/x-icon" href="./libs/icons/favicon.ico">
+
         <!--Bootstrap essentials-->
         <link rel="stylesheet" href="./libs/css/bootstrap/bootstrap.min.css">
 
@@ -16,27 +19,60 @@
         <link rel="stylesheet" href="./libs/css/style.css">
     </head>
     <body>
-
-        <div class="wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="mt-5 mb-3 clearfix">
-                            <h2 class="float-left">
-                                Employees Database
-                            </h2>
-                            <a href="" class="btn btn-success float-right">
-                                <i class="fa fa-plus">
-                                </i>
-                                Add a new employee
-                            </a>
-                        </div>
+        <div class="container-fluid">
+            <div class="row m-2 d-flex justify-content-center">
+                <div class="col-xl-4 text-center mb-2">
+                    <div class="btn-group" role="group" aria-label="Map tile toggle button group">
+                        <input type="radio" class="btn-check" name="data" id="employees" autocomplete="off" checked>
+                        <label class="btn btn-outline-primary" for="employees">Employees</label>
+                      
+                        <input type="radio" class="btn-check" name="data" id="departments" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="departments">Departments</label>
+                      
+                        <input type="radio" class="btn-check" name="data" id="locations" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="locations">Locations</label>
                     </div>
                 </div>
-                <div class="row">
-                    <table class="table table-striped">
+                <div class="col-xl-4 mb-2">
+                    <h2 id="tableTitle" class="text-center">
+                        <!-- Will be udpated by script, depending on user selection -->
+                    </h2>
+                </div>
+                <div id="buttonContainer" class="col-xl-4 justify-content-center text-center mb-2">
 
-                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-bordered table-striped">
+                    <thead id="tableHeaders">
+                        <!-- Will be udpated by script, depending on user selection -->
+                    </thead>
+                    <tbody id="tableData">
+                        <!-- Will be udpated by script, depending on user selection -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!--Modal for displaying CRUD operations-->
+        <div class="modal" tabindex="-1" id="crudModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <!--Content changed by the script-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
