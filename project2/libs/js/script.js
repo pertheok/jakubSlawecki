@@ -52,7 +52,7 @@ const readAllPersonnel = () => {
                         <th>
                             Last Name
                         </th>
-                        <th>
+                        <th class="d-none d-md-table-cell">
                             First Name
                         </th>
                         <th class="d-none d-lg-table-cell">
@@ -67,20 +67,23 @@ const readAllPersonnel = () => {
                         <th class="d-none d-md-table-cell">
                             Location
                         </th>
+                        <th>
+                            Actions
+                        </th>
                     </tr>`
                 );
 
                 //set the table body with the requested info - certain columns are displayed only on certain display sizes to prevent overflowing
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
-                        `<tr onclick="readPersonnelByID(${result.data[i].id});">
+                        `<tr>
                             <td class="d-none d-lg-table-cell">
                                 ${result.data[i].id}
                             </td>
                             <td>
                                 ${result.data[i].lastName}
                             </td>
-                            <td>
+                            <td class="d-none d-md-table-cell">
                                 ${result.data[i].firstName}
                             </td>
                             <td class="d-none d-lg-table-cell">
@@ -94,6 +97,14 @@ const readAllPersonnel = () => {
                             </td>
                             <td class="d-none d-md-table-cell">
                                 ${result.data[i].location}
+                            </td>
+                            <td>
+                                <span class="m-1 fa fa-eye" onclick="readPersonnelByID(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-pencil">
+                                </span>
+                                <span class="m-1 fa fa-trash">
+                                </span>
                             </td>
                         </tr>`
                     );
@@ -166,13 +177,16 @@ const readAllDepartments = () => {
                         <th>
                             Location
                         </th>
+                        <th>
+                            Actions
+                        </th>
                     </tr>`
                 );
 
                 //set the table body with the requested info
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
-                        `<tr onclick="readDepartmentByID(${result.data[i].id});">
+                        `<tr>
                             <td>
                                 ${result.data[i].id}
                             </td>
@@ -181,6 +195,14 @@ const readAllDepartments = () => {
                             </td>
                             <td>
                                 ${result.data[i].location}
+                            </td>
+                            <td>
+                                <span class="m-1 fa fa-eye" onclick="readDepartmentByID(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-pencil">
+                                </span>
+                                <span class="m-1 fa fa-trash">
+                                </span>
                             </td>
                         </tr>`
                     );
@@ -253,18 +275,29 @@ const readAllLocations = () => {
                         <th>
                             Name
                         </th>
+                        <th>
+                            Actions
+                        </th>
                     </tr>`
                 );
 
                 //set the table body with the requested info
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
-                        `<tr onclick="readLocationByID(${result.data[i].id});">
+                        `<tr>
                             <td>
                                 ${result.data[i].id}
                             </td>
                             <td>
                                 ${result.data[i].name}
+                            </td>
+                            <td>
+                                <span class="m-1 fa fa-eye" onclick="readLocationByID(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-pencil">
+                                </span>
+                                <span class="m-1 fa fa-trash">
+                                </span>
                             </td>
                         </tr>`
                     );
