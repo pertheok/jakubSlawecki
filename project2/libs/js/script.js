@@ -27,7 +27,7 @@ const readAllPersonnel = () => {
 
     $.ajax({
         url: "libs/php/readAllPersonnel.php",
-        type: "GET",
+        type: "POST",
         dataType: 'json',
         success: function(result) {
 
@@ -106,6 +106,9 @@ const readAllPersonnel = () => {
     });
 };
 
+//variable to store available department names for later use
+let departments = [];
+
 //populate the table with department info
 const readAllDepartments = () => {
 
@@ -130,11 +133,16 @@ const readAllDepartments = () => {
 
     $.ajax({
         url: "libs/php/readAllDepartments.php",
-        type: "GET",
+        type: "POST",
         dataType: 'json',
         success: function(result) {
 
             if (result.status.name == "ok") {
+
+                //populate the departments array and sort it alphabetically
+                for (let i = 0; i < result.data.length; i++) {
+                    departments[i] = {id: result.data[i].id, name: result.data[i].name};
+                }
 
                  //set the header
                  $("#tableTitle").html("Departments Database");
@@ -186,6 +194,9 @@ const readAllDepartments = () => {
 
 };
 
+//call the readAllDepartments function once to populate the departments array
+readAllDepartments();
+
 //populate the table with location info
 const readAllLocations = () => {
 
@@ -209,7 +220,7 @@ const readAllLocations = () => {
 
     $.ajax({
         url: "libs/php/readAllLocations.php",
-        type: "GET",
+        type: "POST",
         dataType: 'json',
         success: function(result) {
 
@@ -269,7 +280,7 @@ const createPersonnel = () => {
         data: {
             firstName: $("#firstName").val(),
             lastName: $("#lastName").val(),
-            jobTitile: $("#jobTitle").val(),
+            jobTitle: $("#jobTitle").val(),
             email: $("#email").val(),
             departmentID: $("#departmentID").val()
         },
@@ -339,7 +350,7 @@ const readPersonnelByID = id => {
 
     $.ajax({
         url: "libs/php/readPersonnelByID.php",
-        type: "GET",
+        type: "POST",
         dataType: 'json',
         data: {
             id: id
@@ -397,7 +408,7 @@ const readPersonnelByID = id => {
                                 <th>
                                     Department
                                 </th>
-                                <td>
+                                <td id="currentDepartment">
                                     ${result.data.personnel[0].department}
                                 </td>
                             </tr>
@@ -412,6 +423,83 @@ const readPersonnelByID = id => {
                         </tbody>
                     </table>
                 `);
+
+                //set edit modal content
+                $("#editTitle").html("Edit record");
+                $("#editBody").html(`
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <td>
+                                    ${result.data.personnel[0].id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Last Name
+                                </th>
+                                <td>
+                                    <input type="text" id="newLastName" value="${result.data.personnel[0].lastName}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    First Name
+                                </th>
+                                <td>
+                                    <input type="text" id="newFirstName" value="${result.data.personnel[0].firstName}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Job Title
+                                </th>
+                                <td>
+                                    <input type="text" id="newJobTitle" value="${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Email
+                                </th>
+                                <td>
+                                    <input type="email" id="newEmail" value="${result.data.personnel[0].email}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Department
+                                </th>
+                                <td>
+                                    <select name="department" id="newDepartment">
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+
+                //append the options to the department selection when editing
+                for (let i = 0; i < departments.length; i++) {
+
+                    //pre-selects the current department in the edit window
+                    if (departments[i].id == result.data.personnel[0].departmentID) {
+                        $("select").append(`<option value="${departments[i].id}" selected>${departments[i].name}</option>`);
+                    } else {
+                        $("select").append(`<option value="${departments[i].id}">${departments[i].name}</option>`);
+                    }
+                }
+
+                //sort the countries on the dropdown menu alphabetically
+                $("#newDepartment").html($("option").sort((a, b) => {
+                    return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+                }));
+
+                //set the edit button
+                $("#editConfirm").attr('onclick', `updatePersonnelByID(${result.data.personnel[0].id})`);
 
                 //set the delete button
                 $("#deleteConfirm").attr('onclick', `deletePersonnelByID(${result.data.personnel[0].id})`);
@@ -430,7 +518,7 @@ const readDepartmentByID = id => {
 
     $.ajax({
         url: "libs/php/readDepartmentByID.php",
-        type: "GET",
+        type: "POST",
         dataType: 'json',
         data: {
             id: id
@@ -490,7 +578,7 @@ const readLocationByID = id => {
 
     $.ajax({
         url: "libs/php/readLocationByID.php",
-        type: "GET",
+        type: "POST",
         dataType: 'json',
         data: {
             id: id
@@ -540,10 +628,37 @@ const readLocationByID = id => {
 
 //Update functions
 
+const updatePersonnelByID = id => {
+    $.ajax({
+        url: "libs/php/updatePersonnelByID.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id,
+            firstName: $("#newFirstName").val(),
+            lastName: $("#newLastName").val(),
+            jobTitle: $("#newJobTitle").val(),
+            email: $("#newEmail").val(),
+            departmentID: $("#newDepartment").val(),
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+                $("#editModal").modal("hide");
+                readAllPersonnel();
+                readPersonnelByID(id);
+            }                
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
 const updateDepartmentByID = () => {
     $.ajax({
         url: "libs/php/updateDepartmentByID.php",
-        type: "PUT",
+        type: "POST",
         dataType: 'json',
         data: {
             id: $("#departmentName").val(),
@@ -566,7 +681,7 @@ const updateDepartmentByID = () => {
 const updateLocationByID = () => {
     $.ajax({
         url: "libs/php/updateLocationByID.php",
-        type: "PUT",
+        type: "POST",
         dataType: 'json',
         data: {
             id: $("#departmentName").val(),
@@ -577,27 +692,6 @@ const updateLocationByID = () => {
             if (result.status.name == "ok") {
                 $("#viewModal").modal("hide");
                 readAllLocations();
-            }                
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-        }
-    });
-};
-
-const updatePersonnelByID = () => {
-    $.ajax({
-        url: "libs/php/updatePersonnelByID.php",
-        type: "PUT",
-        dataType: 'json',
-        data: {
-            id: $("#departmentName").val()
-        },
-        success: function(result) {
-
-            if (result.status.name == "ok") {
-                $("#viewModal").modal("hide");
-                readAllDepartments();
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
