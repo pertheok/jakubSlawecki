@@ -3,7 +3,7 @@
 //populate the table with basic personnel info
 const readAllPersonnel = () => {
 
-    //set read modal content
+    //set create modal content
     $("#createTitle").html("Create a new employee");
     $("#createBody").html(`
         <form id="createPersonnel">
@@ -101,7 +101,7 @@ const readAllPersonnel = () => {
                             <td>
                                 <span class="m-1 fa fa-eye" onclick="readPersonnelByID(${result.data[i].id});">
                                 </span>
-                                <span class="m-1 fa fa-pencil">
+                                <span class="m-1 fa fa-pencil" onclick="editPersonnelModal(${result.data[i].id});">
                                 </span>
                                 <span class="m-1 fa fa-trash">
                                 </span>
@@ -123,7 +123,7 @@ let departments = [];
 //populate the table with department info
 const readAllDepartments = () => {
 
-    //set read modal content
+    //set create modal content
     $("#createTitle").html("Create a new Department");
     $("#createBody").html(`
         <form id="createDepartment">
@@ -199,7 +199,7 @@ const readAllDepartments = () => {
                             <td>
                                 <span class="m-1 fa fa-eye" onclick="readDepartmentByID(${result.data[i].id});">
                                 </span>
-                                <span class="m-1 fa fa-pencil">
+                                <span class="m-1 fa fa-pencil" onclick="editDepartmentModal(${result.data[i].id});">
                                 </span>
                                 <span class="m-1 fa fa-trash">
                                 </span>
@@ -225,7 +225,7 @@ let locations = [];
 //populate the table with location info
 const readAllLocations = () => {
 
-    //set read modal content
+    //set create modal content
     $("#createTitle").html("Create a new Location");
     $("#createBody").html(`
         <form id="createLocation">
@@ -294,7 +294,7 @@ const readAllLocations = () => {
                             <td>
                                 <span class="m-1 fa fa-eye" onclick="readLocationByID(${result.data[i].id});">
                                 </span>
-                                <span class="m-1 fa fa-pencil">
+                                <span class="m-1 fa fa-pencil" onclick="editLocationModal(${result.data[i].id});">
                                 </span>
                                 <span class="m-1 fa fa-trash">
                                 </span>
@@ -468,6 +468,137 @@ const readPersonnelByID = id => {
                     </table>
                 `);
 
+                //display the read modal
+                $("#viewModal").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
+const readDepartmentByID = id => {
+
+    $.ajax({
+        url: "libs/php/readDepartmentByID.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //set read modal content
+                $("#modalTitle").html("Department record");
+                $("#modalBody").html(`
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <td>
+                                    ${result.data[0].id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <td>
+                                    ${result.data[0].name}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Location
+                                </th>
+                                <td>
+                                    ${result.data[0].location}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+
+                //display the read modal
+                $("#viewModal").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+
+};
+
+const readLocationByID = id => {
+
+    $.ajax({
+        url: "libs/php/readLocationByID.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //set read modal content
+                $("#modalTitle").html("Location record");
+                $("#modalBody").html(`
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <td>
+                                    ${result.data[0].id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <td>
+                                    ${result.data[0].name}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+
+                //display the read modal
+                $("#viewModal").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+
+};
+
+//Update functions
+
+//helper functions to set the edit modal
+const editPersonnelModal = id => {
+    $.ajax({
+        url: "libs/php/readPersonnelByID.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
                 //set edit modal content
                 $("#editTitle").html("Edit record");
                 $("#editBody").html(`
@@ -545,11 +676,8 @@ const readPersonnelByID = id => {
                 //set the edit button
                 $("#editConfirm").attr('onclick', `updatePersonnelByID(${result.data.personnel[0].id})`);
 
-                //set the delete button
-                $("#deleteConfirm").attr('onclick', `deletePersonnelByID(${result.data.personnel[0].id})`);
-
-                //display the read modal
-                $("#viewModal").modal("show");
+                //display the edit modal
+                $("#editModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -558,8 +686,7 @@ const readPersonnelByID = id => {
     });
 };
 
-const readDepartmentByID = id => {
-
+const editDepartmentModal = id => {
     $.ajax({
         url: "libs/php/readDepartmentByID.php",
         type: "POST",
@@ -570,39 +697,6 @@ const readDepartmentByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-
-                //set read modal content
-                $("#modalTitle").html("Department record");
-                $("#modalBody").html(`
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    ID
-                                </th>
-                                <td>
-                                    ${result.data[0].id}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Name
-                                </th>
-                                <td>
-                                    ${result.data[0].name}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Location
-                                </th>
-                                <td>
-                                    ${result.data[0].location}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                `);
 
                 //set edit modal content
                 $("#editTitle").html("Edit record");
@@ -657,22 +751,17 @@ const readDepartmentByID = id => {
                 //set the edit button
                 $("#editConfirm").attr('onclick', `updateDepartmentByID(${result.data[0].id})`);
 
-                //set the delete button
-                $("#deleteConfirm").attr('onclick', `deleteDepartmentByID(${result.data[0].id})`);
-
-                //display the read modal
-                $("#viewModal").modal("show");
+                //display the edit modal
+                $("#editModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
-
 };
 
-const readLocationByID = id => {
-
+const editLocationModal = id => {
     $.ajax({
         url: "libs/php/readLocationByID.php",
         type: "POST",
@@ -683,31 +772,6 @@ const readLocationByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-
-                //set read modal content
-                $("#modalTitle").html("Location record");
-                $("#modalBody").html(`
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    ID
-                                </th>
-                                <td>
-                                    ${result.data[0].id}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Name
-                                </th>
-                                <td>
-                                    ${result.data[0].name}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                `);
 
                 //set edit modal content
                 $("#editTitle").html("Edit record");
@@ -737,21 +801,15 @@ const readLocationByID = id => {
                 //set the edit button
                 $("#editConfirm").attr('onclick', `updateLocationByID(${result.data[0].id})`);
 
-                //set the delete button
-                $("#deleteConfirm").attr('onclick', `deleteLocationByID(${result.data[0].id})`);
-
-                //display the read modal
-                $("#viewModal").modal("show");
+                //display the edit modal
+                $("#editModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
-
 };
-
-//Update functions
 
 const updatePersonnelByID = id => {
     $.ajax({
