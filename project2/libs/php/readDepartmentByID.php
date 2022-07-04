@@ -3,11 +3,6 @@
 	// example use from browser
 	// http://localhost/jakubSlawecki/project2/libs/php/readDepartmentByID.php?id=<id>
 
-	// remove next two lines for production	
-
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
 
 	include("config.php");
@@ -33,11 +28,11 @@
 	}	
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 
-	$query = $conn->prepare('SELECT d.id, d.name, l.name as location FROM department d LEFT JOIN location l ON (l.id = d.locationID) WHERE d.id = ?');
+
+	$query = $conn->prepare('SELECT d.id, d.name, d.locationID, l.name as location FROM department d LEFT JOIN location l ON (l.id = d.locationID) WHERE d.id = ?');
 	
-	$query->bind_param("i", $_REQUEST['id']);
+	$query->bind_param("i", $_POST['id']);
 
 	$query->execute();
 	

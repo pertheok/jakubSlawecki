@@ -139,7 +139,7 @@ const readAllDepartments = () => {
 
             if (result.status.name == "ok") {
 
-                //populate the departments array and sort it alphabetically
+                //populate the departments array
                 for (let i = 0; i < result.data.length; i++) {
                     departments[i] = {id: result.data[i].id, name: result.data[i].name};
                 }
@@ -197,6 +197,9 @@ const readAllDepartments = () => {
 //call the readAllDepartments function once to populate the departments array
 readAllDepartments();
 
+//variable to store available location names for later use
+let locations = [];
+
 //populate the table with location info
 const readAllLocations = () => {
 
@@ -225,6 +228,11 @@ const readAllLocations = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
+
+                //populate the locations array
+                for (let i = 0; i < result.data.length; i++) {
+                    locations[i] = {id: result.data[i].id, name: result.data[i].name};
+                }
 
                  //set the header
                  $("#tableTitle").html("Locations Database");
@@ -268,6 +276,9 @@ const readAllLocations = () => {
         }
     });
 };
+
+//call the readAllLocations function once to populate the locations array
+readAllLocations();
 
 //Create functions
 
@@ -493,7 +504,7 @@ const readPersonnelByID = id => {
                     }
                 }
 
-                //sort the countries on the dropdown menu alphabetically
+                //sort the departments on the dropdown menu alphabetically
                 $("#newDepartment").html($("option").sort((a, b) => {
                     return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
                 }));
@@ -560,6 +571,59 @@ const readDepartmentByID = id => {
                     </table>
                 `);
 
+                //set edit modal content
+                $("#editTitle").html("Edit record");
+                $("#editBody").html(`
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <td>
+                                    ${result.data[0].id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <td>
+                                    <input type="text" id="newName" value="${result.data[0].name}">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Location
+                                </th>
+                                <td>
+                                    <select name="location" id="newLocationID">
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+
+                //append the options to the location selection when editing
+                for (let i = 0; i < locations.length; i++) {
+
+                    //pre-selects the current location in the edit window
+                    if (locations[i].id == result.data[0].locationID) {
+                        $("select").append(`<option value="${locations[i].id}" selected>${locations[i].name}</option>`);
+                    } else {
+                        $("select").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
+                    }
+                }
+
+                //sort the locations on the dropdown menu alphabetically
+                $("#newLocationID").html($("option").sort((a, b) => {
+                    return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+                }));
+
+                //set the edit button
+                $("#editConfirm").attr('onclick', `updateDepartmentByID(${result.data[0].id})`);
+
                 //set the delete button
                 $("#deleteConfirm").attr('onclick', `deleteDepartmentByID(${result.data[0].id})`);
 
@@ -612,6 +676,34 @@ const readLocationByID = id => {
                     </table>
                 `);
 
+                //set edit modal content
+                $("#editTitle").html("Edit record");
+                $("#editBody").html(`
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    ID
+                                </th>
+                                <td>
+                                    ${result.data[0].id}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <td>
+                                    <input type="text" id="newLocationName" value="${result.data[0].name}">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+
+                //set the edit button
+                $("#editConfirm").attr('onclick', `updateLocationByID(${result.data[0].id})`);
+
                 //set the delete button
                 $("#deleteConfirm").attr('onclick', `deleteLocationByID(${result.data[0].id})`);
 
@@ -655,21 +747,22 @@ const updatePersonnelByID = id => {
     });
 };
 
-const updateDepartmentByID = () => {
+const updateDepartmentByID = id => {
     $.ajax({
         url: "libs/php/updateDepartmentByID.php",
         type: "POST",
         dataType: 'json',
         data: {
-            id: $("#departmentName").val(),
-            name: $("#departmentName").val(),
-            locationID: $("#departmentName").val()
+            id: id,
+            name: $("#newName").val(),
+            locationID: $("#newLocationID").val()
         },
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#viewModal").modal("hide");
+                $("#editModal").modal("hide");
                 readAllDepartments();
+                readDepartmentByID(id);
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -678,20 +771,21 @@ const updateDepartmentByID = () => {
     });
 };
 
-const updateLocationByID = () => {
+const updateLocationByID = id => {
     $.ajax({
         url: "libs/php/updateLocationByID.php",
         type: "POST",
         dataType: 'json',
         data: {
-            id: $("#departmentName").val(),
-            name: $("#departmentName").val()
+            id: id,
+            name: $("#newLocationName").val()
         },
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#viewModal").modal("hide");
+                $("#editModal").modal("hide");
                 readAllLocations();
+                readLocationByID(id);
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {

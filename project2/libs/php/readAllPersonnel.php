@@ -3,11 +3,6 @@
 	// example use from browser
 	// http://localhost/jakubSlawecki/project2/libs/php/readAllPersonnel.php
 
-	// remove next two lines for production
-	
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
-
 	$executionStartTime = microtime(true);
 
 	include("config.php");
