@@ -1,18 +1,18 @@
+//arrays that will be used to populate dropdowns, will be filled when called with their respective read function
+let departments = [];
+let locations = [];
+
 //functions for populating the main table
 
-//populate the table with basic personnel info
-const readAllPersonnel = () => {
+//populate the table with location info
+const readAllLocations = () => {
 
     //set create modal content
-    $("#createTitle").html("Create a new employee");
+    $("#createTitle").html("Create a new Location");
     $("#createBody").html(`
-        <form id="createPersonnel">
+        <form id="createLocation">
             <div class="form-group">
-                <input type="text" class="form-control m-1" id="firstName" placeholder="First Name" required>
-                <input type="text" class="form-control m-1" id="lastName" placeholder="Last Name" required>
-                <input type="text" class="form-control m-1" id="jobTitle" placeholder="Job Title (optional)" value=''>
-                <input type="email" class="form-control m-1" id="email" placeholder="Email (optional)">
-                <input type="number" class="form-control m-1" id="departmentID" placeholder="Department ID" required>
+                <input type="text" class="form-control m-1" id="locationName" placeholder="Location Name" required>
             </div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">
@@ -26,6 +26,218 @@ const readAllPersonnel = () => {
     `);
 
     $.ajax({
+        url: "libs/php/readAllLocations.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                 //set the header
+                 $("#tableTitle").html("Locations Database");
+
+                //clear the results table
+                $("#tableHeaders").html("");
+                $("#tableData").html("");
+
+                //set the button description
+                $("#addNewButtonText").html(`Add a new Location`);
+
+                //set the table header
+                $("#tableHeaders").append(
+                    `<tr class="sticky-top">
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>`
+                );
+
+                //set the table body with the requested info
+                for (let i = 0;  i < result.data.length; i++) {
+                    $("#tableData").append(
+                        `<tr>
+                            <td>
+                                ${result.data[i].id}
+                            </td>
+                            <td>
+                                ${result.data[i].name}
+                            </td>
+                            <td>
+                                <span class="m-1 fa fa-eye" onclick="readLocationByID(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-pencil" onclick="editLocationModal(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-trash" onclick="deleteLocationModal(${result.data[i].id});">
+                                </span>
+                            </td>
+                        </tr>`
+                    );
+                }
+
+                //populate the locations array and sort it alphabetically by names
+                for (let i = 0; i < result.data.length; i++) {
+                    locations[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
+                }
+
+                locations.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
+//call the function to get the locations array populated
+readAllLocations();
+
+//populate the table with department info
+const readAllDepartments = () => {
+
+    //set create modal content
+    $("#createTitle").html("Create a new Department");
+    $("#createBody").html(`
+        <form id="createDepartment">
+            <div class="form-group">
+                <input type="text" class="form-control m-1" id="departmentName" placeholder="Department Name" required>
+                <select name="location" id="locationID" class="form-control m-1">
+                </select>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                    Create
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </form>
+    `);
+
+    //append the options to the location selection when editing
+    for (let i = 0; i < locations.length; i++) {
+            $("#locationID").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
+    }
+
+    $.ajax({
+        url: "libs/php/readAllDepartments.php",
+        type: "POST",
+        dataType: 'json',
+        async: false,
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+
+                 //set the header
+                 $("#tableTitle").html("Departments Database");
+
+                //clear the results table and the "Add New" button
+                $("#tableHeaders").html("");
+                $("#tableData").html("");
+                
+                //set the button description
+                $("#addNewButtonText").html(`Add a new Department`);
+
+                //set the table header
+                $("#tableHeaders").append(
+                    `<tr class="sticky-top">
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Location
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>`
+                );
+
+                //set the table body with the requested info
+                for (let i = 0;  i < result.data.length; i++) {
+                    $("#tableData").append(
+                        `<tr>
+                            <td>
+                                ${result.data[i].id}
+                            </td>
+                            <td>
+                                ${result.data[i].name}
+                            </td>
+                            <td>
+                                ${result.data[i].location}
+                            </td>
+                            <td>
+                                <span class="m-1 fa fa-eye" onclick="readDepartmentByID(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-pencil" onclick="editDepartmentModal(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-trash" onclick="deleteDepartmentModal(${result.data[i].id});">
+                                </span>
+                            </td>
+                        </tr>`
+                    );
+                }
+
+                //populate the departments array and sort it by names alphabetically
+                for (let i = 0; i < result.data.length; i++) {
+                    departments[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
+                }
+
+                departments.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+
+};
+
+//call the function to get the departments array populated
+readAllDepartments();
+
+//populate the table with basic personnel info
+const readAllPersonnel = () => {
+
+    //set create modal content
+    $("#createTitle").html("Create a new employee");
+    $("#createBody").html(`
+        <form id="createPersonnel">
+            <div class="form-group">
+                <input type="text" class="form-control m-1" id="firstName" placeholder="First Name" required>
+                <input type="text" class="form-control m-1" id="lastName" placeholder="Last Name" required>
+                <input type="text" class="form-control m-1" id="jobTitle" placeholder="Job Title (optional)" value=''>
+                <input type="email" class="form-control m-1" id="email" placeholder="Email (optional)">
+                <select name="department" id="departmentID" class="form-control m-1">
+                </select>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                    Create
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </form>
+    `);
+
+    //append the options to the department selection when editing
+    for (let i = 0; i < departments.length; i++) {
+        $("#departmentID").append(`<option value="${departments[i].id}">${departments[i].name}</option>`);
+    }
+
+    $.ajax({
         url: "libs/php/readAllPersonnel.php",
         type: "POST",
         dataType: 'json',
@@ -37,8 +249,8 @@ const readAllPersonnel = () => {
                 $("#tableTitle").html("Employees Database");
 
                 //clear the results table
-                $("thead").html("");
-                $("tbody").html("");
+                $("#tableHeaders").html("");
+                $("#tableData").html("");
 
                 //set the button description
                 $("#addNewButtonText").html(`Add a new Employee`);
@@ -116,202 +328,6 @@ const readAllPersonnel = () => {
         }
     });
 };
-
-//variable to store available department names for later use
-let departments = [];
-
-//populate the table with department info
-const readAllDepartments = () => {
-
-    //set create modal content
-    $("#createTitle").html("Create a new Department");
-    $("#createBody").html(`
-        <form id="createDepartment">
-            <div class="form-group">
-                <input type="text" class="form-control m-1" id="departmentName" placeholder="Department Name" required>
-                <input type="number" class="form-control m-1" id="locationID" placeholder="Location ID" required>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">
-                    Create
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </form>
-    `);
-
-    $.ajax({
-        url: "libs/php/readAllDepartments.php",
-        type: "POST",
-        dataType: 'json',
-        success: function(result) {
-
-            if (result.status.name == "ok") {
-
-                //populate the departments array
-                for (let i = 0; i < result.data.length; i++) {
-                    departments[i] = {id: result.data[i].id, name: result.data[i].name};
-                }
-
-                 //set the header
-                 $("#tableTitle").html("Departments Database");
-
-                //clear the results table and the "Add New" button
-                $("thead").html("");
-                $("tbody").html("");
-                
-                //set the button description
-                $("#addNewButtonText").html(`Add a new Department`);
-
-                //set the table header
-                $("#tableHeaders").append(
-                    `<tr class="sticky-top">
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Location
-                        </th>
-                        <th>
-                            Actions
-                        </th>
-                    </tr>`
-                );
-
-                //set the table body with the requested info
-                for (let i = 0;  i < result.data.length; i++) {
-                    $("#tableData").append(
-                        `<tr>
-                            <td>
-                                ${result.data[i].id}
-                            </td>
-                            <td>
-                                ${result.data[i].name}
-                            </td>
-                            <td>
-                                ${result.data[i].location}
-                            </td>
-                            <td>
-                                <span class="m-1 fa fa-eye" onclick="readDepartmentByID(${result.data[i].id});">
-                                </span>
-                                <span class="m-1 fa fa-pencil" onclick="editDepartmentModal(${result.data[i].id});">
-                                </span>
-                                <span class="m-1 fa fa-trash" onclick="deleteDepartmentModal(${result.data[i].id});">
-                                </span>
-                            </td>
-                        </tr>`
-                    );
-                }
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-        }
-    });
-
-};
-
-//call the readAllDepartments function once to populate the departments array
-readAllDepartments();
-
-//variable to store available location names for later use
-let locations = [];
-
-//populate the table with location info
-const readAllLocations = () => {
-
-    //set create modal content
-    $("#createTitle").html("Create a new Location");
-    $("#createBody").html(`
-        <form id="createLocation">
-            <div class="form-group">
-                <input type="text" class="form-control m-1" id="locationName" placeholder="Location Name" required>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">
-                    Create
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </form>
-    `);
-
-    $.ajax({
-        url: "libs/php/readAllLocations.php",
-        type: "POST",
-        dataType: 'json',
-        success: function(result) {
-
-            if (result.status.name == "ok") {
-
-                //populate the locations array
-                for (let i = 0; i < result.data.length; i++) {
-                    locations[i] = {id: result.data[i].id, name: result.data[i].name};
-                }
-
-                 //set the header
-                 $("#tableTitle").html("Locations Database");
-
-                //clear the results table
-                $("thead").html("");
-                $("tbody").html("");
-
-                //set the button description
-                $("#addNewButtonText").html(`Add a new Location`);
-
-                //set the table header
-                $("#tableHeaders").append(
-                    `<tr class="sticky-top">
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Actions
-                        </th>
-                    </tr>`
-                );
-
-                //set the table body with the requested info
-                for (let i = 0;  i < result.data.length; i++) {
-                    $("#tableData").append(
-                        `<tr>
-                            <td>
-                                ${result.data[i].id}
-                            </td>
-                            <td>
-                                ${result.data[i].name}
-                            </td>
-                            <td>
-                                <span class="m-1 fa fa-eye" onclick="readLocationByID(${result.data[i].id});">
-                                </span>
-                                <span class="m-1 fa fa-pencil" onclick="editLocationModal(${result.data[i].id});">
-                                </span>
-                                <span class="m-1 fa fa-trash" onclick="deleteLocationModal(${result.data[i].id});">
-                                </span>
-                            </td>
-                        </tr>`
-                    );
-                }
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-        }
-    });
-};
-
-//call the readAllLocations function once to populate the locations array
-readAllLocations();
 
 //Create functions
 
@@ -588,6 +604,7 @@ const readLocationByID = id => {
 
 //helper functions to set the edit modal
 const editPersonnelModal = id => {
+
     $.ajax({
         url: "libs/php/readPersonnelByID.php",
         type: "POST",
@@ -595,6 +612,7 @@ const editPersonnelModal = id => {
         data: {
             id: id
         },
+        async: false,
         success: function(result) {
 
             if (result.status.name == "ok") {
@@ -649,44 +667,41 @@ const editPersonnelModal = id => {
                                     Department
                                 </th>
                                 <td>
-                                    <select name="department" id="newDepartment">
+                                    <select name="newDepartment" id="newDepartment">
                                     </select>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 `);
-
+                
                 //append the options to the department selection when editing
                 for (let i = 0; i < departments.length; i++) {
 
                     //pre-selects the current department in the edit window
-                    if (departments[i].id == result.data.personnel[0].departmentID) {
-                        $("select").append(`<option value="${departments[i].id}" selected>${departments[i].name}</option>`);
+                    if (departments[i].id === result.data.personnel[0].departmentID) {
+                        $("#newDepartment").append(`<option value="${departments[i].id}" selected>${departments[i].name}</option>`);
                     } else {
-                        $("select").append(`<option value="${departments[i].id}">${departments[i].name}</option>`);
+                        $("#newDepartment").append(`<option value="${departments[i].id}">${departments[i].name}</option>`);
                     }
                 }
-
-                //sort the departments on the dropdown menu alphabetically
-                $("#newDepartment").html($("option").sort((a, b) => {
-                    return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
-                }));
 
                 //set the edit button
                 $("#editConfirm").attr('onclick', `updatePersonnelByID(${result.data.personnel[0].id})`);
 
-                //display the edit modal
-                $("#editModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
+
+    $("#editModal").modal("show");
+
 };
 
 const editDepartmentModal = id => {
+
     $.ajax({
         url: "libs/php/readDepartmentByID.php",
         type: "POST",
@@ -694,6 +709,7 @@ const editDepartmentModal = id => {
         data: {
             id: id
         },
+        async: false,
         success: function(result) {
 
             if (result.status.name == "ok") {
@@ -724,7 +740,7 @@ const editDepartmentModal = id => {
                                     Location
                                 </th>
                                 <td>
-                                    <select name="location" id="newLocationID">
+                                    <select name="newLocation" id="newLocationID">
                                     </select>
                                 </td>
                             </tr>
@@ -736,29 +752,26 @@ const editDepartmentModal = id => {
                 for (let i = 0; i < locations.length; i++) {
 
                     //pre-selects the current location in the edit window
-                    if (locations[i].id == result.data[0].locationID) {
-                        $("select").append(`<option value="${locations[i].id}" selected>${locations[i].name}</option>`);
+                    if (locations[i].id === result.data[0].locationID) {
+                        $("#newLocationID").append(`<option value="${locations[i].id}" selected>${locations[i].name}</option>`);
                     } else {
-                        $("select").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
+                        $("#newLocationID").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
                     }
                 }
-
-                //sort the locations on the dropdown menu alphabetically
-                $("#newLocationID").html($("option").sort((a, b) => {
-                    return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
-                }));
 
                 //set the edit button
                 $("#editConfirm").attr('onclick', `updateDepartmentByID(${result.data[0].id})`);
 
-                //display the edit modal
-                $("#editModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
+
+    //display the edit modal
+    $("#editModal").modal("show");
+
 };
 
 const editLocationModal = id => {
@@ -769,6 +782,7 @@ const editLocationModal = id => {
         data: {
             id: id
         },
+        async: false,
         success: function(result) {
 
             if (result.status.name == "ok") {
@@ -801,14 +815,15 @@ const editLocationModal = id => {
                 //set the edit button
                 $("#editConfirm").attr('onclick', `updateLocationByID(${result.data[0].id})`);
 
-                //display the edit modal
-                $("#editModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
+
+    $("#editModal").modal("show");
+
 };
 
 const updatePersonnelByID = id => {

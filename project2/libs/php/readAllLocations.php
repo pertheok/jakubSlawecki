@@ -29,7 +29,7 @@
 
 	// SQL does not accept parameters and so is not prepared
 
-	$query = 'SELECT * FROM location';
+	$query = 'SELECT * FROM location ORDER BY name';
 
 	$result = $conn->query($query);
 	
