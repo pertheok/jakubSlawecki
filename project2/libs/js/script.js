@@ -103,7 +103,7 @@ const readAllPersonnel = () => {
                                 </span>
                                 <span class="m-1 fa fa-pencil" onclick="editPersonnelModal(${result.data[i].id});">
                                 </span>
-                                <span class="m-1 fa fa-trash">
+                                <span class="m-1 fa fa-trash" onclick="deletePersonnelModal(${result.data[i].id});">
                                 </span>
                             </td>
                         </tr>`
@@ -201,7 +201,7 @@ const readAllDepartments = () => {
                                 </span>
                                 <span class="m-1 fa fa-pencil" onclick="editDepartmentModal(${result.data[i].id});">
                                 </span>
-                                <span class="m-1 fa fa-trash">
+                                <span class="m-1 fa fa-trash" onclick="deleteDepartmentModal(${result.data[i].id});">
                                 </span>
                             </td>
                         </tr>`
@@ -296,7 +296,7 @@ const readAllLocations = () => {
                                 </span>
                                 <span class="m-1 fa fa-pencil" onclick="editLocationModal(${result.data[i].id});">
                                 </span>
-                                <span class="m-1 fa fa-trash">
+                                <span class="m-1 fa fa-trash" onclick="deleteLocationModal(${result.data[i].id});">
                                 </span>
                             </td>
                         </tr>`
@@ -829,7 +829,6 @@ const updatePersonnelByID = id => {
             if (result.status.name == "ok") {
                 $("#editModal").modal("hide");
                 readAllPersonnel();
-                readPersonnelByID(id);
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -853,7 +852,6 @@ const updateDepartmentByID = id => {
             if (result.status.name == "ok") {
                 $("#editModal").modal("hide");
                 readAllDepartments();
-                readDepartmentByID(id);
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -876,7 +874,6 @@ const updateLocationByID = id => {
             if (result.status.name == "ok") {
                 $("#editModal").modal("hide");
                 readAllLocations();
-                readLocationByID(id);
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -888,6 +885,76 @@ const updateLocationByID = id => {
 //Delete functions
 
 //set the delete modal functionality
+const deletePersonnelModal = id => {
+    $.ajax({
+        url: "libs/php/readPersonnelByID.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //set the delete button
+                $("#deleteConfirm").attr('onclick', `deletePersonnelByID(${result.data.personnel[0].id})`);
+                $("#deleteWarning").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
+const deleteDepartmentModal = id => {
+    $.ajax({
+        url: "libs/php/readDepartmentByID.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //set the delete button
+                $("#deleteConfirm").attr('onclick', `deleteDepartmentByID(${result.data[0].id})`);
+                $("#deleteWarning").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
+const deleteLocationModal = id => {
+    $.ajax({
+        url: "libs/php/readLocationByID.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //set the delete button
+                $("#deleteConfirm").attr('onclick', `deleteLocationByID(${result.data[0].id})`);
+                $("#deleteWarning").modal("show");
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
+//delete the selected record based on its department
 
 const deleteDepartmentByID = id => {
     $.ajax({
@@ -900,7 +967,6 @@ const deleteDepartmentByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#viewModal").modal("hide");
                 $("#deleteWarning").modal("hide");
                 readAllDepartments();
             }                
@@ -922,7 +988,6 @@ const deleteLocationByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#viewModal").modal("hide");
                 $("#deleteWarning").modal("hide");
                 readAllLocations();
             }                
@@ -945,7 +1010,6 @@ const deletePersonnelByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#viewModal").modal("hide");
                 $("#deleteWarning").modal("hide");
                 readAllPersonnel();
             }                
@@ -961,16 +1025,6 @@ const deletePersonnelByID = id => {
 //"Add New" buttons functionality
 $("#addNewButton").on("click", () => {
     $("#createModal").modal("show");
-});
-
-//show the delete modal
-$("#deleteButton").on("click", () => {
-    $("#deleteWarning").modal("show");
-});
-
-//show the edit modal
-$("#editButton").on("click", () => {
-    $("#editModal").modal("show");
 });
 
 //needed to wrap the onclick functions in document.ready to work
