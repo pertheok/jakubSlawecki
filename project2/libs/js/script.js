@@ -982,8 +982,13 @@ const deleteDepartmentByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
+
                 $("#deleteWarning").modal("hide");
                 readAllDepartments();
+
+                if (result.data[0] ===  0) {
+                    $("#deleteFailure").modal("show");
+                }
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -1003,8 +1008,13 @@ const deleteLocationByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
+
                 $("#deleteWarning").modal("hide");
                 readAllLocations();
+
+                if (result.data[0] ===  0) {
+                    $("#deleteFailure").modal("show");
+                }
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -1025,8 +1035,13 @@ const deletePersonnelByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
+                
                 $("#deleteWarning").modal("hide");
                 readAllPersonnel();
+
+                if (result.data[0] ===  0) {
+                    $("#deleteFailure").modal("show");
+                }
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {

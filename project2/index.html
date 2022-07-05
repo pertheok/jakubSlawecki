@@ -136,18 +136,38 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">
+                        <h5 class="modal-title">
                             Delete the record?
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
-                    <div class="modal-body text-center" id="modalBody">
+                    <div class="modal-body text-center">
                         <button type="button" class="btn btn-danger m-2" id="deleteConfirm">
                             Delete
                         </button>
                         <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
                             Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for displaying the delete failure-->
+        <div class="modal" tabindex="-1" id="deleteFailure">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Unable to delete the record as records from other tables are dependent on it.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
                         </button>
                     </div>
                 </div>
