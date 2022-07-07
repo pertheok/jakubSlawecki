@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <title>
-            Company Information - Jakub Slawecki
+            Company Directory - Jakub Slawecki
         </title>
         <meta name="description" content="Company Information CRUD app">
         <meta name="author" content="Jakub Slawecki">
@@ -19,11 +19,22 @@
         <link rel="stylesheet" href="./libs/css/style.css">
     </head>
     <body>
+
+        <!-- Pre-loader -->
+        <div id="loader" class="d-flex align-items-center justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="sr-only"></span>
+            </div>
+            <span>
+              Loading data...
+            </span>
+        </div>
+
         <div class="container-fluid">
-            <div class="row m-2 d-flex justify-content-center">
+            <div class="row p-2 d-flex justify-content-center sticky-top" id="top-bar">
 
                 <!-- Radio buttons for choosing the displayed data type -->
-                <div class="col-xl-4 text-center mb-2">
+                <div class="col-xl-6 text-center mb-2">
                     <div class="btn-group" role="group" aria-label="Map tile toggle button group">
                         <input type="radio" class="btn-check" name="data" id="employees" autocomplete="off" checked>
                         <label class="btn btn-outline-primary" for="employees">Employees</label>
@@ -36,15 +47,8 @@
                     </div>
                 </div>
 
-                <!-- Header describing the choosen data type that is being displayed -->
-                <div class="col-xl-4 mb-2">
-                    <h2 id="tableTitle" class="text-center">
-                        <!-- Will be udpated by script, depending on user selection -->
-                    </h2>
-                </div>
-
                 <!-- "Add New" button -->
-                <div class="col-xl-4 justify-content-center text-center mb-2">
+                <div class="col-xl-6 justify-content-center text-center mb-2">
                     <button id="addNewButton" class="btn btn-success text-center">
                         <i class="fa fa-plus">
                         </i>
@@ -54,9 +58,6 @@
             </div>
             <div class="row">
                 <table class="table table-bordered table-striped">
-                    <thead id="tableHeaders">
-                        <!-- Will be udpated by script, depending on user selection -->
-                    </thead>
                     <tbody id="tableData">
                         <!-- Will be udpated by script, depending on user selection -->
                     </tbody>
@@ -64,7 +65,7 @@
             </div>
         </div>
 
-        <!--Modal for create operations -->
+        <!--Modal for creating new personnel -->
         <div class="modal" tabindex="-1" id="createModal">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
@@ -81,8 +82,44 @@
                 </div>
             </div>
         </div>
+
+        <!--Modal for creating new department -->
+        <div class="modal" tabindex="-1" id="createDepartmentModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="createBody">
+                        <!--Content changed by the script-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for creating new locations -->
+        <div class="modal" tabindex="-1" id="createLocationModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="createBody">
+                        <!--Content changed by the script-->
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <!--Modal for read operations -->
+        <!--Modal for reading personnel data -->
         <div class="modal" tabindex="-1" id="viewModal">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
@@ -105,7 +142,53 @@
             </div>
         </div>
 
-        <!--Modal for update operations -->
+        <!--Modal for reading department data -->
+        <div class="modal" tabindex="-1" id="viewDepartmentModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <!--Content changed by the script-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for reading location data -->
+        <div class="modal" tabindex="-1" id="viewLocationModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <!--Content changed by the script-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for updating personnel data -->
         <div class="modal" tabindex="-1" id="editModal">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
@@ -121,7 +204,59 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="editConfirm" class="btn btn-primary">
-                            Confirm changes
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for updating department data-->
+        <div class="modal" tabindex="-1" id="editModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="editBody">
+                        <!--Content changed by the script-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="editConfirm" class="btn btn-primary">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for updating location data -->
+        <div class="modal" tabindex="-1" id="editModal">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editTitle">
+                            <!--Content changed by the script-->
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body" id="editBody">
+                        <!--Content changed by the script-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="editConfirm" class="btn btn-primary">
+                            Save
                         </button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                             Close
@@ -137,17 +272,20 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">
-                            Delete the record?
+                            Delete the record
+                            <span id="recordToDelete">
+
+                            </span>?
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
                     <div class="modal-body text-center">
                         <button type="button" class="btn btn-danger m-2" id="deleteConfirm">
-                            Delete
+                            Yes
                         </button>
                         <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
-                            Cancel
+                            No
                         </button>
                     </div>
                 </div>

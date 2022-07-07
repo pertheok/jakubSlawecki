@@ -1,11 +1,36 @@
+/* ensure that elements that use FA - which are always interactable - change cursor to pointer on hover */
+
 .fa:hover {
     cursor: pointer;
 }
 
-th {
-    background-color: #A89D9B !important;
+/* ensure that the top bar is always on top */
+
+#top-bar {
+    background-color: white !important;
+    border-bottom: 1px solid black;
 }
 
 tbody tr:hover {
     background-color: orange !important;
+}
+
+/* ensure that the cursor doesn't change to text when hovering over the table data cells */
+
+td:hover {
+    cursor: default;
+}
+
+/* Loader setup */
+#loader {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    opacity: 0.7;
+    background-color: #fff;
+    z-index: 99;
 }

@@ -33,38 +33,16 @@ const readAllLocations = () => {
 
             if (result.status.name == "ok") {
 
-                 //set the header
-                 $("#tableTitle").html("Locations Database");
-
                 //clear the results table
-                $("#tableHeaders").html("");
                 $("#tableData").html("");
 
                 //set the button description
                 $("#addNewButtonText").html(`Add a new Location`);
 
-                //set the table header
-                $("#tableHeaders").append(
-                    `<tr class="sticky-top">
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Actions
-                        </th>
-                    </tr>`
-                );
-
                 //set the table body with the requested info
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
                         `<tr>
-                            <td>
-                                ${result.data[i].id}
-                            </td>
                             <td>
                                 ${result.data[i].name}
                             </td>
@@ -134,42 +112,16 @@ const readAllDepartments = () => {
 
             if (result.status.name == "ok") {
 
-
-                 //set the header
-                 $("#tableTitle").html("Departments Database");
-
                 //clear the results table and the "Add New" button
-                $("#tableHeaders").html("");
                 $("#tableData").html("");
                 
                 //set the button description
                 $("#addNewButtonText").html(`Add a new Department`);
 
-                //set the table header
-                $("#tableHeaders").append(
-                    `<tr class="sticky-top">
-                        <th>
-                            ID
-                        </th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Location
-                        </th>
-                        <th>
-                            Actions
-                        </th>
-                    </tr>`
-                );
-
                 //set the table body with the requested info
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
                         `<tr>
-                            <td>
-                                ${result.data[i].id}
-                            </td>
                             <td>
                                 ${result.data[i].name}
                             </td>
@@ -245,53 +197,16 @@ const readAllPersonnel = () => {
 
             if (result.status.name == "ok") {
 
-                //set the header
-                $("#tableTitle").html("Employees Database");
-
                 //clear the results table
-                $("#tableHeaders").html("");
                 $("#tableData").html("");
 
                 //set the button description
                 $("#addNewButtonText").html(`Add a new Employee`);
 
-                //set the table header - certain columns are displayed only on certain display sizes to prevent overflowing
-                $("#tableHeaders").append(
-                    `<tr class="sticky-top">
-                        <th class="d-none d-lg-table-cell">
-                            ID
-                        </th>
-                        <th>
-                            Last Name
-                        </th>
-                        <th class="d-none d-md-table-cell">
-                            First Name
-                        </th>
-                        <th class="d-none d-lg-table-cell">
-                            Job title
-                        </th>
-                        <th class="d-none d-md-table-cell">
-                            Email
-                        </th>
-                        <th>
-                            Department
-                        </th>
-                        <th class="d-none d-md-table-cell">
-                            Location
-                        </th>
-                        <th>
-                            Actions
-                        </th>
-                    </tr>`
-                );
-
                 //set the table body with the requested info - certain columns are displayed only on certain display sizes to prevent overflowing
                 for (let i = 0;  i < result.data.length; i++) {
                     $("#tableData").append(
                         `<tr>
-                            <td class="d-none d-lg-table-cell">
-                                ${result.data[i].id}
-                            </td>
                             <td>
                                 ${result.data[i].lastName}
                             </td>
@@ -426,14 +341,6 @@ const readPersonnelByID = id => {
                         <tbody>
                             <tr>
                                 <th>
-                                    ID
-                                </th>
-                                <td>
-                                    ${result.data.personnel[0].id}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
                                     Last Name
                                 </th>
                                 <td>
@@ -514,14 +421,6 @@ const readDepartmentByID = id => {
                         <tbody>
                             <tr>
                                 <th>
-                                    ID
-                                </th>
-                                <td>
-                                    ${result.data[0].id}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
                                     Name
                                 </th>
                                 <td>
@@ -571,14 +470,6 @@ const readLocationByID = id => {
                         <tbody>
                             <tr>
                                 <th>
-                                    ID
-                                </th>
-                                <td>
-                                    ${result.data[0].id}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
                                     Name
                                 </th>
                                 <td>
@@ -622,14 +513,6 @@ const editPersonnelModal = id => {
                 $("#editBody").html(`
                     <table class="table table-striped">
                         <tbody>
-                            <tr>
-                                <th>
-                                    ID
-                                </th>
-                                <td>
-                                    ${result.data.personnel[0].id}
-                                </td>
-                            </tr>
                             <tr>
                                 <th>
                                     Last Name
@@ -721,14 +604,6 @@ const editDepartmentModal = id => {
                         <tbody>
                             <tr>
                                 <th>
-                                    ID
-                                </th>
-                                <td>
-                                    ${result.data[0].id}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
                                     Name
                                 </th>
                                 <td>
@@ -792,14 +667,6 @@ const editLocationModal = id => {
                 $("#editBody").html(`
                     <table class="table table-striped">
                         <tbody>
-                            <tr>
-                                <th>
-                                    ID
-                                </th>
-                                <td>
-                                    ${result.data[0].id}
-                                </td>
-                            </tr>
                             <tr>
                                 <th>
                                     Name
@@ -1095,3 +962,8 @@ $("#locations").on("click", () => {
 
 //shows personnel info on launch
 readAllPersonnel();
+
+//hide the pre-loader after all data had been retrieved successfully
+$(window).on('load', function () {
+    $('#loader').attr("style", "visibility: hidden;")
+});
