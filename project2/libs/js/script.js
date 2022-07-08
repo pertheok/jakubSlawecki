@@ -1,30 +1,10 @@
-//arrays that will be used to populate dropdowns, will be filled when called with their respective read function
+//arrays that will be used to populate dropdowns used in creating or editing personnel or departments
 let departments = [];
 let locations = [];
 
-//functions for populating the main table
+//functions for populating these arrays
 
-//populate the table with location info
-const readAllLocations = () => {
-
-    //set create modal content
-    $("#createTitle").html("Create a new Location");
-    $("#createBody").html(`
-        <form id="createLocation">
-            <div class="form-group">
-                <input type="text" class="form-control m-1" id="locationName" placeholder="Location Name" required>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">
-                    Create
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </form>
-    `);
-
+const getAllLocations = () => {
     $.ajax({
         url: "libs/php/readAllLocations.php",
         type: "POST",
@@ -32,31 +12,6 @@ const readAllLocations = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-
-                //clear the results table
-                $("#tableData").html("");
-
-                //set the button description
-                $("#addNewButtonText").html(`Add a new Location`);
-
-                //set the table body with the requested info
-                for (let i = 0;  i < result.data.length; i++) {
-                    $("#tableData").append(
-                        `<tr>
-                            <td>
-                                ${result.data[i].name}
-                            </td>
-                            <td>
-                                <span class="m-1 fa fa-eye" onclick="readLocationByID(${result.data[i].id});">
-                                </span>
-                                <span class="m-1 fa fa-pencil" onclick="editLocationModal(${result.data[i].id});">
-                                </span>
-                                <span class="m-1 fa fa-trash" onclick="deleteLocationModal(${result.data[i].id});">
-                                </span>
-                            </td>
-                        </tr>`
-                    );
-                }
 
                 //populate the locations array and sort it alphabetically by names
                 for (let i = 0; i < result.data.length; i++) {
@@ -72,36 +27,7 @@ const readAllLocations = () => {
     });
 };
 
-//call the function to get the locations array populated
-readAllLocations();
-
-//populate the table with department info
-const readAllDepartments = () => {
-
-    //set create modal content
-    $("#createTitle").html("Create a new Department");
-    $("#createBody").html(`
-        <form id="createDepartment">
-            <div class="form-group">
-                <input type="text" class="form-control m-1" id="departmentName" placeholder="Department Name" required>
-                <select name="location" id="locationID" class="form-control m-1">
-                </select>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">
-                    Create
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </form>
-    `);
-
-    //append the options to the location selection when editing
-    for (let i = 0; i < locations.length; i++) {
-            $("#locationID").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
-    }
+const getAllDepartments = () => {
 
     $.ajax({
         url: "libs/php/readAllDepartments.php",
@@ -111,34 +37,6 @@ const readAllDepartments = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-
-                //clear the results table and the "Add New" button
-                $("#tableData").html("");
-                
-                //set the button description
-                $("#addNewButtonText").html(`Add a new Department`);
-
-                //set the table body with the requested info
-                for (let i = 0;  i < result.data.length; i++) {
-                    $("#tableData").append(
-                        `<tr>
-                            <td>
-                                ${result.data[i].name}
-                            </td>
-                            <td>
-                                ${result.data[i].location}
-                            </td>
-                            <td>
-                                <span class="m-1 fa fa-eye" onclick="readDepartmentByID(${result.data[i].id});">
-                                </span>
-                                <span class="m-1 fa fa-pencil" onclick="editDepartmentModal(${result.data[i].id});">
-                                </span>
-                                <span class="m-1 fa fa-trash" onclick="deleteDepartmentModal(${result.data[i].id});">
-                                </span>
-                            </td>
-                        </tr>`
-                    );
-                }
 
                 //populate the departments array and sort it by names alphabetically
                 for (let i = 0; i < result.data.length; i++) {
@@ -152,37 +50,18 @@ const readAllDepartments = () => {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
+}
 
-};
+//call the functions to populate these arrays
 
-//call the function to get the departments array populated
-readAllDepartments();
+getAllLocations();
+getAllDepartments();
+
+
+//functions for populating the main table
 
 //populate the table with basic personnel info
 const readAllPersonnel = () => {
-
-    //set create modal content
-    $("#createTitle").html("Create a new employee");
-    $("#createBody").html(`
-        <form id="createPersonnel">
-            <div class="form-group">
-                <input type="text" class="form-control m-1" id="firstName" placeholder="First Name" required>
-                <input type="text" class="form-control m-1" id="lastName" placeholder="Last Name" required>
-                <input type="text" class="form-control m-1" id="jobTitle" placeholder="Job Title (optional)" value=''>
-                <input type="email" class="form-control m-1" id="email" placeholder="Email (optional)">
-                <select name="department" id="departmentID" class="form-control m-1">
-                </select>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">
-                    Create
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </form>
-    `);
 
     //append the options to the department selection when editing
     for (let i = 0; i < departments.length; i++) {
@@ -242,6 +121,121 @@ const readAllPersonnel = () => {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
+
+    $('#addNewPersonnel').show();
+    $('#addNewDepartment').hide();
+    $('#addNewLocation').hide();
+};
+
+//populate the table with department info
+const readAllDepartments = () => {
+
+    //append the options to the location selection when editing
+    for (let i = 0; i < locations.length; i++) {
+            $("#locationID").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
+    }
+
+    $.ajax({
+        url: "libs/php/readAllDepartments.php",
+        type: "POST",
+        dataType: 'json',
+        async: false,
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //clear the results table and the "Add New" button
+                $("#tableData").html("");
+
+                //set the table body with the requested info
+                for (let i = 0;  i < result.data.length; i++) {
+                    $("#tableData").append(
+                        `<tr>
+                            <td>
+                                ${result.data[i].name}
+                            </td>
+                            <td>
+                                ${result.data[i].location}
+                            </td>
+                            <td>
+                                <span class="m-1 fa fa-eye" onclick="readDepartmentByID(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-pencil" onclick="editDepartmentModal(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-trash" onclick="deleteDepartmentModal(${result.data[i].id});">
+                                </span>
+                            </td>
+                        </tr>`
+                    );
+                }
+
+                //populate the departments array and sort it by names alphabetically
+                for (let i = 0; i < result.data.length; i++) {
+                    departments[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
+                }
+
+                departments.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+
+    $('#addNewPersonnel').hide();
+    $('#addNewDepartment').show();
+    $('#addNewLocation').hide();
+};
+
+//populate the table with location info
+const readAllLocations = () => {
+
+    $.ajax({
+        url: "libs/php/readAllLocations.php",
+        type: "POST",
+        dataType: 'json',
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+
+                //clear the results table
+                $("#tableData").html("");
+
+                //set the table body with the requested info
+                for (let i = 0;  i < result.data.length; i++) {
+                    $("#tableData").append(
+                        `<tr>
+                            <td>
+                                ${result.data[i].name}
+                            </td>
+                            <td>
+                                <span class="m-1 fa fa-eye" onclick="readLocationByID(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-pencil" onclick="editLocationModal(${result.data[i].id});">
+                                </span>
+                                <span class="m-1 fa fa-trash" onclick="deleteLocationModal(${result.data[i].id});">
+                                </span>
+                            </td>
+                        </tr>`
+                    );
+                }
+
+                //populate the locations array and sort it alphabetically by names
+                for (let i = 0; i < result.data.length; i++) {
+                    locations[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
+                }
+
+                locations.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+
+    $('#addNewPersonnel').hide();
+    $('#addNewDepartment').hide();
+    $('#addNewLocation').show();
 };
 
 //Create functions
@@ -286,15 +280,17 @@ const createDepartment = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
+
+                // call the function used to populate the departments array
+                getAllDepartments();
                 $("#createModal").modal("hide");
                 readAllDepartments();
-            }                
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-        }
+        }  
     });
-
 };
 
 const createLocation = () => {
@@ -308,9 +304,13 @@ const createLocation = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
+                
+                // call the function used to populate the locations array
+                getAllLocations();
                 $("#createModal").modal("hide");
                 readAllLocations();
-            }                
+            }
+            
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
@@ -334,65 +334,16 @@ const readPersonnelByID = id => {
 
             if (result.status.name == "ok") {
 
-                //set view modal content
-                $("#modalTitle").html("Employee record");
-                $("#modalBody").html(`
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    Last Name
-                                </th>
-                                <td>
-                                    ${result.data.personnel[0].lastName}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    First Name
-                                </th>
-                                <td>
-                                    ${result.data.personnel[0].firstName}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Job Title
-                                </th>
-                                <td>
-                                    ${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Email
-                                </th>
-                                <td>
-                                    ${result.data.personnel[0].email}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Department
-                                </th>
-                                <td id="currentDepartment">
-                                    ${result.data.personnel[0].department}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Location
-                                </th>
-                                <td>
-                                    ${result.data.personnel[0].location}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                `);
+                //set the read modal content
+                $("#personnelLastName").html(`${result.data.personnel[0].lastName}`);
+                $("#personnelFirstName").html(`${result.data.personnel[0].firstName}`);
+                $("#personnelJobTitle").html(`${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}`);
+                $("#personnelEmail").html(`${result.data.personnel[0].email}`);
+                $("#personnelDepartment").html(`${result.data.personnel[0].department}`);
+                $("#personnelLocation").html(`${result.data.personnel[0].location}`);
 
                 //display the read modal
-                $("#viewModal").modal("show");
+                $("#viewPersonnelModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -415,32 +366,11 @@ const readDepartmentByID = id => {
             if (result.status.name == "ok") {
 
                 //set read modal content
-                $("#modalTitle").html("Department record");
-                $("#modalBody").html(`
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    Name
-                                </th>
-                                <td>
-                                    ${result.data[0].name}
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Location
-                                </th>
-                                <td>
-                                    ${result.data[0].location}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                `);
+                $("#deptName").html(`${result.data[0].name}`);
+                $("#departmentLocation").html(`${result.data[0].location}`);
 
                 //display the read modal
-                $("#viewModal").modal("show");
+                $("#viewDepartmentModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -464,24 +394,10 @@ const readLocationByID = id => {
             if (result.status.name == "ok") {
 
                 //set read modal content
-                $("#modalTitle").html("Location record");
-                $("#modalBody").html(`
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    Name
-                                </th>
-                                <td>
-                                    ${result.data[0].name}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                `);
+                $("#location").html(`${result.data[0].name}`);
 
                 //display the read modal
-                $("#viewModal").modal("show");
+                $("#viewLocationModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -509,54 +425,10 @@ const editPersonnelModal = id => {
             if (result.status.name == "ok") {
 
                 //set edit modal content
-                $("#editTitle").html("Edit record");
-                $("#editBody").html(`
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    Last Name
-                                </th>
-                                <td>
-                                    <input type="text" id="newLastName" value="${result.data.personnel[0].lastName}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    First Name
-                                </th>
-                                <td>
-                                    <input type="text" id="newFirstName" value="${result.data.personnel[0].firstName}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Job Title
-                                </th>
-                                <td>
-                                    <input type="text" id="newJobTitle" value="${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Email
-                                </th>
-                                <td>
-                                    <input type="email" id="newEmail" value="${result.data.personnel[0].email}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Department
-                                </th>
-                                <td>
-                                    <select name="newDepartment" id="newDepartment">
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                `);
+                $("#newFirstName").attr("value", `${result.data.personnel[0].firstName}`);
+                $("#newLastName").attr("value", `${result.data.personnel[0].lastName}`);
+                $("#newJobTitle").attr("value", `${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}`);
+                $("#newEmail").attr("value", `${result.data.personnel[0].email}`);
                 
                 //append the options to the department selection when editing
                 for (let i = 0; i < departments.length; i++) {
@@ -781,6 +653,7 @@ const deletePersonnelModal = id => {
 
                 //set the delete button
                 $("#deleteConfirm").attr('onclick', `deletePersonnelByID(${result.data.personnel[0].id})`);
+                $("#recordToDelete").html(`${result.data.personnel[0].firstName} ${result.data.personnel[0].lastName}`);
                 $("#deleteWarning").modal("show");
             }
         },
@@ -804,6 +677,7 @@ const deleteDepartmentModal = id => {
 
                 //set the delete button
                 $("#deleteConfirm").attr('onclick', `deleteDepartmentByID(${result.data[0].id})`);
+                $("#recordToDelete").html(`${result.data[0].name}`);
                 $("#deleteWarning").modal("show");
             }
         },
@@ -827,6 +701,7 @@ const deleteLocationModal = id => {
 
                 //set the delete button
                 $("#deleteConfirm").attr('onclick', `deleteLocationByID(${result.data[0].id})`);
+                $("#recordToDelete").html(`${result.data[0].name}`);
                 $("#deleteWarning").modal("show");
             }
         },
@@ -920,8 +795,20 @@ const deletePersonnelByID = id => {
 //functions for buttons
 
 //"Add New" buttons functionality
-$("#addNewButton").on("click", () => {
-    $("#createModal").modal("show");
+
+// Add new personnel
+$("#addNewPersonnel").on("click", () => {
+    $("#createPersonnelModal").modal("show");
+});
+
+// Add new department
+$("#addNewDepartment").on("click", () => {
+    $("#createDepartmentModal").modal("show");
+});
+
+// Add new location
+$("#addNewLocation").on("click", () => {
+    $("#createLocationModal").modal("show");
 });
 
 //needed to wrap the onclick functions in document.ready to work
@@ -930,6 +817,7 @@ $(document).on('submit', '#createPersonnel', function(e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
+    e.stopPropagation();
     createPersonnel();
 });
 
@@ -937,6 +825,7 @@ $(document).on('submit', '#createDepartment', function(e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
+    e.stopPropagation();
     createDepartment();
 });
 
@@ -944,6 +833,7 @@ $(document).on('submit', '#createLocation', function(e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
+    e.stopPropagation();
     createLocation();
 });
 
