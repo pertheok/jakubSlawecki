@@ -166,7 +166,7 @@ const readAllDepartments = () => {
                                 </span>
                                 <span class="m-1 fa fa-pencil" onclick="editDepartmentModal(${result.data[i].id});">
                                 </span>
-                                <span class="m-1 fa fa-trash" onclick="deleteDepartmentModal(${result.data[i].id});">
+                                <span class="m-1 fa fa-trash" onclick="testDepartmentDependencies(${result.data[i].id});">
                                 </span>
                             </td>
                         </tr>`
@@ -210,7 +210,7 @@ const readAllLocations = () => {
                                 </span>
                                 <span class="m-1 fa fa-pencil" onclick="editLocationModal(${result.data[i].id});">
                                 </span>
-                                <span class="m-1 fa fa-trash" onclick="deleteLocationModal(${result.data[i].id});">
+                                <span class="m-1 fa fa-trash" onclick="testLocationDependencies(${result.data[i].id});">
                                 </span>
                             </td>
                         </tr>`
@@ -595,6 +595,61 @@ const updateLocationByID = id => {
 
 //Delete functions
 
+// values used to hold ID of the record currently being edited, used for submitting the edit request
+
+let personnelIDtoDelete;
+let departmentIDtoDelete;
+let locationIDtoDelete;
+
+// functions to test the dependencies
+const testDepartmentDependencies = id => {
+    $.ajax({
+        url: "libs/php/testDepartmentDependencies.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+                if (result.data[0] > 0) {
+                    $("#deleteFailure").modal("show");
+                } else {
+                    deleteDepartmentModal(id);
+                }
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
+const testLocationDependencies = id => {
+    $.ajax({
+        url: "libs/php/testLocationDependencies.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+                if (result.data[0] > 0) {
+                    $("#deleteFailure").modal("show");
+                } else {
+                    deleteLocationModal(id);
+                }
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
+
 //set the delete modal functionality
 const deletePersonnelModal = id => {
     $.ajax({
@@ -608,10 +663,9 @@ const deletePersonnelModal = id => {
 
             if (result.status.name == "ok") {
 
-                //set the delete button
-                $("#deleteConfirm").attr('onclick', `deletePersonnelByID(${result.data.personnel[0].id})`);
-                $("#recordToDelete").html(`${result.data.personnel[0].firstName} ${result.data.personnel[0].lastName}`);
-                $("#deleteWarning").modal("show");
+                personnelIDtoDelete = result.data.personnel[0].id;
+                $("#personnelToDelete").html(`${result.data.personnel[0].firstName} ${result.data.personnel[0].lastName}`);
+                $("#deletePersonnelModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -632,10 +686,9 @@ const deleteDepartmentModal = id => {
 
             if (result.status.name == "ok") {
 
-                //set the delete button
-                $("#deleteConfirm").attr('onclick', `deleteDepartmentByID(${result.data[0].id})`);
-                $("#recordToDelete").html(`${result.data[0].name}`);
-                $("#deleteWarning").modal("show");
+                departmentIDtoDelete = result.data[0].id;
+                $("#departmentToDelete").html(`${result.data[0].name}`);
+                $("#deleteDepartmentModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -656,10 +709,9 @@ const deleteLocationModal = id => {
 
             if (result.status.name == "ok") {
 
-                //set the delete button
-                $("#deleteConfirm").attr('onclick', `deleteLocationByID(${result.data[0].id})`);
-                $("#recordToDelete").html(`${result.data[0].name}`);
-                $("#deleteWarning").modal("show");
+                locationIDtoDelete = result.data[0].id;
+                $("#locationToDelete").html(`${result.data[0].name}`);
+                $("#deleteLocationModal").modal("show");
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -668,7 +720,29 @@ const deleteLocationModal = id => {
     });
 };
 
-//delete the selected record based on its department
+//delete the selected record based on its id
+
+const deletePersonnelByID = id => {
+    $.ajax({
+        url: "libs/php/deletePersonnelByID.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            id: id
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+                
+                $("#deletePersonnelModal").modal("hide");
+                readAllPersonnel();
+            }                
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+        }
+    });
+};
 
 const deleteDepartmentByID = id => {
     $.ajax({
@@ -682,12 +756,9 @@ const deleteDepartmentByID = id => {
 
             if (result.status.name == "ok") {
 
-                $("#deleteWarning").modal("hide");
+                getAllDepartments();
+                $("#deleteDepartmentModal").modal("hide");
                 readAllDepartments();
-
-                if (result.data[0] ===  0) {
-                    $("#deleteFailure").modal("show");
-                }
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -708,12 +779,9 @@ const deleteLocationByID = id => {
 
             if (result.status.name == "ok") {
 
-                $("#deleteWarning").modal("hide");
+                getAllLocations();
+                $("#deleteLocationModal").modal("hide");
                 readAllLocations();
-
-                if (result.data[0] ===  0) {
-                    $("#deleteFailure").modal("show");
-                }
             }                
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -721,32 +789,6 @@ const deleteLocationByID = id => {
         }
     });
 
-};
-
-const deletePersonnelByID = id => {
-    $.ajax({
-        url: "libs/php/deletePersonnelByID.php",
-        type: "POST",
-        dataType: 'json',
-        data: {
-            id: id
-        },
-        success: function(result) {
-
-            if (result.status.name == "ok") {
-                
-                $("#deleteWarning").modal("hide");
-                readAllPersonnel();
-
-                if (result.data[0] ===  0) {
-                    $("#deleteFailure").modal("show");
-                }
-            }                
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-        }
-    });
 };
 
 //functions for buttons
@@ -822,6 +864,32 @@ $(document).on('submit', '#updateLocation', function(e) {
     e.preventDefault();
     e.stopPropagation();
     updateLocationByID(locationIDtoEdit);
+});
+
+// delete buttons
+
+$(document).on('submit', '#deletePersonnel', function(e) {
+
+    //prevents the form submission from redirecting to the main page
+    e.preventDefault();
+    e.stopPropagation();
+    deletePersonnelByID(personnelIDtoDelete);
+});
+
+$(document).on('submit', '#deleteDepartment', function(e) {
+
+    //prevents the form submission from redirecting to the main page
+    e.preventDefault();
+    e.stopPropagation();
+    deleteDepartmentByID(departmentIDtoDelete);
+});
+
+$(document).on('submit', '#deleteLocation', function(e) {
+
+    //prevents the form submission from redirecting to the main page
+    e.preventDefault();
+    e.stopPropagation();
+    deleteLocationByID(locationIDtoDelete);
 });
 
 //radio buttons functionality

@@ -1,7 +1,7 @@
 <?php
 
 	// example use from browser
-	// http://localhost/jakubSlawecki/project2/libs/php/deleteDepartmentByID.php?id=<id>
+	// http://localhost/jakubSlawecki/project2/libs/php/testDepartmentDependencies.php?id=<id>
 
 
 	$executionStartTime = microtime(true);
@@ -30,11 +30,15 @@
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 
-	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
+	$query = $conn->prepare('SELECT count(id) as pc FROM department WHERE locationID = ?');
 	
 	$query->bind_param("i", $_POST['id']);
 
 	$query->execute();
+
+	$query->bind_result($result);
+
+	$query->fetch();
 	
 	if (false === $query) {
 
@@ -55,7 +59,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
+	$output['data'] = [$result];
 	
 	mysqli_close($conn);
 

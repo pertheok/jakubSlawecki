@@ -29,7 +29,7 @@
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 
-	$query = $conn->prepare('DELETE l FROM location l LEFT JOIN department d ON d.locationID = l.id WHERE d.locationID IS NULL AND l.id = ?');
+	$query = $conn->prepare('DELETE FROM location WHERE id = ?');
 	
 	$query->bind_param("i", $_POST['id']);
 
