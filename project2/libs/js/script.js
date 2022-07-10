@@ -65,7 +65,9 @@ getAllDepartments();
 //populate the table with basic personnel info
 const readAllPersonnel = () => {
 
-    //append the options to the department selection when 
+    $('#loader').attr("style", "visibility: visible;");
+
+    //append the options to the department selection when creating a new
     $("#departmentID").html("");
     for (let i = 0; i < departments.length; i++) {
         $("#departmentID").append(`<option value="${departments[i].id}">${departments[i].name}</option>`);
@@ -78,6 +80,7 @@ const readAllPersonnel = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
+
 
                 //clear the results table
                 $("#tableData").html("");
@@ -128,10 +131,14 @@ const readAllPersonnel = () => {
     $('#addNewPersonnel').show();
     $('#addNewDepartment').hide();
     $('#addNewLocation').hide();
+
+    $('#loader').attr("style", "visibility: hidden;");
 };
 
 //populate the table with department info
 const readAllDepartments = () => {
+
+    $('#loader').attr("style", "visibility: visible;");
 
     //append the options to the location selection when creating
     $("#locationID").html("");
@@ -182,10 +189,16 @@ const readAllDepartments = () => {
     $('#addNewPersonnel').hide();
     $('#addNewDepartment').show();
     $('#addNewLocation').hide();
+
+
+    $('#loader').attr("style", "visibility: hidden;");
+
 };
 
 //populate the table with location info
 const readAllLocations = () => {
+
+    $('#loader').attr("style", "visibility: visible;");
 
     $.ajax({
         url: "libs/php/readAllLocations.php",
@@ -226,6 +239,8 @@ const readAllLocations = () => {
     $('#addNewPersonnel').hide();
     $('#addNewDepartment').hide();
     $('#addNewLocation').show();
+
+    $('#loader').attr("style", "visibility: hidden;");
 };
 
 //Create functions
