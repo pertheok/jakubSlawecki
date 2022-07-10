@@ -438,10 +438,10 @@ const editPersonnelModal = id => {
                 personnelIDtoEdit = result.data.personnel[0].id;
 
                 //set edit modal content
-                $("#newFirstName").attr("value", `${result.data.personnel[0].firstName}`);
-                $("#newLastName").attr("value", `${result.data.personnel[0].lastName}`);
-                $("#newJobTitle").attr("value", `${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}`);
-                $("#newEmail").attr("value", `${result.data.personnel[0].email}`);
+                $("#newFirstName").val(`${result.data.personnel[0].firstName}`);
+                $("#newLastName").val(`${result.data.personnel[0].lastName}`);
+                $("#newJobTitle").val(`${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}`);
+                $("#newEmail").val(`${result.data.personnel[0].email}`);
                 $("#newDepartment").html("");
                 
                 //append the options to the department selection when editing
@@ -482,7 +482,7 @@ const editDepartmentModal = id => {
                 departmentIDtoEdit = result.data[0].id
 
                 //set edit modal content
-                $("#newName").attr("value", `${result.data[0].name}`);
+                $("#newName").val(`${result.data[0].name}`);
 
                 $("#newLocationID").html("");
                 //append the options to the location selection when editing
@@ -523,7 +523,7 @@ const editLocationModal = id => {
                 locationIDtoEdit = result.data[0].id;
 
                 //set edit modal content
-                $("#newLocationName").attr("value", `${result.data[0].name}`);
+                $("#newLocationName").val(`${result.data[0].name}`);
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -812,16 +812,22 @@ const deleteLocationByID = id => {
 
 // Add new personnel
 $("#addNewPersonnel").on("click", () => {
+    $("#firstName").val("");
+    $("#lastName").val("");
+    $("#jobTitle").val("");
+    $("#email").val("");
     $("#createPersonnelModal").modal("show");
 });
 
 // Add new department
 $("#addNewDepartment").on("click", () => {
+    $("#departmentName").val("");
     $("#createDepartmentModal").modal("show");
 });
 
 // Add new location
 $("#addNewLocation").on("click", () => {
+    $("#locationName").val("");
     $("#createLocationModal").modal("show");
 });
 
