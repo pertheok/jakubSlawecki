@@ -246,7 +246,7 @@ const createPersonnel = () => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#createModal").modal("hide");
+                $("#createPersonnelModal").modal("hide");
                 readAllPersonnel();
             }                
         },
@@ -273,7 +273,7 @@ const createDepartment = () => {
 
                 // call the function used to populate the departments array
                 getAllDepartments();
-                $("#createModal").modal("hide");
+                $("#createDepartmentModal").modal("hide");
                 readAllDepartments();
             }
         },
@@ -297,7 +297,7 @@ const createLocation = () => {
                 
                 // call the function used to populate the locations array
                 getAllLocations();
-                $("#createModal").modal("hide");
+                $("#createLocationModal").modal("hide");
                 readAllLocations();
             }
             
@@ -399,6 +399,12 @@ const readLocationByID = id => {
 
 //Update functions
 
+// values used to hold ID of the record currently being edited, used for submitting the edit request
+
+let personnelIDtoEdit;
+let departmentIDtoEdit;
+let locationIDtoEdit;
+
 //helper functions to set the edit modal
 const editPersonnelModal = id => {
 
@@ -414,11 +420,14 @@ const editPersonnelModal = id => {
 
             if (result.status.name == "ok") {
 
+                personnelIDtoEdit = result.data.personnel[0].id;
+
                 //set edit modal content
                 $("#newFirstName").attr("value", `${result.data.personnel[0].firstName}`);
                 $("#newLastName").attr("value", `${result.data.personnel[0].lastName}`);
                 $("#newJobTitle").attr("value", `${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}`);
                 $("#newEmail").attr("value", `${result.data.personnel[0].email}`);
+                $("#newDepartment").html("");
                 
                 //append the options to the department selection when editing
                 for (let i = 0; i < departments.length; i++) {
@@ -430,10 +439,6 @@ const editPersonnelModal = id => {
                         $("#newDepartment").append(`<option value="${departments[i].id}">${departments[i].name}</option>`);
                     }
                 }
-
-                //set the edit button
-                $("#editConfirm").attr('onclick', `updatePersonnelByID(${result.data.personnel[0].id})`);
-
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -441,7 +446,7 @@ const editPersonnelModal = id => {
         }
     });
 
-    $("#editModal").modal("show");
+    $("#editPersonnelModal").modal("show");
 
 };
 
@@ -459,32 +464,12 @@ const editDepartmentModal = id => {
 
             if (result.status.name == "ok") {
 
-                //set edit modal content
-                $("#editTitle").html("Edit record");
-                $("#editBody").html(`
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    Name
-                                </th>
-                                <td>
-                                    <input type="text" id="newName" value="${result.data[0].name}">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    Location
-                                </th>
-                                <td>
-                                    <select name="newLocation" id="newLocationID">
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                `);
+                departmentIDtoEdit = result.data[0].id
 
+                //set edit modal content
+                $("#newName").attr("value", `${result.data[0].name}`);
+
+                $("#newLocationID").html("");
                 //append the options to the location selection when editing
                 for (let i = 0; i < locations.length; i++) {
 
@@ -495,10 +480,6 @@ const editDepartmentModal = id => {
                         $("#newLocationID").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
                     }
                 }
-
-                //set the edit button
-                $("#editConfirm").attr('onclick', `updateDepartmentByID(${result.data[0].id})`);
-
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -507,7 +488,7 @@ const editDepartmentModal = id => {
     });
 
     //display the edit modal
-    $("#editModal").modal("show");
+    $("#editDepartmentModal").modal("show");
 
 };
 
@@ -524,26 +505,10 @@ const editLocationModal = id => {
 
             if (result.status.name == "ok") {
 
+                locationIDtoEdit = result.data[0].id;
+
                 //set edit modal content
-                $("#editTitle").html("Edit record");
-                $("#editBody").html(`
-                    <table class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <th>
-                                    Name
-                                </th>
-                                <td>
-                                    <input type="text" id="newLocationName" value="${result.data[0].name}">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                `);
-
-                //set the edit button
-                $("#editConfirm").attr('onclick', `updateLocationByID(${result.data[0].id})`);
-
+                $("#newLocationName").attr("value", `${result.data[0].name}`);
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -551,7 +516,7 @@ const editLocationModal = id => {
         }
     });
 
-    $("#editModal").modal("show");
+    $("#editLocationModal").modal("show");
 
 };
 
@@ -571,7 +536,7 @@ const updatePersonnelByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#editModal").modal("hide");
+                $("#editPersonnelModal").modal("hide");
                 readAllPersonnel();
             }                
         },
@@ -594,7 +559,8 @@ const updateDepartmentByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#editModal").modal("hide");
+                getAllDepartments();
+                $("#editDepartmentModal").modal("hide");
                 readAllDepartments();
             }                
         },
@@ -616,7 +582,8 @@ const updateLocationByID = id => {
         success: function(result) {
 
             if (result.status.name == "ok") {
-                $("#editModal").modal("hide");
+                getAllLocations();
+                $("#editLocationModal").modal("hide");
                 readAllLocations();
             }                
         },
@@ -803,13 +770,14 @@ $("#addNewLocation").on("click", () => {
 
 //needed to wrap the onclick functions in document.ready to work
 
+// create buttons
+ 
 $(document).on('submit', '#createPersonnel', function(e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
     e.stopPropagation();
     createPersonnel();
-    $("#createPersonnelModal").modal("hide");
 });
 
 $(document).on('submit', '#createDepartment', function(e) {
@@ -818,7 +786,6 @@ $(document).on('submit', '#createDepartment', function(e) {
     e.preventDefault();
     e.stopPropagation();
     createDepartment();
-    $("#createDepartmentModal").modal("hide");
 });
 
 $(document).on('submit', '#createLocation', function(e) {
@@ -827,7 +794,34 @@ $(document).on('submit', '#createLocation', function(e) {
     e.preventDefault();
     e.stopPropagation();
     createLocation();
-    $("#createLocationModal").modal("hide");
+});
+
+// read buttons are defined in readAllXXX and readXXXbyID functions, where XXX is personnel, department or location
+
+// update buttons
+
+$(document).on('submit', '#updatePersonnel', function(e) {
+
+    //prevents the form submission from redirecting to the main page
+    e.preventDefault();
+    e.stopPropagation();
+    updatePersonnelByID(personnelIDtoEdit);
+});
+
+$(document).on('submit', '#updateDepartment', function(e) {
+
+    //prevents the form submission from redirecting to the main page
+    e.preventDefault();
+    e.stopPropagation();
+    updateDepartmentByID(departmentIDtoEdit);
+});
+
+$(document).on('submit', '#updateLocation', function(e) {
+
+    //prevents the form submission from redirecting to the main page
+    e.preventDefault();
+    e.stopPropagation();
+    updateLocationByID(locationIDtoEdit);
 });
 
 //radio buttons functionality

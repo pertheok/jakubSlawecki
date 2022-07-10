@@ -373,7 +373,7 @@
         </div>
 
         <!--Modal for updating personnel data -->
-        <div class="modal" tabindex="-1" id="editModal">
+        <div class="modal" tabindex="-1" id="editPersonnelModal">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -383,8 +383,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <form id="updatePersonnel">
+                    <form id="updatePersonnel">
+                        <div class="modal-body">
                             <div class="form-group">
                                 <div class="mb-3">
                                     <label for="newFirstName" class="form-label">
@@ -418,22 +418,22 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">
-                                    Save
-                                </button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
         <!--Modal for updating department data-->
-        <div class="modal" tabindex="-1" id="editModal">
+        <div class="modal" tabindex="-1" id="editDepartmentModal">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -443,57 +443,39 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
-                    <div class="modal-body" id="editBody">
-                        <form id="updateDepartment">
+                    <form id="updateDepartment">
+                        <div class="modal-body">
                             <div class="form-group">
                                 <div class="mb-3">
-                                    <label for="newFirstName" class="form-label">
-                                        First Name
+                                    <label for="newName" class="form-label">
+                                        Name
                                     </label>
-                                    <input type="text" class="form-control m-1" id="newFirstName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newLastName" class="form-label">
-                                        Last Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="newLastName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newJobTitle" class="form-label">
-                                        Job Title (optional)
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="newJobTitle" value=''>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newEmail" class="form-label">
-                                        Email (optional)
-                                    </label>
-                                    <input type="email" class="form-control m-1" id="newEmail">
+                                    <input type="text" class="form-control m-1" id="newName" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="newDepartment" class="form-label">
-                                        Department
+                                        Location
                                     </label>
-                                    <select name="department" id="newDepartment" class="form-control m-1">
+                                    <select name="location" id="newLocationID" class="form-control m-1">
                                     </select>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" id="editConfirm" class="btn btn-primary">
-                                    Save
-                                </button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
         <!--Modal for updating location data -->
-        <div class="modal" tabindex="-1" id="editModal">
+        <div class="modal" tabindex="-1" id="editLocationModal">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -503,17 +485,26 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         </button>
                     </div>
-                    <div class="modal-body" id="editBody">
-                        <!--Content changed by the script-->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="editConfirm" class="btn btn-primary">
-                            Save
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancel
-                        </button>
-                    </div>
+                    <form id="updateLocation">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="mb-3">
+                                    <label for="newLocationName" class="form-label">
+                                        Name
+                                    </label>
+                                    <input type="text" class="form-control m-1" id="newLocationName" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
