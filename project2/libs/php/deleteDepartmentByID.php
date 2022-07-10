@@ -30,7 +30,9 @@
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 
-	$query = $conn->prepare('DELETE d FROM department d LEFT JOIN personnel p ON p.departmentID = d.id WHERE p.departmentID IS NULL AND d.id = ?');
+	$query = $conn->prepare('SELECT count(id) as pc FROM personnel WHERE departmentID = ?');
+
+	// $query = $conn->prepare('DELETE d FROM department d LEFT JOIN personnel p ON p.departmentID = d.id WHERE p.departmentID IS NULL AND d.id = ?');
 	
 	$query->bind_param("i", $_POST['id']);
 
@@ -55,7 +57,7 @@
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [$query->affected_rows];
+	$output['data'] = [$query];
 	
 	mysqli_close($conn);
 

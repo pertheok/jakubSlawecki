@@ -13,6 +13,7 @@ const getAllLocations = () => {
 
             if (result.status.name == "ok") {
 
+                locations = [];
                 //populate the locations array and sort it alphabetically by names
                 for (let i = 0; i < result.data.length; i++) {
                     locations[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
@@ -38,6 +39,7 @@ const getAllDepartments = () => {
 
             if (result.status.name == "ok") {
 
+                departments = [];
                 //populate the departments array and sort it by names alphabetically
                 for (let i = 0; i < result.data.length; i++) {
                     departments[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
@@ -63,7 +65,8 @@ getAllDepartments();
 //populate the table with basic personnel info
 const readAllPersonnel = () => {
 
-    //append the options to the department selection when editing
+    //append the options to the department selection when 
+    $("#departmentID").html("");
     for (let i = 0; i < departments.length; i++) {
         $("#departmentID").append(`<option value="${departments[i].id}">${departments[i].name}</option>`);
     }
@@ -130,7 +133,8 @@ const readAllPersonnel = () => {
 //populate the table with department info
 const readAllDepartments = () => {
 
-    //append the options to the location selection when editing
+    //append the options to the location selection when creating
+    $("#locationID").html("");
     for (let i = 0; i < locations.length; i++) {
             $("#locationID").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
     }
@@ -168,13 +172,6 @@ const readAllDepartments = () => {
                         </tr>`
                     );
                 }
-
-                //populate the departments array and sort it by names alphabetically
-                for (let i = 0; i < result.data.length; i++) {
-                    departments[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
-                }
-
-                departments.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -219,13 +216,6 @@ const readAllLocations = () => {
                         </tr>`
                     );
                 }
-
-                //populate the locations array and sort it alphabetically by names
-                for (let i = 0; i < result.data.length; i++) {
-                    locations[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
-                }
-
-                locations.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -819,6 +809,7 @@ $(document).on('submit', '#createPersonnel', function(e) {
     e.preventDefault();
     e.stopPropagation();
     createPersonnel();
+    $("#createPersonnelModal").modal("hide");
 });
 
 $(document).on('submit', '#createDepartment', function(e) {
@@ -827,6 +818,7 @@ $(document).on('submit', '#createDepartment', function(e) {
     e.preventDefault();
     e.stopPropagation();
     createDepartment();
+    $("#createDepartmentModal").modal("hide");
 });
 
 $(document).on('submit', '#createLocation', function(e) {
@@ -835,6 +827,7 @@ $(document).on('submit', '#createLocation', function(e) {
     e.preventDefault();
     e.stopPropagation();
     createLocation();
+    $("#createLocationModal").modal("hide");
 });
 
 //radio buttons functionality
