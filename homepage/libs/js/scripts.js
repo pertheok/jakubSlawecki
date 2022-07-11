@@ -52,3 +52,36 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
+
+const sendEmail = () => {
+    $.ajax({
+        url: "libs/php/mail-script.php",
+        type: "POST",
+        dataType: 'json',
+        data: {
+            name: $("#name").val(),
+            email: $("#email").val(),
+            message: $("#message").val()
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+                $("#submitSuccessMessage").show();
+            }                
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
+            $("#submitErrorMessage").show();
+        }
+    });
+
+};
+
+
+$('#contactForm').on('submit', function(e) {
+
+    //prevents the form submission from redirecting to the main page
+    e.preventDefault();
+    e.stopPropagation();
+    sendEmail();
+});
