@@ -9,20 +9,20 @@ const getAllLocations = () => {
         url: "libs/php/readAllLocations.php",
         type: "POST",
         dataType: 'json',
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
                 locations = [];
                 //populate the locations array and sort it alphabetically by names
                 for (let i = 0; i < result.data.length; i++) {
-                    locations[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
+                    locations[i] = { id: parseInt(result.data[i].id), name: result.data[i].name };
                 }
 
-                locations.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+                locations.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -35,20 +35,20 @@ const getAllDepartments = () => {
         type: "POST",
         dataType: 'json',
         async: false,
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
                 departments = [];
                 //populate the departments array and sort it by names alphabetically
                 for (let i = 0; i < result.data.length; i++) {
-                    departments[i] = {id: parseInt(result.data[i].id), name: result.data[i].name};
+                    departments[i] = { id: parseInt(result.data[i].id), name: result.data[i].name };
                 }
 
-                departments.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+                departments.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -77,7 +77,7 @@ const readAllPersonnel = () => {
         url: "libs/php/readAllPersonnel.php",
         type: "POST",
         dataType: 'json',
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -89,7 +89,7 @@ const readAllPersonnel = () => {
                 $("#addNewButtonText").html(`Add a new Employee`);
 
                 //set the table body with the requested info - certain columns are displayed only on certain display sizes to prevent overflowing
-                for (let i = 0;  i < result.data.length; i++) {
+                for (let i = 0; i < result.data.length; i++) {
                     $("#tableData").append(
                         `<tr>
                             <td>
@@ -123,7 +123,7 @@ const readAllPersonnel = () => {
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -143,7 +143,7 @@ const readAllDepartments = () => {
     //append the options to the location selection when creating
     $("#locationID").html("");
     for (let i = 0; i < locations.length; i++) {
-            $("#locationID").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
+        $("#locationID").append(`<option value="${locations[i].id}">${locations[i].name}</option>`);
     }
 
     $.ajax({
@@ -151,7 +151,7 @@ const readAllDepartments = () => {
         type: "POST",
         dataType: 'json',
         async: false,
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -159,7 +159,7 @@ const readAllDepartments = () => {
                 $("#tableData").html("");
 
                 //set the table body with the requested info
-                for (let i = 0;  i < result.data.length; i++) {
+                for (let i = 0; i < result.data.length; i++) {
                     $("#tableData").append(
                         `<tr>
                             <td>
@@ -181,7 +181,7 @@ const readAllDepartments = () => {
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -204,7 +204,7 @@ const readAllLocations = () => {
         url: "libs/php/readAllLocations.php",
         type: "POST",
         dataType: 'json',
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -212,7 +212,7 @@ const readAllLocations = () => {
                 $("#tableData").html("");
 
                 //set the table body with the requested info
-                for (let i = 0;  i < result.data.length; i++) {
+                for (let i = 0; i < result.data.length; i++) {
                     $("#tableData").append(
                         `<tr>
                             <td>
@@ -231,7 +231,7 @@ const readAllLocations = () => {
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -258,14 +258,14 @@ const createPersonnel = () => {
             email: $("#email").val(),
             departmentID: $("#departmentID").val()
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
                 $("#createPersonnelModal").modal("hide");
                 readAllPersonnel();
-            }                
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -282,7 +282,7 @@ const createDepartment = () => {
             name: $("#departmentName").val(),
             locationID: $("#locationID").val()
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -292,9 +292,9 @@ const createDepartment = () => {
                 readAllDepartments();
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
-        }  
+        }
     });
 };
 
@@ -306,18 +306,18 @@ const createLocation = () => {
         data: {
             name: $("#locationName").val()
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
-                
+
                 // call the function used to populate the locations array
                 getAllLocations();
                 $("#createLocationModal").modal("hide");
                 readAllLocations();
             }
-            
+
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -335,7 +335,7 @@ const readPersonnelByID = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -351,7 +351,7 @@ const readPersonnelByID = id => {
                 $("#viewPersonnelModal").modal("show");
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -366,7 +366,7 @@ const readDepartmentByID = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -378,7 +378,7 @@ const readDepartmentByID = id => {
                 $("#viewDepartmentModal").modal("show");
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -394,7 +394,7 @@ const readLocationByID = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -405,7 +405,7 @@ const readLocationByID = id => {
                 $("#viewLocationModal").modal("show");
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -431,7 +431,7 @@ const editPersonnelModal = id => {
             id: id
         },
         async: false,
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -443,7 +443,7 @@ const editPersonnelModal = id => {
                 $("#newJobTitle").val(`${result.data.personnel[0].jobTitle ? result.data.personnel[0].jobTitle : ''}`);
                 $("#newEmail").val(`${result.data.personnel[0].email}`);
                 $("#newDepartment").html("");
-                
+
                 //append the options to the department selection when editing
                 for (let i = 0; i < departments.length; i++) {
 
@@ -456,7 +456,7 @@ const editPersonnelModal = id => {
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -475,7 +475,7 @@ const editDepartmentModal = id => {
             id: id
         },
         async: false,
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -497,7 +497,7 @@ const editDepartmentModal = id => {
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -516,7 +516,7 @@ const editLocationModal = id => {
             id: id
         },
         async: false,
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -526,7 +526,7 @@ const editLocationModal = id => {
                 $("#newLocationName").val(`${result.data[0].name}`);
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -548,14 +548,14 @@ const updatePersonnelByID = id => {
             email: $("#newEmail").val(),
             departmentID: $("#newDepartment").val(),
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
                 $("#editPersonnelModal").modal("hide");
                 readAllPersonnel();
-            }                
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -571,15 +571,15 @@ const updateDepartmentByID = id => {
             name: $("#newName").val(),
             locationID: $("#newLocationID").val()
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
                 getAllDepartments();
                 $("#editDepartmentModal").modal("hide");
                 readAllDepartments();
-            }                
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -594,15 +594,15 @@ const updateLocationByID = id => {
             id: id,
             name: $("#newLocationName").val()
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
                 getAllLocations();
                 $("#editLocationModal").modal("hide");
                 readAllLocations();
-            }                
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -625,7 +625,7 @@ const testDepartmentDependencies = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
                 if (result.data[0] > 0) {
@@ -635,7 +635,7 @@ const testDepartmentDependencies = id => {
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -649,7 +649,7 @@ const testLocationDependencies = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
                 if (result.data[0] > 0) {
@@ -659,7 +659,7 @@ const testLocationDependencies = id => {
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -674,7 +674,7 @@ const deletePersonnelModal = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -683,7 +683,7 @@ const deletePersonnelModal = id => {
                 $("#deletePersonnelModal").modal("show");
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -697,7 +697,7 @@ const deleteDepartmentModal = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -706,7 +706,7 @@ const deleteDepartmentModal = id => {
                 $("#deleteDepartmentModal").modal("show");
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -720,7 +720,7 @@ const deleteLocationModal = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -729,7 +729,7 @@ const deleteLocationModal = id => {
                 $("#deleteLocationModal").modal("show");
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -745,15 +745,15 @@ const deletePersonnelByID = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
-                
+
                 $("#deletePersonnelModal").modal("hide");
                 readAllPersonnel();
-            }                
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -767,16 +767,16 @@ const deleteDepartmentByID = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
                 getAllDepartments();
                 $("#deleteDepartmentModal").modal("hide");
                 readAllDepartments();
-            }                
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -790,16 +790,16 @@ const deleteLocationByID = id => {
         data: {
             id: id
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
                 getAllLocations();
                 $("#deleteLocationModal").modal("hide");
                 readAllLocations();
-            }                
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -834,8 +834,8 @@ $("#addNewLocation").on("click", () => {
 //needed to wrap the onclick functions in document.ready to work
 
 // create buttons
- 
-$(document).on('submit', '#createPersonnel', function(e) {
+
+$(document).on('submit', '#createPersonnel', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
@@ -843,7 +843,7 @@ $(document).on('submit', '#createPersonnel', function(e) {
     createPersonnel();
 });
 
-$(document).on('submit', '#createDepartment', function(e) {
+$(document).on('submit', '#createDepartment', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
@@ -851,7 +851,7 @@ $(document).on('submit', '#createDepartment', function(e) {
     createDepartment();
 });
 
-$(document).on('submit', '#createLocation', function(e) {
+$(document).on('submit', '#createLocation', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
@@ -863,7 +863,7 @@ $(document).on('submit', '#createLocation', function(e) {
 
 // update buttons
 
-$(document).on('submit', '#updatePersonnel', function(e) {
+$(document).on('submit', '#updatePersonnel', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
@@ -871,7 +871,7 @@ $(document).on('submit', '#updatePersonnel', function(e) {
     updatePersonnelByID(personnelIDtoEdit);
 });
 
-$(document).on('submit', '#updateDepartment', function(e) {
+$(document).on('submit', '#updateDepartment', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
@@ -879,7 +879,7 @@ $(document).on('submit', '#updateDepartment', function(e) {
     updateDepartmentByID(departmentIDtoEdit);
 });
 
-$(document).on('submit', '#updateLocation', function(e) {
+$(document).on('submit', '#updateLocation', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
@@ -889,7 +889,7 @@ $(document).on('submit', '#updateLocation', function(e) {
 
 // delete buttons
 
-$(document).on('submit', '#deletePersonnel', function(e) {
+$(document).on('submit', '#deletePersonnel', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
@@ -897,7 +897,7 @@ $(document).on('submit', '#deletePersonnel', function(e) {
     deletePersonnelByID(personnelIDtoDelete);
 });
 
-$(document).on('submit', '#deleteDepartment', function(e) {
+$(document).on('submit', '#deleteDepartment', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
@@ -905,7 +905,7 @@ $(document).on('submit', '#deleteDepartment', function(e) {
     deleteDepartmentByID(departmentIDtoDelete);
 });
 
-$(document).on('submit', '#deleteLocation', function(e) {
+$(document).on('submit', '#deleteLocation', function (e) {
 
     //prevents the form submission from redirecting to the main page
     e.preventDefault();
