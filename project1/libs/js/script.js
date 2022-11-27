@@ -5,15 +5,15 @@ let map = L.map('map');
 
 //create variables containing different map tiles
 const esriTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
+    attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
 });
 
 const esriWorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
+    attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
 });
 
 const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
+    attribution: 'SPA made by <a href="http://www.jakubslawecki.com" target="_blank">Jakub Slawecki</a>, Tiles &copy; <a href="https://www.esri.com/en-us/home" target="_blank">Esri</a>'
 });
 
 //set default map view
@@ -21,37 +21,37 @@ esriTopoMap.addTo(map);
 
 //change tile layers based on the selected radio button of the options radio group
 $('#topoMap').on("click", () => {
-        map.removeLayer(esriWorldStreetMap);
-        map.removeLayer(esriWorldImagery);
-        esriTopoMap.addTo(map);
-    }
+    map.removeLayer(esriWorldStreetMap);
+    map.removeLayer(esriWorldImagery);
+    esriTopoMap.addTo(map);
+}
 );
 
 $('#streetMap').on("click", () => {
-        map.removeLayer(esriTopoMap);
-        map.removeLayer(esriWorldImagery);
-        esriWorldStreetMap.addTo(map);
-    }
+    map.removeLayer(esriTopoMap);
+    map.removeLayer(esriWorldImagery);
+    esriWorldStreetMap.addTo(map);
+}
 );
 
 $('#worldMap').on("click", () => {
-        map.removeLayer(esriTopoMap);
-        map.removeLayer(esriWorldStreetMap);
-        esriWorldImagery.addTo(map);
-    }
+    map.removeLayer(esriTopoMap);
+    map.removeLayer(esriWorldStreetMap);
+    esriWorldImagery.addTo(map);
+}
 );
 
 //change visible marker data based on the selected radio button of the options radio group
 $('#nationalReserves').on("click", () => {
-        map.removeLayer(webcamLayer);
-        nationalReserveLayer.addTo(map);
-    }
+    map.removeLayer(webcamLayer);
+    nationalReserveLayer.addTo(map);
+}
 );
 
 $('#webcams').on("click", () => {
-        map.removeLayer(nationalReserveLayer);
-        webcamLayer.addTo(map);
-    }
+    map.removeLayer(nationalReserveLayer);
+    webcamLayer.addTo(map);
+}
 );
 
 $('#both').on("click", () => {
@@ -61,9 +61,9 @@ $('#both').on("click", () => {
 );
 
 $('#off').on("click", () => {
-        map.removeLayer(nationalReserveLayer);
-        map.removeLayer(webcamLayer);
-    }
+    map.removeLayer(nationalReserveLayer);
+    map.removeLayer(webcamLayer);
+}
 );
 
 //create an empty geoJSON layer to display country borders on it
@@ -156,10 +156,10 @@ const getCountryNames = () => {
         type: 'POST',
         dataType: 'text json',
         async: false,
-        success: function(result) {
-            localJsonResponse = result.data;            
+        success: function (result) {
+            localJsonResponse = result.data;
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -201,7 +201,7 @@ const getData = (chosenCountryCode) => {
     webcamLayer.clearLayers();
 
     //change contents of the news modal back to empty
-    $('#news').html('');    
+    $('#news').html('');
 
     //ajax request to get a geoJSON object containing the chosen country's data from the internal geo.json file
     $.ajax({
@@ -212,7 +212,7 @@ const getData = (chosenCountryCode) => {
             isoCode: chosenCountryCode
         },
         dataType: 'text json',
-        success: function(result) {
+        success: function (result) {
 
             //set the retrieved geoJSON data to a variable that will be used to draw country borders on the map
             chosenCountryGeoJson = result.data;
@@ -228,9 +228,9 @@ const getData = (chosenCountryCode) => {
             } else {
                 chosenCountryName = result.data.properties.name;
                 $('#countryWiki').attr('href', `https://en.wikipedia.org/wiki/${chosenCountryName}`);
-            } 
+            }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -243,11 +243,11 @@ const getData = (chosenCountryCode) => {
         dataType: 'json',
         data: {
             countryCode: chosenCountryCode,
-            
+
             //retrieve bank holiday data for the current year
             year: new Date().getFullYear()
         },
-        success: function(result) {
+        success: function (result) {
 
             if (result.status.name == "ok") {
 
@@ -255,7 +255,7 @@ const getData = (chosenCountryCode) => {
                 $("#holidayTable").html("");
 
                 //set the table data with holiday info
-                for (let i = 0;  i < result.data.length; i++) {
+                for (let i = 0; i < result.data.length; i++) {
                     let currentDate = new Date(result.data[i].date);
                     $("#holidayTable").append(
                         `<tr>
@@ -270,7 +270,7 @@ const getData = (chosenCountryCode) => {
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
@@ -283,19 +283,19 @@ const getData = (chosenCountryCode) => {
         data: {
             countryCode: chosenCountryCode
         },
-        success: function(result) {
+        success: function (result) {
             if (result.status.name == "ok") {
 
-                    //set the indicated html classes and ids equal to the relevant retrieved data
-                    $('.capitalName').html(result.data.capital);
+                //set the indicated html classes and ids equal to the relevant retrieved data
+                $('.capitalName').html(result.data.capital);
 
-                    //conversion to string and regex used to help with adding a comma for separating thousands from the number
-                    $('#countryPopulation').html(result.data.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                    $('#countryContinent').html(result.data.continentName);
+                //conversion to string and regex used to help with adding a comma for separating thousands from the number
+                $('#countryPopulation').html(result.data.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#countryContinent').html(result.data.continentName);
 
-                    //change the areaInSqKm from float to int to get rid of the decimal (which seems to always be .0 anyway). convert the int to string and add comma for separating thousands from the number 
-                    $('#countryArea').html(parseInt(result.data.areaInSqKm).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                    $('#countryCurrency').html(result.data.currencyCode);   
+                //change the areaInSqKm from float to int to get rid of the decimal (which seems to always be .0 anyway). convert the int to string and add comma for separating thousands from the number 
+                $('#countryArea').html(parseInt(result.data.areaInSqKm).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('#countryCurrency').html(result.data.currencyCode);
             }
         },
 
@@ -310,7 +310,7 @@ const getData = (chosenCountryCode) => {
                 data: {
                     countryName: chosenCountryName
                 },
-                success: function(result) {
+                success: function (result) {
 
                     if (result.status.name == "ok") {
 
@@ -347,7 +347,7 @@ const getData = (chosenCountryCode) => {
                         }
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
                 }
             });
@@ -360,7 +360,7 @@ const getData = (chosenCountryCode) => {
                 data: {
                     countryCode: chosenCountryCode,
                 },
-                success: function(result) {
+                success: function (result) {
 
                     if (result.status.name == "ok") {
                         for (let i = 0; i < result.data.length; i++) {
@@ -374,11 +374,11 @@ const getData = (chosenCountryCode) => {
                                 <div class="embed-responsive embed-responsive-1by1">
                                     <iframe class="embed-responsive-item" src="https://webcams.windy.com/webcams/public/embed/player/${result.data[i].id}/day?autoresize=1&sr=2560x1440&vp=503x25&token=null"></iframe>
                                 </div>`
-                            )); 
+                            ));
                         }
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
                 }
             });
@@ -391,7 +391,7 @@ const getData = (chosenCountryCode) => {
                 data: {
                     countryName: chosenCountryName
                 },
-                success: function(result) {
+                success: function (result) {
 
                     if (result.status.name == "ok") {
 
@@ -405,7 +405,7 @@ const getData = (chosenCountryCode) => {
                         }
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
                 }
             });
@@ -418,7 +418,7 @@ const getData = (chosenCountryCode) => {
                 data: {
                     countryCurrency: $("#countryCurrency").html()
                 },
-                success: function(result) {
+                success: function (result) {
 
                     if (result.status.name == "ok") {
 
@@ -429,7 +429,7 @@ const getData = (chosenCountryCode) => {
                         $('#countryCurrencyExchange').html(`1 USD = ${rate} ${$("#countryCurrency").html()}`);
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
                 }
             });
@@ -442,7 +442,7 @@ const getData = (chosenCountryCode) => {
                 data: {
                     capitalName: $(".capitalName").html()
                 },
-                success: function(result) {
+                success: function (result) {
 
                     if (result.status.name == "ok") {
 
@@ -454,7 +454,7 @@ const getData = (chosenCountryCode) => {
                         $('#weatherImage').attr('src', `https://openweathermap.org/img/wn/${result.data.icon}@2x.png`);
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
                 }
             });
@@ -467,13 +467,13 @@ const getData = (chosenCountryCode) => {
                 data: {
                     capitalName: $(".capitalName").html()
                 },
-                success: function(result) {
+                success: function (result) {
 
                     if (result.status.name == "ok") {
 
                         //change html of the forecast section to an empty string
                         $("#forecast").html("");
-                        
+
                         //set the indicated html classes and ids equal to the relevant retrieved data
                         for (let i = 0; i < 4; i++) {
 
@@ -494,20 +494,20 @@ const getData = (chosenCountryCode) => {
 
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
                 }
             });
 
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
         }
     });
-    
+
     //set the value of the drop down menu to the country whose data is being currently displayed - this is used when country data was not retrieved following user's actions, such as when invoking the getLocation() function 
     $('select').val(chosenCountryCode);
-    
+
     //display the selected country's borders on map
     displayBorders(chosenCountryGeoJson);
 
@@ -521,7 +521,7 @@ const getData = (chosenCountryCode) => {
 //retrieve the user's location or retrieve the data for the default country (UK) if navigator.geolocation is not supported by the browser
 const getLocation = () => {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, () => { getData("GB")});
+        navigator.geolocation.getCurrentPosition(showPosition, () => { getData("GB") });
     } else {
         getData("GB");
     }
@@ -540,10 +540,10 @@ const showPosition = position => {
                 userLatitude: userLat,
                 userLongitude: userLong
             },
-            success: function(result) {
+            success: function (result) {
                 getData(result.data);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 console.log(`${jqXHR}, ${textStatus}, ${errorThrown}`);
             }
         });
