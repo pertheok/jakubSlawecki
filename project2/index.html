@@ -1,135 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <title>
-            Company Directory - Jakub Slawecki
-        </title>
-        <meta name="description" content="Company Information CRUD app">
-        <meta name="author" content="Jakub Slawecki">
 
-        <!--Favicon-->
-        <link rel="icon" type="image/x-icon" href="./libs/icons/favicon.ico">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>
+        Company Directory - Jakub Slawecki
+    </title>
+    <meta name="description" content="Company Information CRUD app">
+    <meta name="author" content="Jakub Slawecki">
 
-        <!--Bootstrap essentials-->
-        <link rel="stylesheet" href="./libs/css/bootstrap/bootstrap.min.css">
+    <!--Favicon-->
+    <link rel="icon" type="image/x-icon" href="./libs/icons/favicon.ico">
 
-        <!--Main stylesheet-->
-        <link rel="stylesheet" href="./libs/css/style.css">
-    </head>
-    <body>
+    <!--Bootstrap essentials-->
+    <link rel="stylesheet" href="./libs/css/bootstrap/bootstrap.min.css">
 
-        <!-- Pre-loader -->
-        <div id="loader" class="d-flex align-items-center justify-content-center">
-            <div class="spinner-border" role="status">
-              <span class="sr-only"></span>
+    <!--Main stylesheet-->
+    <link rel="stylesheet" href="./libs/css/style.css">
+</head>
+
+<body>
+
+    <!-- Pre-loader -->
+    <div id="loader" class="d-flex align-items-center justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="sr-only"></span>
+        </div>
+        <span>
+            Loading data...
+        </span>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row p-2 d-flex justify-content-center sticky-top" id="top-bar">
+
+            <!-- Radio buttons for choosing the displayed data type -->
+            <div class="col-xl-6 text-center mb-2">
+                <div class="btn-group" role="group" aria-label="Map tile toggle button group">
+                    <input type="radio" class="btn-check" name="data" id="employees" autocomplete="off" checked>
+                    <label class="btn btn-outline-primary" for="employees">Employees</label>
+
+                    <input type="radio" class="btn-check" name="data" id="departments" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="departments">Departments</label>
+
+                    <input type="radio" class="btn-check" name="data" id="locations" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="locations">Locations</label>
+                </div>
             </div>
-            <span>
-              Loading data...
-            </span>
+
+            <!-- "Add New" buttons - only one will be visible at any given time -->
+
+
+            <div class="col-xl-6 justify-content-center text-center mb-2">
+
+                <!-- Add a new employee -->
+                <button id="addNewPersonnel" class="btn btn-success text-center">
+                    <i class="fa fa-plus">
+                    </i>
+                    <span>Add a new Employee</span>
+                </button>
+
+                <!-- Add a new department -->
+                <button id="addNewDepartment" class="btn btn-success text-center">
+                    <i class="fa fa-plus">
+                    </i>
+                    <span>Add a new Department</span>
+                </button>
+
+                <!-- Add a new location -->
+                <button id="addNewLocation" class="btn btn-success text-center">
+                    <i class="fa fa-plus">
+                    </i>
+                    <span>Add a new Location</span>
+                </button>
+            </div>
         </div>
 
-        <div class="container-fluid">
-            <div class="row p-2 d-flex justify-content-center sticky-top" id="top-bar">
+        <!-- Table displaying all data from the selected category -->
+        <div class="row">
+            <table class="table table-bordered table-striped">
+                <tbody id="tableData">
+                    <!-- Will be udpated by script, depending on user selection -->
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-                <!-- Radio buttons for choosing the displayed data type -->
-                <div class="col-xl-6 text-center mb-2">
-                    <div class="btn-group" role="group" aria-label="Map tile toggle button group">
-                        <input type="radio" class="btn-check" name="data" id="employees" autocomplete="off" checked>
-                        <label class="btn btn-outline-primary" for="employees">Employees</label>
-                      
-                        <input type="radio" class="btn-check" name="data" id="departments" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="departments">Departments</label>
-                      
-                        <input type="radio" class="btn-check" name="data" id="locations" autocomplete="off">
-                        <label class="btn btn-outline-primary" for="locations">Locations</label>
+    <!--Modal for creating new personnel -->
+    <div class="modal" tabindex="-1" id="createPersonnelModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createTitle">
+                        Create a new employee
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form id="createPersonnel">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">
+                                    First Name
+                                </label>
+                                <input type="text" class="form-control m-1" id="firstName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">
+                                    Last Name
+                                </label>
+                                <input type="text" class="form-control m-1" id="lastName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="jobTitle" class="form-label">
+                                    Job Title (optional)
+                                </label>
+                                <input type="text" class="form-control m-1" id="jobTitle" value=''>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">
+                                    Email (optional)
+                                </label>
+                                <input type="email" class="form-control m-1" id="email">
+                            </div>
+                            <div class="mb-3">
+                                <label for="departmentID" class="form-label">
+                                    Department
+                                </label>
+                                <select name="department" id="departmentID" class="form-control m-1">
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- "Add New" buttons - only one will be visible at any given time -->
-
-                
-                <div class="col-xl-6 justify-content-center text-center mb-2">
-                    
-                    <!-- Add a new employee -->
-                    <button id="addNewPersonnel" class="btn btn-success text-center">
-                        <i class="fa fa-plus">
-                        </i>
-                        <span>Add a new Employee</span>
-                    </button>
-
-                    <!-- Add a new department -->
-                    <button id="addNewDepartment" class="btn btn-success text-center">
-                        <i class="fa fa-plus">
-                        </i>
-                        <span>Add a new Department</span>
-                    </button>
-
-                    <!-- Add a new location -->
-                    <button id="addNewLocation" class="btn btn-success text-center">
-                        <i class="fa fa-plus">
-                        </i>
-                        <span>Add a new Location</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Table displaying all data from the selected category -->
-            <div class="row">
-                <table class="table table-bordered table-striped">
-                    <tbody id="tableData">
-                        <!-- Will be udpated by script, depending on user selection -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!--Modal for creating new personnel -->
-        <div class="modal" tabindex="-1" id="createPersonnelModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createTitle">
-                            Create a new employee
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            OK
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
                         </button>
                     </div>
-                    <form id="createPersonnel">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <label for="firstName" class="form-label">
-                                        First Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="firstName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="lastName" class="form-label">
-                                        Last Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="lastName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="jobTitle" class="form-label">
-                                        Job Title (optional)
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="jobTitle" value=''>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">
-                                        Email (optional)
-                                    </label>
-                                    <input type="email" class="form-control m-1" id="email">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="departmentID" class="form-label">
-                                        Department
-                                    </label>
-                                    <select name="department" id="departmentID" class="form-control m-1">
-                                    </select>
-                                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for creating new department -->
+    <div class="modal" tabindex="-1" id="createDepartmentModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createTitle">
+                        Create a new Department
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form id="createDepartment">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="departmentName" class="form-label">
+                                    Department Name
+                                </label>
+                                <input type="text" class="form-control m-1" id="departmentName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="locationID" class="form-label">
+                                    Location Name
+                                </label>
+                                <select name="location" id="locationID" class="form-control m-1">
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -140,499 +183,459 @@
                                 Cancel
                             </button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!--Modal for creating new department -->
-        <div class="modal" tabindex="-1" id="createDepartmentModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createTitle">
-                            Create a new Department
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <form id="createDepartment">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <label for="departmentName" class="form-label">
-                                        Department Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="departmentName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="locationID" class="form-label">
-                                        Location Name
-                                    </label>
-                                    <select name="location" id="locationID" class="form-control m-1">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">
-                                    OK
-                                </button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+    <!--Modal for creating new locations -->
+    <div class="modal" tabindex="-1" id="createLocationModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createTitle">
+                        Create a new Location
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
                 </div>
-            </div>
-        </div>
-
-        <!--Modal for creating new locations -->
-        <div class="modal" tabindex="-1" id="createLocationModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createTitle">
-                            Create a new Location
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <form id="createLocation">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <label for="locationName" class="form-label">
-                                        Location Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="locationName" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">
-                                OK
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        
-        <!--Modal for reading personnel data -->
-        <div class="modal" tabindex="-1" id="viewPersonnelModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Employee record
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
+                <form id="createLocation">
                     <div class="modal-body">
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <th>
-                                        Last Name
-                                    </th>
-                                    <td id="personnelLastName">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        First Name
-                                    </th>
-                                    <td id="personnelFirstName">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Job Title
-                                    </th>
-                                    <td id="personnelJobTitle">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Email
-                                    </th>
-                                    <td id="personnelEmail">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Department
-                                    </th>
-                                    <td id="personnelDepartment">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Location
-                                    </th>
-                                    <td id="personnelLocation">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="locationName" class="form-label">
+                                    Location Name
+                                </label>
+                                <input type="text" class="form-control m-1" id="locationName" required>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            OK
+                        </button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
+                            Cancel
                         </button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for reading personnel data -->
+    <div class="modal" tabindex="-1" id="viewPersonnelModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Employee record
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Last Name
+                                </th>
+                                <td id="personnelLastName">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    First Name
+                                </th>
+                                <td id="personnelFirstName">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Job Title
+                                </th>
+                                <td id="personnelJobTitle">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Email
+                                </th>
+                                <td id="personnelEmail">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Department
+                                </th>
+                                <td id="personnelDepartment">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Location
+                                </th>
+                                <td id="personnelLocation">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!--Modal for reading department data -->
-        <div class="modal" tabindex="-1" id="viewDepartmentModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Department record
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
+    <!--Modal for reading department data -->
+    <div class="modal" tabindex="-1" id="viewDepartmentModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Department record
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <td id="deptName">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Location
+                                </th>
+                                <td id="departmentLocation">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for reading location data -->
+    <div class="modal" tabindex="-1" id="viewLocationModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <!--Content changed by the script-->
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    Name
+                                </th>
+                                <td id="location">
+                                    <!-- Content set by the script -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for updating personnel data -->
+    <div class="modal" tabindex="-1" id="editPersonnelModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Update the personnel record
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form id="updatePersonnel">
                     <div class="modal-body">
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <td id="deptName">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Location
-                                    </th>
-                                    <td id="departmentLocation">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="newFirstName" class="form-label">
+                                    First Name
+                                </label>
+                                <input type="text" class="form-control m-1" id="newFirstName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newLastName" class="form-label">
+                                    Last Name
+                                </label>
+                                <input type="text" class="form-control m-1" id="newLastName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newJobTitle" class="form-label">
+                                    Job Title (optional)
+                                </label>
+                                <input type="text" class="form-control m-1" id="newJobTitle" value=''>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newEmail" class="form-label">
+                                    Email (optional)
+                                </label>
+                                <input type="email" class="form-control m-1" id="newEmail">
+                            </div>
+                            <div class="mb-3">
+                                <label for="newDepartment" class="form-label">
+                                    Department
+                                </label>
+                                <select name="department" id="newDepartment" class="form-control m-1">
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            Save
+                        </button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
+                            Cancel
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!--Modal for reading location data -->
-        <div class="modal" tabindex="-1" id="viewLocationModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
+    <!--Modal for updating department data-->
+    <div class="modal" tabindex="-1" id="editDepartmentModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Update the department record
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form id="updateDepartment">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="newName" class="form-label">
+                                    Name
+                                </label>
+                                <input type="text" class="form-control m-1" id="newName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="newDepartment" class="form-label">
+                                    Location
+                                </label>
+                                <select name="location" id="newLocationID" class="form-control m-1">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for updating location data -->
+    <div class="modal" tabindex="-1" id="editLocationModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Update the location record
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form id="updateLocation">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="newLocationName" class="form-label">
+                                    Name
+                                </label>
+                                <input type="text" class="form-control m-1" id="newLocationName" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for displaying the delete warning for personnel-->
+    <div class="modal" tabindex="-1" id="deletePersonnelModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Delete the following Employee record?
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form id="deletePersonnel">
+                    <div class="modal-body text-center">
+                        <p id="personnelToDelete" class="m-0">
                             <!--Content changed by the script-->
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <td id="location">
-                                        <!-- Content set by the script -->
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
+                        <button type="submit" class="btn btn-danger m-2">
+                            Yes
+                        </button>
+                        <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
+                            No
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <!--Modal for updating personnel data -->
-        <div class="modal" tabindex="-1" id="editPersonnelModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Update the personnel record
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <form id="updatePersonnel">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <label for="newFirstName" class="form-label">
-                                        First Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="newFirstName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newLastName" class="form-label">
-                                        Last Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="newLastName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newJobTitle" class="form-label">
-                                        Job Title (optional)
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="newJobTitle" value=''>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newEmail" class="form-label">
-                                        Email (optional)
-                                    </label>
-                                    <input type="email" class="form-control m-1" id="newEmail">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newDepartment" class="form-label">
-                                        Department
-                                    </label>
-                                    <select name="department" id="newDepartment" class="form-control m-1">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">
-                                Save
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
+    <!--Modal for displaying the delete warning for department-->
+    <div class="modal" tabindex="-1" id="deleteDepartmentModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Delete the following Department record?
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
                 </div>
-            </div>
-        </div>
-
-        <!--Modal for updating department data-->
-        <div class="modal" tabindex="-1" id="editDepartmentModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Update the department record
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <form id="updateDepartment">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <label for="newName" class="form-label">
-                                        Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="newName" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="newDepartment" class="form-label">
-                                        Location
-                                    </label>
-                                    <select name="location" id="newLocationID" class="form-control m-1">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">
-                                Save
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!--Modal for updating location data -->
-        <div class="modal" tabindex="-1" id="editLocationModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Update the location record
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <form id="updateLocation">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <label for="newLocationName" class="form-label">
-                                        Name
-                                    </label>
-                                    <input type="text" class="form-control m-1" id="newLocationName" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">
-                                Save
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!--Modal for displaying the delete warning for personnel-->
-        <div class="modal" tabindex="-1" id="deletePersonnelModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Delete the following Employee record?
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <form id="deletePersonnel">
-                        <div class="modal-body text-center">
-                            <p id="personnelToDelete" class="m-0">
-                                <!--Content changed by the script-->
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger m-2">
-                                Yes
-                            </button>
-                            <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
-                                No
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!--Modal for displaying the delete warning for department-->
-        <div class="modal" tabindex="-1" id="deleteDepartmentModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Delete the following Department record?
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <form id="deleteDepartment">
-                        <div class="modal-body text-center">
-                            <p id="departmentToDelete" class="m-0">
-                                <!--Content changed by the script-->
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger m-2">
-                                Yes
-                            </button>
-                            <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
-                                No
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        
-        <!--Modal for displaying the delete warning for location-->
-        <div class="modal" tabindex="-1" id="deleteLocationModal">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Delete the following Location record?
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <form id="deleteLocation">
-                        <div class="modal-body text-center">
-                            <p id="locationToDelete" class="m-0">
-                                <!--Content changed by the script-->
-                            </p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger m-2">
-                                Yes
-                            </button>
-                            <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
-                                No
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!--Modal for displaying the delete failure-->
-        <div class="modal" tabindex="-1" id="deleteFailure">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Unable to delete the record as records from other tables are dependent on it.</p>
+                <form id="deleteDepartment">
+                    <div class="modal-body text-center">
+                        <p id="departmentToDelete" class="m-0">
+                            <!--Content changed by the script-->
+                        </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
+                        <button type="submit" class="btn btn-danger m-2">
+                            Yes
+                        </button>
+                        <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
+                            No
                         </button>
                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for displaying the delete warning for location-->
+    <div class="modal" tabindex="-1" id="deleteLocationModal">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Delete the following Location record?
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <form id="deleteLocation">
+                    <div class="modal-body text-center">
+                        <p id="locationToDelete" class="m-0">
+                            <!--Content changed by the script-->
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger m-2">
+                            Yes
+                        </button>
+                        <button type="button" class="btn btn-secondary m-2" data-bs-dismiss="modal">
+                            No
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal for displaying the delete failure-->
+    <div class="modal" tabindex="-1" id="deleteFailure">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Unable to delete the record as records from other tables are dependent on it.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!--Bootstrap essentials-->
-        <script src="./libs/js/bootstrap/bootstrap.min.js">
-        </script>
+    <!--Bootstrap essentials-->
+    <script src="./libs/js/bootstrap/bootstrap.min.js">
+    </script>
 
-        <!--jQuery-->
-        <script type="text/javascript" src="./libs/js/jquery-3.6.0.min.js">
-        </script>
+    <!--jQuery-->
+    <script type="text/javascript" src="./libs/js/jquery-3.6.0.min.js">
+    </script>
 
-        <!--Font Awesome-->
-        <script src="./libs/js/fontawesome.js">
-        </script>
+    <!--Font Awesome-->
+    <script src="./libs/js/fontawesome.js">
+    </script>
 
-        <!--custom script-->
-        <script type="text/javascript" src="./libs/js/script.js">
-        </script>
-    </body>
+    <!--custom script-->
+    <script type="text/javascript" src="./libs/js/script.js">
+    </script>
+</body>
+
 </html>

@@ -1,5 +1,6 @@
 /* setting up Leaflet so the map takes up the entire height and width of the screen */
-html, body {
+html,
+body {
     height: 100%;
     width: 100%;
 }
@@ -9,7 +10,7 @@ body {
     margin: 0;
 }
 
-#map{
+#map {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -71,4 +72,3 @@ img {
     padding: 0px;
     text-align: center;
 }
-

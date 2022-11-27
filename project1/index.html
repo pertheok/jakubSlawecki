@@ -1,409 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <title>
-            Gazetteer - Jakub Slawecki
-        </title>
-        <meta name="description" content="Gazetteer">
-        <meta name="author" content="Jakub Slawecki">
-        
-        <!--Favicon-->
-        <link rel="icon" type="image/x-icon" href="./libs/icons/favicon.ico">
 
-        <!--Leaflet essentials-->
-        <link rel="stylesheet" href="./libs/css/leaflet/leaflet.css"/>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <title>
+    Gazetteer - Jakub Slawecki
+  </title>
+  <meta name="description" content="Gazetteer">
+  <meta name="author" content="Jakub Slawecki">
 
-        <!--Bootstrap essentials-->
-        <link rel="stylesheet" href="./libs/css/bootstrap/bootstrap.min.css">
+  <!--Favicon-->
+  <link rel="icon" type="image/x-icon" href="./libs/icons/favicon.ico">
 
-        <!--Leaflet Easy Buttons-->
-        <link rel="stylesheet" href="./libs/css/leaflet/easybutton.css">
+  <!--Leaflet essentials-->
+  <link rel="stylesheet" href="./libs/css/leaflet/leaflet.css" />
 
-        <!--Leaflet Extra Markers-->
-        <link rel="stylesheet" href="./libs/css/leaflet/leaflet.extra-markers.min.css">
+  <!--Bootstrap essentials-->
+  <link rel="stylesheet" href="./libs/css/bootstrap/bootstrap.min.css">
 
-        <!--Leaflet Marker Clusters-->
-        <link rel="stylesheet" href="./libs/css/leaflet/MarkerCluster.css">
-        <link rel="stylesheet" href="./libs/css/leaflet/MarkerCluster.Default.css">
+  <!--Leaflet Easy Buttons-->
+  <link rel="stylesheet" href="./libs/css/leaflet/easybutton.css">
 
-        <!--Main stylesheet-->
-        <link rel="stylesheet" href="./libs/css/style.css">
-    </head>
-    <body>
+  <!--Leaflet Extra Markers-->
+  <link rel="stylesheet" href="./libs/css/leaflet/leaflet.extra-markers.min.css">
 
-        <!-- Pre-loader -->
-        <div id="loader" class="d-flex align-items-center justify-content-center">
-          <div class="spinner-border" role="status">
-            <span class="sr-only"></span>
-          </div>
-          <span>
-            Loading data...
-          </span>
+  <!--Leaflet Marker Clusters-->
+  <link rel="stylesheet" href="./libs/css/leaflet/MarkerCluster.css">
+  <link rel="stylesheet" href="./libs/css/leaflet/MarkerCluster.Default.css">
+
+  <!--Main stylesheet-->
+  <link rel="stylesheet" href="./libs/css/style.css">
+</head>
+
+<body>
+
+  <!-- Pre-loader -->
+  <div id="loader" class="d-flex align-items-center justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only"></span>
+    </div>
+    <span>
+      Loading data...
+    </span>
+  </div>
+
+  <!--Search bar-->
+
+  <select class="sticky-top form-select mx-auto w-auto mt-2" name="countryName" id="countrySearch">
+  </select>
+
+  <!--Leaflet implementation-->
+  <div id="map">
+  </div>
+
+  <!--Modal for displaying country information-->
+  <div class="modal" tabindex="-1" id="countryInfoModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Country information
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
         </div>
+        <div class="modal-body">
 
-            <!--Search bar-->
-
-        <select class="sticky-top form-select mx-auto w-auto mt-2" name="countryName" id="countrySearch">
-        </select>
-
-        <!--Leaflet implementation-->
-        <div id="map">
-        </div>
-
-        <!--Modal for displaying country information-->
-        <div class="modal" tabindex="-1" id="countryInfoModal">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">
-                    Country information
-                  </h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                  </button>
-                </div>
-                <div class="modal-body">
-
-                  <!--Display information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                  <table class="table table-striped">
-                    <tbody>
-                      <tr>
-                        <th scope="row">
-                          Name
-                        </th>
-                        <td class="countryName text-end">
-                          No data found
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          ISO code
-                        </th>
-                        <td id="countryIsoCode" class="text-end">
-                          No data found
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          Continent
-                        </th>
-                        <td id="countryContinent" class="text-end">
-                          No data found
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          Capital
-                        </th>
-                        <td class="capitalName text-end">
-                          No data found
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          Population
-                        </th>
-                        <td id="countryPopulation" class="text-end">
-                          No data found
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          Area (km<sup>2</sup>)
-                        </th>
-                        <td id="countryArea" class="text-end">
-                          No data found
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="2" class="text-center">
-
-                          <!--Link redirecting the user to the selected country's Wikipedia page-->
-                          <a href="" target="_blank" id="countryWiki">
-                            Wikipedia link (opens in a new tab)
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>                 
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-        </div>
-
-        <!--Modal for displaying weather information-->
-        <div class="modal" tabindex="-1" id="weatherInfoModal">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  Weather in the capital
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-              </div>
-              <div class="modal-body" id="weather">
-                <p class="capitalName h3">
+          <!--Display information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+          <table class="table table-striped">
+            <tbody>
+              <tr>
+                <th scope="row">
+                  Name
+                </th>
+                <td class="countryName text-end">
                   No data found
-                </p>
-                <table class="table">
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  ISO code
+                </th>
+                <td id="countryIsoCode" class="text-end">
+                  No data found
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  Continent
+                </th>
+                <td id="countryContinent" class="text-end">
+                  No data found
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  Capital
+                </th>
+                <td class="capitalName text-end">
+                  No data found
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  Population
+                </th>
+                <td id="countryPopulation" class="text-end">
+                  No data found
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  Area (km<sup>2</sup>)
+                </th>
+                <td id="countryArea" class="text-end">
+                  No data found
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" class="text-center">
 
-                  <!--Display information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                  <thead>
-                    <tr class="w-100">
-                      <td>
-                        <img id="weatherImage" src="" alt="Weather symbol">
-                      </td>
-                      <th class="text-center align-middle">
-                        <p id="capitalTemperature" class="h1">
-                          No data found
-                        </p>
-                      </th>
-                      <th id="capitalWeather" class="h3 align-middle">
-                        No data found
-                      </th>
-                    </tr>
-                  </thead>
-                </table>
-                <table class="table">
-                  <tbody>
-                    <tr id="forecast" class="d-flex justify-content-evenly">
-                      <td>
-                        No data found
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
+                  <!--Link redirecting the user to the selected country's Wikipedia page-->
+                  <a href="" target="_blank" id="countryWiki">
+                    Wikipedia link (opens in a new tab)
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-
-        <!--Modal for displaying currency information-->
-        <div class="modal" tabindex="-1" id="currencyInfoModal">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Currency information</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-              </div>
-              <div class="modal-body">
-
-                <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                <div class="row w-100">
-                  <table class="table table-striped">
-                    <tbody>
-                      <tr>
-                        <th scope="row">
-                          Local currency
-                        </th>
-                        <td id="countryCurrency" class="text-end">
-                          No data found
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">
-                          Local currency USD exchange rate
-                        </th>
-                        <td id="countryCurrencyExchange" class="text-end">
-                          No data found
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <!--Modal for displaying local news-->
-        <div class="modal" tabindex="-1" id="countryNewsModal">
-          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  Recent news involving 
-                  <span class="countryName">
+  <!--Modal for displaying weather information-->
+  <div class="modal" tabindex="-1" id="weatherInfoModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Weather in the capital
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body" id="weather">
+          <p class="capitalName h3">
+            No data found
+          </p>
+          <table class="table">
+
+            <!--Display information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+            <thead>
+              <tr class="w-100">
+                <td>
+                  <img id="weatherImage" src="" alt="Weather symbol">
+                </td>
+                <th class="text-center align-middle">
+                  <p id="capitalTemperature" class="h1">
                     No data found
-                  </span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-              </div>
-              <div class="modal-body" id="news">
-                <!--Displaying information retrieved from the APIs, code added by script-->
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!--Modal for displaying bank holiday information-->
-        <div class="modal" tabindex="-1" id="holidayModal">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  National Holidays in 
-                  <span class="countryName">
+                  </p>
+                </th>
+                <th id="capitalWeather" class="h3 align-middle">
                   No data found
-                </span>
-                 this year
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-              </div>
-              <div class="modal-body">
+                </th>
+              </tr>
+            </thead>
+          </table>
+          <table class="table">
+            <tbody>
+              <tr id="forecast" class="d-flex justify-content-evenly">
+                <td>
+                  No data found
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-                <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
-                <div class="row w-100">
-                  <table class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th>
-                          Name
-                        </th>
-                        <th class="text-end">
-                          Date
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody id="holidayTable">
-                      <!--Data appended via script-->
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  Close
-                </button>
-              </div>
-            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Modal for displaying currency information-->
+  <div class="modal" tabindex="-1" id="currencyInfoModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Currency information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+          <div class="row w-100">
+            <table class="table table-striped">
+              <tbody>
+                <tr>
+                  <th scope="row">
+                    Local currency
+                  </th>
+                  <td id="countryCurrency" class="text-end">
+                    No data found
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    Local currency USD exchange rate
+                  </th>
+                  <td id="countryCurrencyExchange" class="text-end">
+                    No data found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        <!--Map options modal-->
-        <div class="modal" tabindex="-1" id="optionsModal">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  Display options
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="row w-100">
-                  <table class="table table-striped">
-                    <tbody>
-                      <tr>
-                        <th>
-                          Map tile data
-                        </th>
-                        <td class="text-end">
-                          <div class="btn-group" role="group" aria-label="Map tile toggle button group">
-                            <input type="radio" class="btn-check" name="map" id="topoMap" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary" for="topoMap">Topographic Map</label>
-                          
-                            <input type="radio" class="btn-check" name="map" id="streetMap" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="streetMap">Street Map</label>
-                          
-                            <input type="radio" class="btn-check" name="map" id="worldMap" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="worldMap">World Imagery</label>
-                          </div>
-                        </td>
+  <!--Modal for displaying local news-->
+  <div class="modal" tabindex="-1" id="countryNewsModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Recent news involving
+            <span class="countryName">
+              No data found
+            </span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body" id="news">
+          <!--Displaying information retrieved from the APIs, code added by script-->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                      </tr>
-                      <tr>
-                        <th>
-                          Markers
-                        </th>
-                        <td class="text-end">
-                          <div class="btn-group" role="group" aria-label="Markers toggle button group">
-                            <input type="radio" class="btn-check" name="marker" id="nationalReserves" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary" for="nationalReserves">National Reserves</label>
-  
-                            <input type="radio" class="btn-check" name="marker" id="webcams" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="webcams">Webcams</label>
+  <!--Modal for displaying bank holiday information-->
+  <div class="modal" tabindex="-1" id="holidayModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            National Holidays in
+            <span class="countryName">
+              No data found
+            </span>
+            this year
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
 
-                            <input type="radio" class="btn-check" name="marker" id="both" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="both">Both</label>
-                          
-                            <input type="radio" class="btn-check" name="marker" id="off" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="off">Hide all</label>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                  Close
-                </button>
-              </div>
-            </div>
+          <!--Displaying information retrieved from the APIs, spans will have their html rewritten based on the API responses -->
+          <div class="row w-100">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>
+                    Name
+                  </th>
+                  <th class="text-end">
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="holidayTable">
+                <!--Data appended via script-->
+              </tbody>
+            </table>
           </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        <!--Leaflet essentials-->
-        <script src="./libs/js/leaflet/leaflet.js">
-        </script>
+  <!--Map options modal-->
+  <div class="modal" tabindex="-1" id="optionsModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Display options
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row w-100">
+            <table class="table table-striped">
+              <tbody>
+                <tr>
+                  <th>
+                    Map tile data
+                  </th>
+                  <td class="text-end">
+                    <div class="btn-group" role="group" aria-label="Map tile toggle button group">
+                      <input type="radio" class="btn-check" name="map" id="topoMap" autocomplete="off" checked>
+                      <label class="btn btn-outline-primary" for="topoMap">Topographic Map</label>
 
-         <!--Bootstrap essentials-->
-        <script src="./libs/js/bootstrap/bootstrap.min.js">
-        </script>
+                      <input type="radio" class="btn-check" name="map" id="streetMap" autocomplete="off">
+                      <label class="btn btn-outline-primary" for="streetMap">Street Map</label>
 
-        <!--Leaflet easy buttons-->
-        <script src="./libs/js/leaflet/easybutton.js">
-        </script>
+                      <input type="radio" class="btn-check" name="map" id="worldMap" autocomplete="off">
+                      <label class="btn btn-outline-primary" for="worldMap">World Imagery</label>
+                    </div>
+                  </td>
 
-        <!--Leaflet Extra Markers-->
-        <script src="./libs/js/leaflet/leaflet.extra-markers.min.js">
-        </script>
+                </tr>
+                <tr>
+                  <th>
+                    Markers
+                  </th>
+                  <td class="text-end">
+                    <div class="btn-group" role="group" aria-label="Markers toggle button group">
+                      <input type="radio" class="btn-check" name="marker" id="nationalReserves" autocomplete="off"
+                        checked>
+                      <label class="btn btn-outline-primary" for="nationalReserves">National Reserves</label>
 
-        <!--Leaflet marker clusters-->
-        <script src="./libs/js/leaflet/leaflet.markercluster.js">
-        </script>
+                      <input type="radio" class="btn-check" name="marker" id="webcams" autocomplete="off">
+                      <label class="btn btn-outline-primary" for="webcams">Webcams</label>
 
-        <!--jQuery-->
-        <script type="text/javascript" src="./libs/js/jquery-3.6.0.min.js">
-        </script>
+                      <input type="radio" class="btn-check" name="marker" id="both" autocomplete="off">
+                      <label class="btn btn-outline-primary" for="both">Both</label>
 
-        <!--date.js-->
-        <script type="text/javascript" src="./libs/js/date.js">
-        </script>
+                      <input type="radio" class="btn-check" name="marker" id="off" autocomplete="off">
+                      <label class="btn btn-outline-primary" for="off">Hide all</label>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        <!--Font Awesome-->
-        <script src="./libs/js/fontawesome.js">
-        </script>
-        
-        <!--custom script-->
-        <script type="text/javascript" src="./libs/js/script.js">
-        </script>
-    </body>
+  <!--Leaflet essentials-->
+  <script src="./libs/js/leaflet/leaflet.js">
+  </script>
+
+  <!--Bootstrap essentials-->
+  <script src="./libs/js/bootstrap/bootstrap.min.js">
+  </script>
+
+  <!--Leaflet easy buttons-->
+  <script src="./libs/js/leaflet/easybutton.js">
+  </script>
+
+  <!--Leaflet Extra Markers-->
+  <script src="./libs/js/leaflet/leaflet.extra-markers.min.js">
+  </script>
+
+  <!--Leaflet marker clusters-->
+  <script src="./libs/js/leaflet/leaflet.markercluster.js">
+  </script>
+
+  <!--jQuery-->
+  <script type="text/javascript" src="./libs/js/jquery-3.6.0.min.js">
+  </script>
+
+  <!--date.js-->
+  <script type="text/javascript" src="./libs/js/date.js">
+  </script>
+
+  <!--Font Awesome-->
+  <script src="./libs/js/fontawesome.js">
+  </script>
+
+  <!--custom script-->
+  <script type="text/javascript" src="./libs/js/script.js">
+  </script>
+</body>
+
 </html>
